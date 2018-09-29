@@ -1,0 +1,105 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Authors: Ana Cristina Rocha-Oliveira(*)
+%          Mauricio Ayala-Rincon(*)
+%          Maribel Fernandez(**)
+%          (*)Universidade de Brasilia, (**)King's College London
+% Last modified: 27 June 2015
+% This directory contains the PVS theory for Nominal Unification. 
+% The top subtheory is >> nominalunif.pvs <<
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The theory Nominal Unification consists of eight pvs files.
+
+  This was specified in PVS 6.0 (available at http://pvs.csl.sri.com) over
+  Mac Os and Linux platforms. Also, you will need the PVS NASA libraries
+  (available at http://shemesh.larc.nasa.gov/fm/ftp/larc/PVS-library). 
+  Running PVS opens an Emacs window. 
+
+  Uncompress and copy the nominal unification directory somewhere in your 
+  system. Then run PVS using as context library (change context) that 
+  directory.  
+
+  To follow a proof you should place the cursor over the lemma or theorem
+  you want to check and use the PVS meta commands x-step-proof (step by
+  step) or x-prove.
+ 
+The contents of the nominal unification library are described below.
+
+atoms.pvs with the implementation of atoms as natural numbers, permutations 
+          and the difference set (ds).
+
+nominal_term.pvs contains the data structure of terms and the homomorphic 
+          extension of swappings for terms. It is presented also the boolean 
+          function ``occurs" that verifies the occurrence of a variable in a term 
+          and the function ``Vars" which builds the set of variable of a term.
+          Type checking will generate the additional pvs file:
+term_adt.pvs which contains all inductive proof schematta for this ADT.
+
+fresh.pvs contains the definition of freshness through the boolean recursive 
+          function ``fresh" which checks if an atom is fresh for a term with 
+          respect to a specific context. The function ``fresh?" does something 
+          similar by verifying if an atom is fresh for a term in some context 
+          and, simultaneously, it builds such a context, if it exists. Some 
+          properties can be reached very easily, like that freshness is closed 
+          over permutation action.
+
+alpha_equivalence.pvs concerns alpha-equivalence, that is defined recursively 
+          as the function ``alpha". The function alpha tests if two terms are 
+          alpha-equivalent in a specific context. It is proved that alpha is 
+          an equivalence relation. It is also made the function ``alpha?" which 
+          checks if a pair of terms are alpha-equivalent in some context and it 
+          constructs such a context. It is proved as well that such context 
+          satisfies the first function ``alpha", i.e., that ``alpha?" is sound. 
+          Additionally, it was proven that ``alpha?" is complete.
+
+substitution.pvs deals with substitutions (acting over variables only) and some 
+          basic properties. There is a function named ``fresh_subs?" which apply 
+          a substitution to a freshness context in the sense that, for each pair 
+          (atom x variable) in the original context, it verifies if the atom is 
+          fresh in the term obtained by applying the substitution to the 
+          variable. This verification and the building of a proper new context 
+          is made recursively by the function ``fresh?". The function ``fresh_subs?" 
+          is used in the unification algorithm in order to update freshness 
+          contexts.
+
+nominalunif.pvs brings a definition of unifiable terms, which means that there 
+          exists a pair (context x substitution) such that the context derives 
+          the alpha equivalence between the instances of the two terms. It is 
+          provided an algorithm through the function ``unify" to test if two 
+          terms are unifiable at the same time that builds a ``most general" 
+          solution (context x substitution), if it exists. Termination, 
+          soundness and completeness of this algorithm are already proved.
+
+structure_extra.pvs includes auxiliary lemmatta related with properties of 
+          lists, non straightforwardly related with the nominal unification
+          theory.
+
+The hierarchy of this theory is given as below, where "V" means that the 
+theory above imports the theory below:
+
+                        nominalunif
+                             |
+                             V
+                        substitution
+                             |
+                             V
+                      alpha_equivalence
+                             |
+                             V
+                         freshness
+                             |
+                             V
+                        nominal_basis
+                         /    |     \
+                        |     |      |
+                        V     |      V
+                     atoms    |    terms
+                        |     |   
+                        V     V   
+                       structure_extra
+
+NomUnif-AR-F-RO.pdf contains the paper which some comments in the *.pvs files
+           reffer to.
+          

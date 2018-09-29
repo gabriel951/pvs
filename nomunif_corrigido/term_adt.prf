@@ -1,0 +1,6 @@
+(term_adt)
+(term_adt_map)
+(term_adt_reduce
+ (atom_TCC1 0
+  (atom_TCC1-1 nil 3745910722 ("" (postpone) nil nil) nil shostak)))
+
