@@ -34,7 +34,9 @@ fresh(Delta)(a, t): RECURSIVE bool =
 	 abs(b,bd): IF a=b THEN TRUE
 	 	       ELSE fresh(Delta)(a,bd)
 		    ENDIF,
-	 app(sl,ag): fresh(Delta)(a,ag)
+	 app(sl,ag): fresh(Delta)(a,ag),
+	 % TODO - added commutative function 
+	 c_app(sl, ag): fresh(Delta)(a, ag)
    ENDCASES
    MEASURE t BY <<
 

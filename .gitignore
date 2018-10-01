@@ -5,4 +5,40 @@
 bin/
 
 
+# other files i would like to ignore - this is a mess xD
+.pvscontext
+Examples/
+INSTALL
+LICENSE
+NOTICES
+README
+atoms.pvs~
+doc/
+emacs/
+lib/
+nasalib-6.0.9-nobin.tgz
+nasalib/
+nomunif-pvs60/
+nomunif-pvs60_aspas/__MACOSX/._nomunif-pvs60
+nomunif-pvs60_aspas/__MACOSX/nomunif-pvs60/._NomUnif-AR-F-RO.pdf
+nomunif-pvs60_aspas/__MACOSX/nomunif-pvs60/._README
+nomunif-pvs60_aspas/nomunif-pvs60/.pvscontext
+nomunif-pvs60_aspas/nomunif-pvs60/NomUnif-AR-F-RO.pdf
+nomunif-pvs60_aspas/nomunif-pvs60/README
+nomunif-pvs60_aspas/nomunif-pvs60_aspas.zip
+nomunif_corrigido/.pvscontext
+nomunif_corrigido/orphaned-proofs.prf
+planetB.prf~
+planetB.pvs~
+pred_gcd.pvs~
+proveit
+provethem
+pvs
+pvs-files.tex
+pvs-tex.sub
+pvs.sty
+pvsclass17/
+pvsio
+sum.pvs~
+wish/
 
