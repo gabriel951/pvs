@@ -155,16 +155,6 @@
      ("4" (GRIND) NIL NIL) ("5" (GRIND) NIL NIL) ("6" (GRIND) NIL NIL))
     NIL)
    NIL SHOSTAK))
- (|depth_TCC1| 0
-  (|depth_TCC1-1| NIL 3747237792 ("" (CASES-TCC) NIL NIL) NIL NIL))
- (|depth_TCC2| 0
-  (|depth_TCC2-1| NIL 3747238094 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|depth_TCC3| 0
-  (|depth_TCC3-1| NIL 3747238094 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|depth_TCC4| 0
-  (|depth_TCC4-1| NIL 3747238094 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|depth_TCC5| 0
-  (|depth_TCC5-1| NIL 3747238094 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
  (|ext_preserves_depth| 0
   (|ext_preserves_depth-2| NIL 3745911120
    ("" (INDUCT "t")
@@ -212,16 +202,6 @@
      ("4" (GRIND) NIL NIL) ("5" (GRIND) NIL NIL) ("6" (GRIND) NIL NIL))
     NIL)
    NIL SHOSTAK))
- (|occurs_TCC1| 0
-  (|occurs_TCC1-1| NIL 3747238094 ("" (CASES-TCC) NIL NIL) NIL NIL))
- (|occurs_TCC2| 0
-  (|occurs_TCC2-1| NIL 3747238196 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|occurs_TCC3| 0
-  (|occurs_TCC3-1| NIL 3747238196 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|occurs_TCC4| 0
-  (|occurs_TCC4-1| NIL 3747238196 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|occurs_TCC5| 0
-  (|occurs_TCC5-1| NIL 3747238196 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
  (|ext_preserves_occurs| 0
   (|ext_preserves_occurs-2| NIL 3745911150
    ("" (INDUCT "t")
@@ -258,7 +238,7 @@
     (|occurs| DEF-DECL "bool" |nominal_term| NIL)
     (= CONST-DECL "[T, T -> boolean]" |equalities| NIL)
     (TRUE CONST-DECL "bool" |booleans| NIL)
-    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL) NIL
+    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
     (PRED TYPE-EQ-DECL NIL |defined_types| NIL)
     (|term| TYPE-DECL NIL |term_adt| NIL))
    NIL)
@@ -268,16 +248,6 @@
      ("4" (GRIND) NIL NIL) ("5" (GRIND) NIL NIL) ("6" (GRIND) NIL NIL))
     NIL)
    NIL SHOSTAK))
- (|Vars_TCC1| 0
-  (|Vars_TCC1-1| NIL 3747238196 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|Vars_TCC2| 0
-  (|Vars_TCC2-1| NIL 3747238196 ("" (CASES-TCC) NIL NIL) NIL NIL))
- (|Vars_TCC3| 0
-  (|Vars_TCC3-1| NIL 3747238349 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|Vars_TCC4| 0
-  (|Vars_TCC4-1| NIL 3747238349 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
- (|Vars_TCC5| 0
-  (|Vars_TCC5-1| NIL 3747238349 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
  (|ext_preserves_Vars| 0
   (|ext_preserves_Vars-2| NIL 3745911180
    ("" (INDUCT "t")
@@ -315,8 +285,7 @@
     (|is_finite| CONST-DECL "bool" |finite_sets| NIL)
     (= CONST-DECL "[T, T -> boolean]" |equalities| NIL)
     (|set| TYPE-EQ-DECL NIL |sets| NIL) (TRUE CONST-DECL "bool" |booleans| NIL)
-    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
-    (|every| ADT-DEF-DECL "boolean" |term_adt| NIL)
+    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL) NIL
     (PRED TYPE-EQ-DECL NIL |defined_types| NIL)
     (|term| TYPE-DECL NIL |term_adt| NIL))
    NIL)
@@ -369,8 +338,7 @@
     (|set| TYPE-EQ-DECL NIL |sets| NIL)
     (= CONST-DECL "[T, T -> boolean]" |equalities| NIL)
     (TRUE CONST-DECL "bool" |booleans| NIL)
-    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
-    (|every| ADT-DEF-DECL "boolean" |term_adt| NIL)
+    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL) NIL
     (PRED TYPE-EQ-DECL NIL |defined_types| NIL)
     (|term| TYPE-DECL NIL |term_adt| NIL))
    NIL)

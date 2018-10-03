@@ -97,7 +97,9 @@ fresh?(a, t): RECURSIVE [fresh_context, bool] =
 	 pair(t1,t2): x(fresh?(a, t1), fresh?(a, t2)),
 	 abs(b,bd): IF a = b THEN ((::), TRUE)
 	 	       ELSE fresh?(a, bd) ENDIF,
-	 app(f,ag): fresh?(a, ag)
+	 app(f,ag): fresh?(a, ag),
+	 % TODO: commutative symbols
+	 c_app(f, ag): fresh?(a, ag)
    ENDCASES
    MEASURE t BY <<
 
