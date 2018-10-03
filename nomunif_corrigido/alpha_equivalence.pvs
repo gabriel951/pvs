@@ -41,6 +41,8 @@ alpha(Delta)(t, s): RECURSIVE bool =
 		    ENDIF,
 	 app(sl,ag): app?(s) AND sl=sym(s) AND
 	 	     alpha(Delta)(ag, arg(s))
+
+		     
    ENDCASES
    MEASURE t BY <<
 
