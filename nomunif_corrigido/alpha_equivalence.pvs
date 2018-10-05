@@ -40,9 +40,11 @@ alpha(Delta)(t, s): RECURSIVE bool =
 		       	    alpha(Delta)(bd, ext((:(a,abstr(s)):))(body(s)))
 		    ENDIF,
 	 app(sl,ag): app?(s) AND sl=sym(s) AND
-	 	     alpha(Delta)(ag, arg(s))
+	 	     alpha(Delta)(ag, arg(s)),
 
-		     
+	% TODO: added commutative function
+	c_app(sl, ag1, ag2): c_app?(s) AND ( ( (alpha(Delta)(ag1, arg1(s))) AND (alpha(Delta)(ag2, arg2(s))) ) OR
+		       	     	             ( (alpha(Delta)(ag1, arg2(s))) AND (alpha(Delta)(ag2, arg1(s))) ) )
    ENDCASES
    MEASURE t BY <<
 

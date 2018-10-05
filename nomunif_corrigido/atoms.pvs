@@ -88,7 +88,7 @@ Atoms_append: LEMMA
    Atoms(append(pi1,pi2)) = append(Atoms(pi1), Atoms(pi2))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Deifference set between two permutations
+% Difference set between two permutations
 ds(pi1,pi2): set[atom] = 
       {a | act(pi1)(a) /= act(pi2)(a)}
 
