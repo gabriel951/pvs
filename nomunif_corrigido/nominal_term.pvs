@@ -155,8 +155,6 @@ Vars_occurs: LEMMA
    Vars(t)(X) = occurs(X,t)
 
 END nominal_term
-
-
   
 
 

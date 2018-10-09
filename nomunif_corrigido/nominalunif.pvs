@@ -73,7 +73,12 @@ unify(t,s): RECURSIVE [fresh_context, Subs_unif(t,s), bool] =
 				      x((Delta2, Id, b2), (Delta1, sig, b1)) ENDIF,
  	 app(f,ag): IF NOT app?(s) OR f /= sym(s) THEN ((::), Id, FALSE)
 		       ELSE unify(ag, arg(s)) ENDIF
-   ENDCASES ENDIF
+         c-app(f, af) :  IF NOT c-app?(s) OR THEN ((::), ...
+                           c-app(g, ag) :  f = g  AND LET (Delta, sig, b) = unify(af,ag) IN
+			                               IF b THEN (Delta, sig, b)XF
+						       ELSE unify(pair(arg2(af), arg1(af)), ag)
+						       ENDIF         
+ENDCASES ENDIF
    MEASURE lex2(card(Vars(t,s)), depth(t))
 
 % Soundness of unify.

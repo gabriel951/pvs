@@ -43,8 +43,15 @@ alpha(Delta)(t, s): RECURSIVE bool =
 	 	     alpha(Delta)(ag, arg(s)),
 
 	% TODO: added commutative function
-	c_app(sl, ag1, ag2): c_app?(s) AND ( ( (alpha(Delta)(ag1, arg1(s))) AND (alpha(Delta)(ag2, arg2(s))) ) OR
-		       	     	             ( (alpha(Delta)(ag1, arg2(s))) AND (alpha(Delta)(ag2, arg1(s))) ) )
+	c_app(sl, ag): c_app?(s) AND sl= c_sym(s) AND
+	                CASES ag OF
+			   pair(ag1, ag2) : pair?(arg(s)) AND
+			       
+		       	     ( (alpha(Delta)(ag1, arg1(arg(s)))) AND (alpha(Delta)(ag2, arg2(arg(s))) )) OR
+		       	     ( (alpha(Delta)(ag1, arg2(s))) AND (alpha(Delta)(ag2, arg1(s))) ) ,
+                           _ : FALSE
+			ENDCASES,
+			
    ENDCASES
    MEASURE t BY <<
 
