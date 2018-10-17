@@ -36,7 +36,7 @@ fresh(Delta)(a, t): RECURSIVE bool =
 		    ENDIF,
 	 app(sl,ag): fresh(Delta)(a,ag),
 	 % TODO - added commutative function 
-	 c_app(sl, ag1, ag2): fresh(Delta)(a, ag1) AND fresh(Delta)(a, ag2)
+	 c_app(sl, ag): fresh(Delta)(a, ag)
    ENDCASES
    MEASURE t BY <<
 
@@ -99,7 +99,7 @@ fresh?(a, t): RECURSIVE [fresh_context, bool] =
 	 	       ELSE fresh?(a, bd) ENDIF,
 	 app(f,ag): fresh?(a, ag),
 	 % TODO: commutative symbols
-	 c_app(f, ag1, ag2): x(fresh?(a, ag1), fresh?(a, ag2))
+	 c_app(f, ag): fresh?(a, ag)
    ENDCASES
    MEASURE t BY <<
 

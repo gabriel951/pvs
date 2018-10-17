@@ -16,7 +16,7 @@
 % Nominal terms grammar: atoms, suspended variables, unit, pairs,
 % abstractions and application, respectively.
 % Definition 2.2
-% TODO: commutative functions
+% TODO: commutative functions. Do commutative symbols need to be nonempty?
 term[atom : TYPE+, perm : TYPE+, variable : TYPE+, symbol : TYPE+, commutative_symbol: TYPE+ ]: DATATYPE
 	  BEGIN
 	      at (a: atom): atom?
@@ -31,8 +31,8 @@ term[atom : TYPE+, perm : TYPE+, variable : TYPE+, symbol : TYPE+, commutative_s
 
 	      app (sym: symbol, arg: term): app?
 
-	      % TODO: commutative functions - they necessarily take two arguments
-	      c_app (c_sym: commutative_symbol, arg1: term, arg2:term): c_app?
+	      % TODO: commutative functions - they necessarily take a pair. But i can not put type pair in PVS 
+	      c_app (c_sym: commutative_symbol, c_arg: term): c_app?
 
 	  END term
 	  
@@ -72,7 +72,7 @@ ext(pi)(t): RECURSIVE term =
    	 abs(ab, bd): abs(act(pi)(ab), ext(pi)(bd)),
    	 app(sl, ag): app(sl, ext(pi)(ag)),
 	 % TODO: added commutative symbol
-	 c_app(sl, ag1, ag2): c_app(sl, ext(pi)(ag1), ext(pi)(ag2))
+	 c_app(sl, ag): c_app(sl, ext(pi)(ag))
   ENDCASES
 MEASURE t BY <<
 
@@ -102,7 +102,7 @@ depth(t): RECURSIVE nat =
 	 abs(a,bd): 1 + depth(bd),
 	 app(sl,ag): 1 + depth(ag),
 	 % TODO: added commutative symbol
-	 c_app(sl, ag1, ag2): 1 + max(depth(ag1), depth(ag2))
+	 c_app(sl, ag): 1 + depth(ag)
    ENDCASES
    MEASURE t BY <<
 
@@ -121,7 +121,7 @@ occurs(X, t): RECURSIVE bool =
 	 abs(a,bd): occurs(X,bd),
 	 app(sl,ag): occurs(X,ag),
 	 % TODO: added commutative symbol
-	 c_app(sl, ag1, ag2): occurs(X, ag1) OR occurs(X, ag2)
+	 c_app(sl, ag): occurs(X, ag)
 	 
    ENDCASES
    MEASURE t BY <<
@@ -141,7 +141,7 @@ Vars(t): RECURSIVE finite_set[variable] =
 	 abs(a,bd): Vars(bd),
 	 app(sl,ag): Vars(ag),
 	 % TODO: added commutative symbol
-	 c_app(sl, ag1, ag2): union(Vars(ag1), Vars(ag2))
+	 c_app(sl, ag): Vars(ag)
    ENDCASES
    MEASURE t BY <<
 

@@ -39,9 +39,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   c_sym: [(c_app?) -> commutative_symbol]
 
-  arg1: [(c_app?) -> term]
-
-  arg2: [(c_app?) -> term]
+  c_arg: [(c_app?) -> term]
 
   at: [atom -> (atom?)]
 
@@ -55,7 +53,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   app: [[symbol, term] -> (app?)]
 
-  c_app: [[commutative_symbol, term, term] -> (c_app?)]
+  c_app: [[commutative_symbol, term] -> (c_app?)]
 
   term_ord: [term -> upto(6)]
 
@@ -67,8 +65,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
             term_ord(pair(term1, term2)) = 3)
      AND (FORALL (abstr: atom, body: term): term_ord(abs(abstr, body)) = 4)
      AND (FORALL (sym: symbol, arg: term): term_ord(app(sym, arg)) = 5)
-     AND (FORALL (c_sym: commutative_symbol, arg1: term, arg2: term):
-            term_ord(c_app(c_sym, arg1, arg2)) = 6);
+     AND (FORALL (c_sym: commutative_symbol, c_arg: term):
+            term_ord(c_app(c_sym, c_arg)) = 6);
 
   ord(x: term): [term -> upto(6)] =
       CASES x
@@ -78,7 +76,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
            pair(pair1_var, pair2_var): 3,
            abs(abs1_var, abs2_var): 4,
            app(app1_var, app2_var): 5,
-           c_app(c_app1_var, c_app2_var, c_app3_var): 6
+           c_app(c_app1_var, c_app2_var): 6
         ENDCASES
 
   term_at_extensionality: AXIOM
@@ -131,14 +129,12 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
   term_c_app_extensionality: AXIOM
     FORALL (c_app?_var: (c_app?), c_app?_var2: (c_app?)):
       c_sym(c_app?_var) = c_sym(c_app?_var2) AND
-       arg1(c_app?_var) = arg1(c_app?_var2) AND
-        arg2(c_app?_var) = arg2(c_app?_var2)
+       c_arg(c_app?_var) = c_arg(c_app?_var2)
        IMPLIES c_app?_var = c_app?_var2;
 
   term_c_app_eta: AXIOM
     FORALL (c_app?_var: (c_app?)):
-      c_app(c_sym(c_app?_var), arg1(c_app?_var), arg2(c_app?_var)) =
-       c_app?_var;
+      c_app(c_sym(c_app?_var), c_arg(c_app?_var)) = c_app?_var;
 
   term_a_at: AXIOM FORALL (at1_var: atom): a(at(at1_var)) = at1_var;
 
@@ -175,19 +171,12 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
       arg(app(app1_var, app2_var)) = app2_var;
 
   term_c_sym_c_app: AXIOM
-    FORALL (c_app1_var: commutative_symbol, c_app2_var: term,
-            c_app3_var: term):
-      c_sym(c_app(c_app1_var, c_app2_var, c_app3_var)) = c_app1_var;
+    FORALL (c_app1_var: commutative_symbol, c_app2_var: term):
+      c_sym(c_app(c_app1_var, c_app2_var)) = c_app1_var;
 
-  term_arg1_c_app: AXIOM
-    FORALL (c_app1_var: commutative_symbol, c_app2_var: term,
-            c_app3_var: term):
-      arg1(c_app(c_app1_var, c_app2_var, c_app3_var)) = c_app2_var;
-
-  term_arg2_c_app: AXIOM
-    FORALL (c_app1_var: commutative_symbol, c_app2_var: term,
-            c_app3_var: term):
-      arg2(c_app(c_app1_var, c_app2_var, c_app3_var)) = c_app3_var;
+  term_c_arg_c_app: AXIOM
+    FORALL (c_app1_var: commutative_symbol, c_app2_var: term):
+      c_arg(c_app(c_app1_var, c_app2_var)) = c_app2_var;
 
   term_inclusive: AXIOM
     FORALL (term_var: term):
@@ -208,10 +197,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
               p1(abs2_var) IMPLIES p1(abs(abs1_var, abs2_var))
         AND FORALL (app1_var: symbol, app2_var: term):
               p1(app2_var) IMPLIES p1(app(app1_var, app2_var))
-        AND FORALL (c_app1_var: commutative_symbol, c_app2_var: term,
-                    c_app3_var: term):
-              p1(c_app2_var) AND p1(c_app3_var) IMPLIES
-               p1(c_app(c_app1_var, c_app2_var, c_app3_var)))
+        AND FORALL (c_app1_var: commutative_symbol, c_app2_var: term):
+              p1(c_app2_var) IMPLIES p1(c_app(c_app1_var, c_app2_var)))
        IMPLIES (FORALL (term_var: term): p1(term_var));
 
   every(p1: PRED[atom], p2: PRED[perm], p3: PRED[variable],
@@ -229,10 +216,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              p1(abs1_var) AND every(p1, p2, p3, p4, p5)(abs2_var),
            app(app1_var, app2_var):
              p4(app1_var) AND every(p1, p2, p3, p4, p5)(app2_var),
-           c_app(c_app1_var, c_app2_var, c_app3_var):
-             p5(c_app1_var) AND
-              every(p1, p2, p3, p4, p5)(c_app2_var) AND
-               every(p1, p2, p3, p4, p5)(c_app3_var)
+           c_app(c_app1_var, c_app2_var):
+             p5(c_app1_var) AND every(p1, p2, p3, p4, p5)(c_app2_var)
         ENDCASES;
 
   every(p1: PRED[atom], p2: PRED[perm], p3: PRED[variable],
@@ -249,10 +234,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              p1(abs1_var) AND every(p1, p2, p3, p4, p5, abs2_var),
            app(app1_var, app2_var):
              p4(app1_var) AND every(p1, p2, p3, p4, p5, app2_var),
-           c_app(c_app1_var, c_app2_var, c_app3_var):
-             p5(c_app1_var) AND
-              every(p1, p2, p3, p4, p5, c_app2_var) AND
-               every(p1, p2, p3, p4, p5, c_app3_var)
+           c_app(c_app1_var, c_app2_var):
+             p5(c_app1_var) AND every(p1, p2, p3, p4, p5, c_app2_var)
         ENDCASES;
 
   some(p1: PRED[atom], p2: PRED[perm], p3: PRED[variable],
@@ -270,10 +253,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              p1(abs1_var) OR some(p1, p2, p3, p4, p5)(abs2_var),
            app(app1_var, app2_var):
              p4(app1_var) OR some(p1, p2, p3, p4, p5)(app2_var),
-           c_app(c_app1_var, c_app2_var, c_app3_var):
-             p5(c_app1_var) OR
-              some(p1, p2, p3, p4, p5)(c_app2_var) OR
-               some(p1, p2, p3, p4, p5)(c_app3_var)
+           c_app(c_app1_var, c_app2_var):
+             p5(c_app1_var) OR some(p1, p2, p3, p4, p5)(c_app2_var)
         ENDCASES;
 
   some(p1: PRED[atom], p2: PRED[perm], p3: PRED[variable],
@@ -290,10 +271,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              p1(abs1_var) OR some(p1, p2, p3, p4, p5, abs2_var),
            app(app1_var, app2_var):
              p4(app1_var) OR some(p1, p2, p3, p4, p5, app2_var),
-           c_app(c_app1_var, c_app2_var, c_app3_var):
-             p5(c_app1_var) OR
-              some(p1, p2, p3, p4, p5, c_app2_var) OR
-               some(p1, p2, p3, p4, p5, c_app3_var)
+           c_app(c_app1_var, c_app2_var):
+             p5(c_app1_var) OR some(p1, p2, p3, p4, p5, c_app2_var)
         ENDCASES;
 
   subterm(x: term, y: term):  boolean =
@@ -306,8 +285,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
               subterm(x, pair1_var) OR subterm(x, pair2_var),
             abs(abs1_var, abs2_var): subterm(x, abs2_var),
             app(app1_var, app2_var): subterm(x, app2_var),
-            c_app(c_app1_var, c_app2_var, c_app3_var):
-              subterm(x, c_app2_var) OR subterm(x, c_app3_var)
+            c_app(c_app1_var, c_app2_var): subterm(x, c_app2_var)
          ENDCASES;
 
   <<:  (strict_well_founded?[term]) =
@@ -321,9 +299,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                 x = pair2_var OR x << pair2_var,
              abs(abs1_var, abs2_var): x = abs2_var OR x << abs2_var,
              app(app1_var, app2_var): x = app2_var OR x << app2_var,
-             c_app(c_app1_var, c_app2_var, c_app3_var):
-               (x = c_app2_var OR x << c_app2_var) OR
-                x = c_app3_var OR x << c_app3_var
+             c_app(c_app1_var, c_app2_var):
+               x = c_app2_var OR x << c_app2_var
           ENDCASES;
 
   term_well_founded: AXIOM strict_well_founded?[term](<<);
@@ -333,7 +310,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              pair?_fun: [[nat, nat] -> nat],
              abs?_fun: [[atom, nat] -> nat],
              app?_fun: [[symbol, nat] -> nat],
-             c_app?_fun: [[commutative_symbol, nat, nat] -> nat]):
+             c_app?_fun: [[commutative_symbol, nat] -> nat]):
         [term -> nat] =
       LAMBDA (term_adtvar: term):
         LET red: [term -> nat] =
@@ -349,8 +326,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  pair?_fun(red(pair1_var), red(pair2_var)),
                abs(abs1_var, abs2_var): abs?_fun(abs1_var, red(abs2_var)),
                app(app1_var, app2_var): app?_fun(app1_var, red(app2_var)),
-               c_app(c_app1_var, c_app2_var, c_app3_var):
-                 c_app?_fun(c_app1_var, red(c_app2_var), red(c_app3_var))
+               c_app(c_app1_var, c_app2_var):
+                 c_app?_fun(c_app1_var, red(c_app2_var))
             ENDCASES;
 
   REDUCE_nat(atom?_fun: [[atom, term] -> nat],
@@ -359,7 +336,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              pair?_fun: [[nat, nat, term] -> nat],
              abs?_fun: [[atom, nat, term] -> nat],
              app?_fun: [[symbol, nat, term] -> nat],
-             c_app?_fun: [[commutative_symbol, nat, nat, term] -> nat]):
+             c_app?_fun: [[commutative_symbol, nat, term] -> nat]):
         [term -> nat] =
       LAMBDA (term_adtvar: term):
         LET red: [term -> nat] =
@@ -377,9 +354,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  abs?_fun(abs1_var, red(abs2_var), term_adtvar),
                app(app1_var, app2_var):
                  app?_fun(app1_var, red(app2_var), term_adtvar),
-               c_app(c_app1_var, c_app2_var, c_app3_var):
-                 c_app?_fun(c_app1_var, red(c_app2_var), red(c_app3_var),
-                            term_adtvar)
+               c_app(c_app1_var, c_app2_var):
+                 c_app?_fun(c_app1_var, red(c_app2_var), term_adtvar)
             ENDCASES;
 
   reduce_ordinal(atom?_fun: [atom -> ordinal],
@@ -388,8 +364,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  pair?_fun: [[ordinal, ordinal] -> ordinal],
                  abs?_fun: [[atom, ordinal] -> ordinal],
                  app?_fun: [[symbol, ordinal] -> ordinal],
-                 c_app?_fun:
-                   [[commutative_symbol, ordinal, ordinal] -> ordinal]):
+                 c_app?_fun: [[commutative_symbol, ordinal] -> ordinal]):
         [term -> ordinal] =
       LAMBDA (term_adtvar: term):
         LET red: [term -> ordinal] =
@@ -405,8 +380,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  pair?_fun(red(pair1_var), red(pair2_var)),
                abs(abs1_var, abs2_var): abs?_fun(abs1_var, red(abs2_var)),
                app(app1_var, app2_var): app?_fun(app1_var, red(app2_var)),
-               c_app(c_app1_var, c_app2_var, c_app3_var):
-                 c_app?_fun(c_app1_var, red(c_app2_var), red(c_app3_var))
+               c_app(c_app1_var, c_app2_var):
+                 c_app?_fun(c_app1_var, red(c_app2_var))
             ENDCASES;
 
   REDUCE_ordinal(atom?_fun: [[atom, term] -> ordinal],
@@ -416,8 +391,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  abs?_fun: [[atom, ordinal, term] -> ordinal],
                  app?_fun: [[symbol, ordinal, term] -> ordinal],
                  c_app?_fun:
-                   [[commutative_symbol, ordinal, ordinal, term] ->
-                      ordinal]):
+                   [[commutative_symbol, ordinal, term] -> ordinal]):
         [term -> ordinal] =
       LAMBDA (term_adtvar: term):
         LET red: [term -> ordinal] =
@@ -435,9 +409,8 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  abs?_fun(abs1_var, red(abs2_var), term_adtvar),
                app(app1_var, app2_var):
                  app?_fun(app1_var, red(app2_var), term_adtvar),
-               c_app(c_app1_var, c_app2_var, c_app3_var):
-                 c_app?_fun(c_app1_var, red(c_app2_var), red(c_app3_var),
-                            term_adtvar)
+               c_app(c_app1_var, c_app2_var):
+                 c_app?_fun(c_app1_var, red(c_app2_var), term_adtvar)
             ENDCASES;
  END term_adt
 
@@ -487,9 +460,8 @@ term_adt_map[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              abs(f1(abs1_var), map(f1, f2, f3, f4, f5)(abs2_var)),
            app(app1_var, app2_var):
              app(f4(app1_var), map(f1, f2, f3, f4, f5)(app2_var)),
-           c_app(c_app1_var, c_app2_var, c_app3_var):
-             c_app(f5(c_app1_var), map(f1, f2, f3, f4, f5)(c_app2_var),
-                   map(f1, f2, f3, f4, f5)(c_app3_var))
+           c_app(c_app1_var, c_app2_var):
+             c_app(f5(c_app1_var), map(f1, f2, f3, f4, f5)(c_app2_var))
         ENDCASES;
 
   map(f1: [atom -> atom1], f2: [perm -> perm1],
@@ -508,9 +480,8 @@ term_adt_map[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              abs(f1(abs1_var), map(f1, f2, f3, f4, f5, abs2_var)),
            app(app1_var, app2_var):
              app(f4(app1_var), map(f1, f2, f3, f4, f5, app2_var)),
-           c_app(c_app1_var, c_app2_var, c_app3_var):
-             c_app(f5(c_app1_var), map(f1, f2, f3, f4, f5, c_app2_var),
-                   map(f1, f2, f3, f4, f5, c_app3_var))
+           c_app(c_app1_var, c_app2_var):
+             c_app(f5(c_app1_var), map(f1, f2, f3, f4, f5, c_app2_var))
         ENDCASES;
 
   every(R1: [[atom, atom1] -> boolean], R2: [[perm, perm1] -> boolean],
@@ -534,9 +505,10 @@ term_adt_map[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
        OR app?(x) AND
            app?(y) AND
             R4(sym(x), sym(y)) AND every(R1, R2, R3, R4, R5)(arg(x), arg(y))
-       OR      c_app?(x) AND c_app?(y) AND R5(c_sym(x), c_sym(y))
-           AND every(R1, R2, R3, R4, R5)(arg1(x), arg1(y))
-           AND every(R1, R2, R3, R4, R5)(arg2(x), arg2(y));
+       OR c_app?(x) AND
+           c_app?(y) AND
+            R5(c_sym(x), c_sym(y)) AND
+             every(R1, R2, R3, R4, R5)(c_arg(x), c_arg(y));
  END term_adt_map
 
 term_adt_reduce[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
@@ -561,7 +533,7 @@ term_adt_reduce[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
          pair?_fun: [[range, range] -> range],
          abs?_fun: [[atom, range] -> range],
          app?_fun: [[symbol, range] -> range],
-         c_app?_fun: [[commutative_symbol, range, range] -> range]):
+         c_app?_fun: [[commutative_symbol, range] -> range]):
         [term[atom, perm, variable, symbol, commutative_symbol] -> range] =
       LAMBDA (term_adtvar:
                 term[atom, perm, variable, symbol, commutative_symbol]):
@@ -581,8 +553,8 @@ term_adt_reduce[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  pair?_fun(red(pair1_var), red(pair2_var)),
                abs(abs1_var, abs2_var): abs?_fun(abs1_var, red(abs2_var)),
                app(app1_var, app2_var): app?_fun(app1_var, red(app2_var)),
-               c_app(c_app1_var, c_app2_var, c_app3_var):
-                 c_app?_fun(c_app1_var, red(c_app2_var), red(c_app3_var))
+               c_app(c_app1_var, c_app2_var):
+                 c_app?_fun(c_app1_var, red(c_app2_var))
             ENDCASES;
 
   REDUCE(atom?_fun:
@@ -609,7 +581,7 @@ term_adt_reduce[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
              term[atom, perm, variable, symbol, commutative_symbol]] ->
               range],
          c_app?_fun:
-           [[commutative_symbol, range, range,
+           [[commutative_symbol, range,
              term[atom, perm, variable, symbol, commutative_symbol]] ->
               range]):
         [term[atom, perm, variable, symbol, commutative_symbol] -> range] =
@@ -633,8 +605,7 @@ term_adt_reduce[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
                  abs?_fun(abs1_var, red(abs2_var), term_adtvar),
                app(app1_var, app2_var):
                  app?_fun(app1_var, red(app2_var), term_adtvar),
-               c_app(c_app1_var, c_app2_var, c_app3_var):
-                 c_app?_fun(c_app1_var, red(c_app2_var), red(c_app3_var),
-                            term_adtvar)
+               c_app(c_app1_var, c_app2_var):
+                 c_app?_fun(c_app1_var, red(c_app2_var), term_adtvar)
             ENDCASES;
  END term_adt_reduce
