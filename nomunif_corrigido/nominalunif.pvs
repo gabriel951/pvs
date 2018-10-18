@@ -64,6 +64,7 @@ x(solve1, solve2): [fresh_context, Sub, bool] =
 % Function returns
   % a list of nominal solution. The list is empty if no solution could be found.  
 unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE [nominal_sol]:
+
     % if unify_lst is True, we are trying to unify lst_t and lst_s. 
     IF unify_lst THEN
        IF lst_t = null OR lst_s = null THEN (::)
@@ -78,88 +79,66 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE [nominal_sol]:
 	IF susp?(s) AND NOT occurs(V(s), t) THEN
 	   LET sol = ( (::), (: (V(s), ext(reverse(p(s))(t))) :) ) IN
 	       (:sol:)
+	       
 	ELSE CASES t of
 	     % atom - simple base case of our induction
 	     at(a): IF s = at(a) THEN LET sol = ( (::), Id) IN
 	     	       	   	      	  (:sol:)
-
-	     % suspended variable
-	     *(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :) ) IN
-	     	       	      		   	    (:sol:)
-		       ELSE (::)
-		       ENDIF 
-
-	     % 
-	ENDIF
-    ENDIF
-MEASURE lex2(card(Vars(t,s)), depth(t))
-
-%produces the most general unifier to unifiable
-% terms and returns fail (False) to non-unifiable terms.
-% Definition 4.2
-
-% TODO: i'll need to modify this in order to output a family of fixpoint equations.
-% function now returns a list of solutions. 
-unify(t,s): RECURSIVE list(nominal_sol) =
-
-
-    % the case of s being a suspended variable and not occuring in T is simple
-    IF susp?(s) AND NOT occurs(V(s), t) THEN
-       let sol = ( (::), (: (V(s), ext(reverse(p(s))(t))) :) ) in 
-      	   (:sol:)
-
-    ELSE CASES t of
-    	% simple base case of our induction
-  	at(a): IF s = at(a) THEN LET sol = ( (::), Id) IN
-	       	      	    	     (:sol:)
-	       ELSE (::)
-	       ENDIF,
-
-	% suspended variable
-	*(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :) ) IN
-	      	     	 	      	       (:sol:)
-		  ELSE (::)   % TODO: correctly adapt function alpha? to return a list.. this is the old way.
-		       	      % i could see if s is a variable. If s is not a suspended variable. If not, don't unify. I could cut function alpha? completely. 
-		  ENDIF, 
-
-        % simple base case of our induction
-	unit: IF s = unit THEN LET sol = ( (::), Id) IN
-	      	     	       	   (:sol:)
-              ELSE (::)
-	      ENDIF,
-
-	% TODO - pair. I'll need to define 4 more functions in order for this to work. Maybe i should define a separate function for this. 
-        pair(t1, t2): IF NOT pair?(s) THEN (::)    
-                      ELSE LET sol_lst_first_pre = unify(t1, term1(s)),   % unify first terms, obtaining a preliminar first list of solutions
-		               (t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_first_pre, t2, term2(s)), % TODO: apply substitutions to second argument of the terms 
-		               sol_lst_snd = unify_lst(t2_subs_lst, s2_subs_lst),                  % unify list of second terms, obtaining a second list of solutions
-			       
-
-
-sol_lst_first_final = fresh_subs?_lst(sol_lst_fst, sol_lst_snd) in % TODO: obtain list of context where freshness holds, if possible
-			       concat_pair_sol(sol_lst_snd, sol_lst_final)                  % TODO: concatenate appropriate solutions, if possible
-		      ENDIF,
-
-        % TODO - abstraction
-	abs(a, bd): IF NOT abs?(s) THEN (::)
-	       	    ELSIF a = abstr(s) THEN unify(bd, body(s))
-		    ELSE LET  sol_lst1 = unify(bd, ext((:(a, abstr(s)):))(body(s))), % unify body of abstractions, according to the rules.
-		    	      sol_lst2 % computes minimal context necessary for freshness
-			      concat_pair_sol(sol_lst1, sol_lst2)  % concatenate appropriate solutions, if possible 
+		    ELSE (::)
 		    ENDIF, 
 
-	% application of a function
-	app(f, ag): IF NOT app?(s) OR f /= sym(s) THEN (::)
-	            ELSE unify(ag, arg(s))
-		    ENDIF,
+	     % suspended variable - TODO: easily handle this case, preferably without calling function alpha? (from Ana's specification)
+	     *(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :) ) IN
+	     	       	      		   	    (:sol:)
+		       ELSE IF susp?(s) AND occurs(X, s) THEN % TODO: we have a fixed point problem. How shall we proceed?                             
+		       ELSE (::)                              % here, t is a suspension and s is not a suspension, but it contains X.
+                 	  				      % there is no possible solution
+		       ENDIF,
 
-        % TODO: commutative functions. This should be like the pair. 
-	c_app(f, ag): IF NOT c_app?(s) OR f/= c_sym(s) THEN (::) % return empty list, no solution is possible
-		      ELSE % code to unify simultaneously (t1, s1) and (t2, s2). Should be similar to pair
-		      	   % code to unify simultaneously (t1, s2) and (t2, s1). Should be similar to pair.  
-			   % append solutions appropriately.  
-		      ENDIF
-    ENDCASES
+	     % unit - a simple base case of our induction
+	     unit: IF s = unit THEN LET sol = ( (::), Id) IN
+	     	      	       	    	(:sol:)
+		   ELSE (::)
+		   ENDIF,
+
+	     % pair - TODO: i'll need to code 2 auxiliary functions
+	     pair(t1, t2): IF NOT pair?(s) THEN (::)
+	                   ELSE LET % unify first terms - obtain preliminar list of solutions
+			            sol_lst_fst_pre = unify_wrapper(t1, term1(s), FALSE, (::), (::)), 
+                                    % apply every possible substitution to second terms
+                                    (t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_fst_pre, t2, term2(s)),
+				    % unify list of second terms 
+				    sol_lst_snd = unify_wrapper(t, s, TRUE, t2_subs_lst, s2_subs_lst),
+				    % applies list of substitutions to list of contexts (if possible) obtaining new contexts for fst solution
+				    sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst_fst_pre, sol_lst_snd)
+				    % concatenate lists of solutions
+				    IN flat_concat(sol_lst_fst_final, sol_lst_snd)
+		           ENDIF
+
+	     % abstraction - TODO: I will need to code two more functions.
+	     abs(a, bd): IF NOT abs?(s) THEN (::)
+	       	         ELSIF a = abstr(s) THEN unify_wrapper(bd, body(s), FALSE, (::), (::))
+		         ELSE LET % unify body of abstractions, according to the rules. Obtain preliminar list of solutions
+			          sol_lst1 = unify_wrapper(bd, ext((:(a, abstr(s)):))(body(s)), FALSE, (::), (::)),
+		    	          % TODO: computes minimal context in which a is fresh on each solution of the lst of solutions
+				  (Delta_lst, bool_lst) = fresh?_lst(a, sol_lst1)
+				  % concatenate this list of contexts with the solutions, case the boolean indicate it is possible
+				  add_context_aux(Delta_lst, bool_lst, sol_lst1)
+		         ENDIF,
+
+	     % application of a function - easy commutative case
+             app(f, ag): IF NOT app?(s) OR f /= sym(s) THEN (::)
+	     	    	 ELSE unify_wrapper(ag, arg(s), FALSE, (::), (::))
+			 ENDIF, 
+	     
+	     % commutative function - how should we handle commutative functions not being called with a pair?
+	     c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(f) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
+	     	      	      % try both ways of unifying the pair (t1, t2) with (s1, s2) and concatenate this solutions
+	     	      	      ELSE LET sol1_lst = unify_wrapper(pair(term1(f), term2(f)), pair(term1(arg(s)), term2(arg(s))), FALSE, (::), (::))
+			      	       sol2_lst = unify_wrapper(pair(term1(f), term2(f)), pair(term2(arg(s)), term1(arg(s))), FALSE, (::), (::)) IN
+				       flat_concat(sol1_lst, sol2_lst)
+			      ENDIF	     
+	ENDIF
     ENDIF
 MEASURE lex2(card(Vars(t,s)), depth(t))
 
