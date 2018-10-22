@@ -24,9 +24,17 @@ BEGIN
 	sigma, gamma, theta: VAR Sub
 	t, s, u: VAR term
 	X: VAR variable
+
+	% TODO: unify_lst - boolean that indicates whether the algorith unify_wrapper is working as unify or unify_lst
+	unify_lst: VAR bool
+        lst_t: VAR list[term]
+	lst_s: VAR list[term]
 	
-% one nominal solution is a list consisting of a fresh context and a substitution
-nominal_sol:  TYPE = [fresh_context, substitution]
+	
+% TODO: one nominal solution is a list consisting of a fresh context and a substitution
+nominal_sol:  TYPE = [fresh_context, Sub]
+
+sol: VAR nominal_sol
 
 % Two terms are unifiable if there is a solution (Delta, sigma)
 % that makes them alpha-equivalent.
@@ -63,21 +71,23 @@ x(solve1, solve2): [fresh_context, Sub, bool] =
   % 5. lst_s to unify (if we are in function unify_lst)
 % Function returns
   % a list of nominal solution. The list is empty if no solution could be found.  
-unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE [nominal_sol]:
+unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] = 
 
     % if unify_lst is True, we are trying to unify lst_t and lst_s. 
     IF unify_lst THEN
-       IF lst_t = null OR lst_s = null THEN (::)
+       IF null(lst_t) OR null(lst_s) THEN (::)
        % flatten and concatenate list of solutions of the heads of the list AND list of solutions for the tail of the lists
        % TODO: write this function
-       ELSE flat_concat(unify_wrapper(car(lst_t), car(lst_s), FALSE, (::), (::) ),  unify_wrapper(t, s, TRUE, cdr(lst_t), cdr(lst_s)))
+       ELSE LET sol_head = unify_wrapper(car(lst_t), car(lst_s), FALSE, (::), (::)),
+       	    	sol_tail = unify_wrapper(t, s, TRUE, cdr(lst_t), cdr(lst_s)) IN (::)
+		%flat_concat(sol_head, sol_tail)
        ENDIF
 
     % if unify_lst is False, we are in the normal algorithm for unifying two terms 
     ELSE
 	% handle case of s being a suspended variable not occurring in t
 	IF susp?(s) AND NOT occurs(V(s), t) THEN
-	   LET sol = ( (::), (: (V(s), ext(reverse(p(s))(t))) :) ) IN
+	LET sol = ( (::), (: (V(s), ext(reverse(p(s)))(t)) :) ) IN
 	       (:sol:)
 	       
 	ELSE CASES t of
@@ -90,7 +100,9 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE [nominal_sol]:
 	     % suspended variable - TODO: easily handle this case, preferably without calling function alpha? (from Ana's specification)
 	     *(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :) ) IN
 	     	       	      		   	    (:sol:)
-		       ELSE IF susp?(s) AND occurs(X, s) THEN % TODO: we have a fixed point problem. How shall we proceed?                             
+		       % TODO: here we have a fixed point problem
+		       ELSIF susp?(s) AND occurs(X, s) THEN LET sol = (fc(DS(pm, p(s)), X), Id) IN
+                       	     	      	  	       	    	(:sol:)
 		       ELSE (::)                              % here, t is a suspension and s is not a suspension, but it contains X.
                  	  				      % there is no possible solution
 		       ENDIF,
@@ -104,26 +116,26 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE [nominal_sol]:
 	     % pair - TODO: i'll need to code 2 auxiliary functions
 	     pair(t1, t2): IF NOT pair?(s) THEN (::)
 	                   ELSE LET % unify first terms - obtain preliminar list of solutions
-			            sol_lst_fst_pre = unify_wrapper(t1, term1(s), FALSE, (::), (::)), 
+			            sol_lst_fst_pre = unify_wrapper(t1, term1(s), FALSE, (::), (::))%, 
                                     % apply every possible substitution to second terms
-                                    (t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_fst_pre, t2, term2(s)),
+                                    %(t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_fst_pre, t2, term2(s)),
 				    % unify list of second terms 
-				    sol_lst_snd = unify_wrapper(t, s, TRUE, t2_subs_lst, s2_subs_lst),
+				    %sol_lst_snd = unify_wrapper(t, s, TRUE, t2_subs_lst, s2_subs_lst),
 				    % applies list of substitutions to list of contexts (if possible) obtaining new contexts for fst solution
-				    sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst_fst_pre, sol_lst_snd)
+				    %sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst_fst_pre, sol_lst_snd)
 				    % concatenate lists of solutions
-				    IN flat_concat(sol_lst_fst_final, sol_lst_snd)
-		           ENDIF
+				    IN (::) %flat_concat(sol_lst_fst_final, sol_lst_snd)
+		           ENDIF,
 
 	     % abstraction - TODO: I will need to code two more functions.
 	     abs(a, bd): IF NOT abs?(s) THEN (::)
 	       	         ELSIF a = abstr(s) THEN unify_wrapper(bd, body(s), FALSE, (::), (::))
-		         ELSE LET % unify body of abstractions, according to the rules. Obtain preliminar list of solutions
-			          sol_lst1 = unify_wrapper(bd, ext((:(a, abstr(s)):))(body(s)), FALSE, (::), (::)),
-		    	          % TODO: computes minimal context in which a is fresh on each solution of the lst of solutions
-				  (Delta_lst, bool_lst) = fresh?_lst(a, sol_lst1)
+		         ELSE (::) %LET % unify body of abstractions, according to the rules. Obtain preliminar list of solutions
+			      %    sol_lst1 = unify_wrapper(bd, ext((:(a, abstr(s)):))(body(s)), FALSE, (::), (::)),
+		    	      %    % TODO: computes minimal context in which a is fresh on each solution of the lst of solutions
+			      %    %(Delta_lst, bool_lst) = fresh?_lst(a, sol_lst1)
 				  % concatenate this list of contexts with the solutions, case the boolean indicate it is possible
-				  add_context_aux(Delta_lst, bool_lst, sol_lst1)
+				  % IN add_context_aux(Delta_lst, bool_lst, sol_lst1)
 		         ENDIF,
 
 	     % application of a function - easy commutative case
@@ -132,48 +144,44 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE [nominal_sol]:
 			 ENDIF, 
 	     
 	     % commutative function - how should we handle commutative functions not being called with a pair?
-	     c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(f) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
+	     c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(arg(t)) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
 	     	      	      % try both ways of unifying the pair (t1, t2) with (s1, s2) and concatenate this solutions
-	     	      	      ELSE LET sol1_lst = unify_wrapper(pair(term1(f), term2(f)), pair(term1(arg(s)), term2(arg(s))), FALSE, (::), (::))
-			      	       sol2_lst = unify_wrapper(pair(term1(f), term2(f)), pair(term2(arg(s)), term1(arg(s))), FALSE, (::), (::)) IN
-				       flat_concat(sol1_lst, sol2_lst)
+	     	      	      ELSE LET sol1_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term1(arg(s)), term2(arg(s))), FALSE, (::), (::)),
+			      	       sol2_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term2(arg(s)), term1(arg(s))), FALSE, (::), (::)) IN (::)
+				       %flat_concat(sol1_lst, sol2_lst) 
 			      ENDIF	     
-	ENDIF
+	ENDCASES
     ENDIF
+ENDIF
 MEASURE lex2(card(Vars(t,s)), depth(t))
+% TODO: what is the function lex2?. Here, I need to add the length of lst_t. 
 
-
-% original function
-% unify(t,s): RECURSIVE [fresh_context, Subs_unif(t,s), bool] =
-%   IF susp?(s) AND NOT occurs(V(s), t)
-%      THEN ((::),(:(V(s),ext(reverse(p(s)))(t)):),TRUE)
-%      ELSE
-%   CASES t OF
-%   	 at(a): ((::),Id,s=at(a)),
-%	 *(pm,X): IF NOT occurs(X,s) THEN ((::),(:(X,ext(reverse(pm))(s)):),TRUE)
-%	 	     ELSE LET SOL = alpha?(pm * X, s) IN
-%		     	  (SOL`1,Id,SOL`2) ENDIF,
-%	 unit: ((::),Id,s=unit),
-%	 pair(t1,t2): IF NOT pair?(s) THEN ((::), Id, FALSE) 
-%	 	      	 ELSE LET (Delta1, sig1, b1) = unify(t1,term1(s)),
-%			      	  (Delta2, sig2, b2) = unify(Subs(sig1)(t2),Subs(sig1)(term2(s))),
-%			      	  (Delta3, b3) = fresh_subs?(sig2, Delta1) IN
-%			          x((Delta2,sig2,b2), (Delta3,sig1, b1 AND b3)) ENDIF,	
-%	 abs(a,bd): IF NOT abs?(s) THEN ((::), Id, FALSE)
-%		       ELSIF a = abstr(s)
-%			     THEN unify(bd, body(s))
-%			     ELSE LET (Delta1, sig, b1) = unify(bd, ext((:(a,abstr(s)):))(body(s))),
-%				      (Delta2, b2) = fresh?(a, Subs(sig)(body(s))) IN
-%				      x((Delta2, Id, b2), (Delta1, sig, b1)) ENDIF,
-%	 app(f,ag): IF NOT app?(s) OR f /= sym(s) THEN ((::), Id, FALSE)
-%		       ELSE unify(ag, arg(s)) ENDIF
-%         c-app(f, af) :  IF NOT c-app?(s) OR THEN ((::), ...
-%                           c-app(g, ag) :  f = g  AND LET (Delta, sig, b) = unify(af,ag) IN
-%			                               IF b THEN (Delta, sig, b)XF
-%						       ELSE unify(pair(arg2(af), arg1(af)), ag)
-%						       ENDIF         
-%ENDCASES ENDIF
-%   MEASURE lex2(card(Vars(t,s)), depth(t))
+%  original function
+unify(t,s): RECURSIVE [fresh_context, Subs_unif(t,s), bool] =
+   IF susp?(s) AND NOT occurs(V(s), t)
+      THEN ((::),(:(V(s),ext(reverse(p(s)))(t)):),TRUE)
+      ELSE
+   CASES t OF
+   	 at(a): ((::),Id,s=at(a)),
+	 *(pm,X): IF NOT occurs(X,s) THEN ((::),(:(X,ext(reverse(pm))(s)):),TRUE)
+	 	     ELSE LET SOL = alpha?(pm * X, s) IN
+		     	  (SOL`1,Id,SOL`2) ENDIF,
+	 unit: ((::),Id,s=unit),
+	 pair(t1,t2): IF NOT pair?(s) THEN ((::), Id, FALSE) 
+	 	      	 ELSE LET (Delta1, sig1, b1) = unify(t1,term1(s)),
+			      	  (Delta2, sig2, b2) = unify(Subs(sig1)(t2),Subs(sig1)(term2(s))),
+			      	  (Delta3, b3) = fresh_subs?(sig2, Delta1) IN
+			          x((Delta2,sig2,b2), (Delta3,sig1, b1 AND b3)) ENDIF,	
+	 abs(a,bd): IF NOT abs?(s) THEN ((::), Id, FALSE)
+		       ELSIF a = abstr(s)
+			     THEN unify(bd, body(s))
+			     ELSE LET (Delta1, sig, b1) = unify(bd, ext((:(a,abstr(s)):))(body(s))),
+				      (Delta2, b2) = fresh?(a, Subs(sig)(body(s))) IN
+				      x((Delta2, Id, b2), (Delta1, sig, b1)) ENDIF,
+	 app(f,ag): IF NOT app?(s) OR f /= sym(s) THEN ((::), Id, FALSE)
+		       ELSE unify(ag, arg(s)) ENDIF
+ENDCASES ENDIF
+MEASURE lex2(card(Vars(t,s)), depth(t))
 
 % Soundness of unify.
 unify_sound: LEMMA % Lemma 4.10
