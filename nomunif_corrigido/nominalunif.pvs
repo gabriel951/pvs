@@ -18,7 +18,8 @@
 nominalunif: THEORY
 BEGIN
 	IMPORTING substitution,
-		  structure_extra[[variable,term]]
+		  structure_extra[[variable,term]],
+		  atoms
 
 	Delta, Nabla: VAR fresh_context
 	sigma, gamma, theta: VAR Sub
@@ -30,11 +31,15 @@ BEGIN
         lst_t: VAR list[term]
 	lst_s: VAR list[term]
 	
-	
-% TODO: one nominal solution is a list consisting of a fresh context and a substitution
-nominal_sol:  TYPE = [fresh_context, Sub]
+% TODO: a fixed point equation is a permutation and a variable
+fix_pnt_eq: TYPE = [perm, variable]
+
+% TODO: one nominal solution is a list consisting of a fresh context and a substitution. 
+nominal_sol:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
 
 sol: VAR nominal_sol
+sol_lst: VAR list[nominal_sol]
+
 
 % Two terms are unifiable if there is a solution (Delta, sigma)
 % that makes them alpha-equivalent.
@@ -58,6 +63,33 @@ x(solve1, solve2): [fresh_context, Sub, bool] =
       ELSE ((::), Id, FALSE)
    ENDIF
 
+%%%%%%%%%%%%
+% Auxiliar functions for the algorithm unify wrapper
+% The following are the auxiliar function for the algorithm:
+  % apply subs
+
+%% Function: apply_subs.
+%  Receives:
+	% 1. A list of nominal solutions, which contains the substitutions to be applied simultaneously to terms t and s
+	% 2. A term t
+	% 3. A term s 
+%  Returns:
+	% a list containing two elements. The first element is a list of term. Each term is the result of applying a substitution to the term t.
+	% The second element is also a list of terms. Each term is the result of applying the same substitution to the term s
+apply_subs(sol_lst, t, s): RECURSIVE [list[term] , list[term]] = 
+    IF null(sol_lst) THEN ((::), (::)) 
+    ELSE LET sub = car(sol_lst)`2,
+	     t_first_lst = (:Subs(sub)(t):),
+	     s_first_lst = (:Subs(sub)(t):),
+	     (t_tail_lst, s_tail_lst) = apply_subs(cdr(sol_lst), t, s),
+	     lst_t = append(t_first_lst, t_tail_lst),
+	     lst_s = append(s_first_lst, s_tail_lst) 
+	     IN (lst_t, lst_s)
+    ENDIF
+MEASURE sol_lst BY <<
+
+%%%%%%%%%% END
+
 % The function unify_wrapper encapsulates two functions (unify) and (unify_lst) in one.
 % The function unify calls unify_lst, and unify_lst calls unify. However, since PVS does not support mutual recursion, we need to
 % encapsulate them both in the same function. A boolean parameter decides which function is currently running. The return type is
@@ -76,39 +108,39 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] =
     % if unify_lst is True, we are trying to unify lst_t and lst_s. 
     IF unify_lst THEN
        IF null(lst_t) OR null(lst_s) THEN (::)
-       % flatten and concatenate list of solutions of the heads of the list AND list of solutions for the tail of the lists
-       % TODO: write this function
+       % append list of solutions of head with list of solutions of tail of the list
        ELSE LET sol_head = unify_wrapper(car(lst_t), car(lst_s), FALSE, (::), (::)),
-       	    	sol_tail = unify_wrapper(t, s, TRUE, cdr(lst_t), cdr(lst_s)) IN (::)
-		%flat_concat(sol_head, sol_tail)
+       	    	sol_tail = unify_wrapper(t, s, TRUE, cdr(lst_t), cdr(lst_s)) IN
+		append(sol_head, sol_tail)
        ENDIF
 
     % if unify_lst is False, we are in the normal algorithm for unifying two terms 
     ELSE
 	% handle case of s being a suspended variable not occurring in t
 	IF susp?(s) AND NOT occurs(V(s), t) THEN
-	LET sol = ( (::), (: (V(s), ext(reverse(p(s)))(t)) :) ) IN
+	LET sol = ( (::), (: (V(s), ext(reverse(p(s)))(t)) :), (::)) IN
 	       (:sol:)
 	       
 	ELSE CASES t of
 	     % atom - simple base case of our induction
-	     at(a): IF s = at(a) THEN LET sol = ( (::), Id) IN
+	     at(a): IF s = at(a) THEN LET sol = ( (::), Id, (::)) IN
 	     	       	   	      	  (:sol:)
 		    ELSE (::)
 		    ENDIF, 
 
-	     % suspended variable - TODO: easily handle this case, preferably without calling function alpha? (from Ana's specification)
-	     *(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :) ) IN
+	     % suspended variable - TODO: i am not calling function alpha? (from Ana's specification)
+	     *(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :), (::)) IN
 	     	       	      		   	    (:sol:)
-		       % TODO: here we have a fixed point problem
-		       ELSIF susp?(s) AND occurs(X, s) THEN LET sol = (fc(DS(pm, p(s)), X), Id) IN
+		       % TODO: here we have a fixed point problem. Adapt algorithm?
+		       ELSIF susp?(s) AND occurs(X, s) THEN LET fxd_pnt_eq = (append(pm, reverse(p(s))), X),
+		       	     	      	  	       	    	sol = ((::), Id, (:fxd_pnt_eq:)) IN
                        	     	      	  	       	    	(:sol:)
 		       ELSE (::)                              % here, t is a suspension and s is not a suspension, but it contains X.
                  	  				      % there is no possible solution
 		       ENDIF,
 
 	     % unit - a simple base case of our induction
-	     unit: IF s = unit THEN LET sol = ( (::), Id) IN
+	     unit: IF s = unit THEN LET sol = ( (::), Id, (::)) IN
 	     	      	       	    	(:sol:)
 		   ELSE (::)
 		   ENDIF,
@@ -116,15 +148,15 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] =
 	     % pair - TODO: i'll need to code 2 auxiliary functions
 	     pair(t1, t2): IF NOT pair?(s) THEN (::)
 	                   ELSE LET % unify first terms - obtain preliminar list of solutions
-			            sol_lst_fst_pre = unify_wrapper(t1, term1(s), FALSE, (::), (::))%, 
+			            sol_lst_fst_pre = unify_wrapper(t1, term1(s), FALSE, (::), (::)), 
                                     % apply every possible substitution to second terms
-                                    %(t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_fst_pre, t2, term2(s)),
+                                    (t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_fst_pre, t2, term2(s))
 				    % unify list of second terms 
 				    %sol_lst_snd = unify_wrapper(t, s, TRUE, t2_subs_lst, s2_subs_lst),
 				    % applies list of substitutions to list of contexts (if possible) obtaining new contexts for fst solution
 				    %sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst_fst_pre, sol_lst_snd)
 				    % concatenate lists of solutions
-				    IN (::) %flat_concat(sol_lst_fst_final, sol_lst_snd)
+				    IN (::) %append(sol_lst_fst_final, sol_lst_snd)
 		           ENDIF,
 
 	     % abstraction - TODO: I will need to code two more functions.
@@ -147,15 +179,18 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] =
 	     c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(arg(t)) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
 	     	      	      % try both ways of unifying the pair (t1, t2) with (s1, s2) and concatenate this solutions
 	     	      	      ELSE LET sol1_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term1(arg(s)), term2(arg(s))), FALSE, (::), (::)),
-			      	       sol2_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term2(arg(s)), term1(arg(s))), FALSE, (::), (::)) IN (::)
-				       %flat_concat(sol1_lst, sol2_lst) 
+			      	       sol2_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term2(arg(s)), term1(arg(s))), FALSE, (::), (::))
+				       IN append(sol1_lst, sol2_lst) 
 			      ENDIF	     
 	ENDCASES
     ENDIF
 ENDIF
 MEASURE lex2(card(Vars(t,s)), depth(t))
-% TODO: what is the function lex2?. Here, I need to add the length of lst_t. 
+% TODO: what is the function lex2?. Here, I need to add the length of lst_t. There is lex3 on PVS 
 
+
+
+%%%%%%%%%%%%
 %  original function
 unify(t,s): RECURSIVE [fresh_context, Subs_unif(t,s), bool] =
    IF susp?(s) AND NOT occurs(V(s), t)
@@ -174,7 +209,7 @@ unify(t,s): RECURSIVE [fresh_context, Subs_unif(t,s), bool] =
 			          x((Delta2,sig2,b2), (Delta3,sig1, b1 AND b3)) ENDIF,	
 	 abs(a,bd): IF NOT abs?(s) THEN ((::), Id, FALSE)
 		       ELSIF a = abstr(s)
-			     THEN unify(bd, body(s))
+			     THEN unify(bd, body(s))	
 			     ELSE LET (Delta1, sig, b1) = unify(bd, ext((:(a,abstr(s)):))(body(s))),
 				      (Delta2, b2) = fresh?(a, Subs(sig)(body(s))) IN
 				      x((Delta2, Id, b2), (Delta1, sig, b1)) ENDIF,
