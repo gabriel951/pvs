@@ -1,0 +1,10 @@
+Meeting
+- Explained about the article for Ayala. I think I could adapt him, but them it would
+  have exponential cost. 
+- X = pi * X, how fixed point equations should be handled?
+- We talked about associative operators and the possibility of flattening
+
+
+After the Meeting 
+- think about adapting PANU to the cases A and AC.
+- the research has a theme: extend A, C and AC unification to nominal theory. 

@@ -1,0 +1,50 @@
+# Meeting 20/8/18 
+# Before the Meeting
+-> I've read both articles. I understood the general idea of both. The PANU article
+was easier. 
+
+# Meeting and after the meeting
+-> problem of efficiency in the permutations
+-> Possible readings: unification modulo commutative symbols, washington articles, 
+perfect matching in bipartite graphs
+
+# To Do
+-> I should adapt PANU to handle comutative symbols of functions. Tuples become
+problematic if the arity is bigger than 2
+I now see that they are only problematic if used with a commutative symbol  
+
+
+# Adaptation of PANU
+TODO: Can the DAG be useful for this extension?
+
+1. Abstract 
+- TODO: i don't know if the dag representation will be good enough to
+mantain the polynomial running time of the algorithm. 
+
+2. Introduction
+TODO: talk to ayala, the website contains no implementation of the algorithm. 
+
+3. Background
+- In the definition of nominal terms, I have to make room for commutative symbols. 
+- Permutations and substitutions are extended naturally, posing no problem. 
+- Freshness can be extended naturally, but now alpha equivalence mean is a bit
+different. For instance, from a = c and b = d we can get f(a, b) = f(c, d) but also
+f(a, b) = f(d, c)
+- As a consequence, simplification rules on problems are now not deterministic?
+This means that checking alpha-equivalence is now an exponential task!
+
+4. A graph rewriting algorithm to solve alfa-equality constraints
+- The algorithm would work now with a set of nominal graphs and we could apply the
+PANU for each graph individually. But that would be exponential.. and exponential
+in time and space
+- In page 14, i will possibly need to add a rule for alfa-equivalence with
+commutative symbols
+
+5. Freshness Constraints
+- No adaptations are needed in freshness constraints.
+
+6. Total Cost
+- The cost of solving alfa constraints is modified, freshness constraints are not. 
+
+7. Conclusion 
+- The algorithm could be adapted, but it would not have polynomial running time. 

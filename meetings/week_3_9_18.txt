@@ -1,0 +1,16 @@
+Before the Meeting
+- I read Ana Cristina article
+- Sent Calves an email, but message was not sent
+- Started thinking about adapting PANU to the cases A and AC
+    CASE A
+        - no article found
+        - naive algorithm that is exponential in the complexity of the term
+    CASE AC 
+        - did preliminary studies, should study more about this soon 
+        - in a situation without constants, we can use linear programming to obtain a
+          polynomial algorithm. But in a situation with constants... the problem is
+          NP-complete 
+        - Did not study the algorithm
+
+- Study Unification A, C and AC for nominal theory
+- Research calendar. 

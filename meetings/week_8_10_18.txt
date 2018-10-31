@@ -1,0 +1,12 @@
+Before the meeting
+- I think I made a mistake in doing the specification of the commutative functions. 
+- I corrected the mistake and was now in doubt on how to adapt only two functions in
+  the entire .pvs world: alpha? and the unify algorithm. 
+- I didn't read one article this week 
+
+After the meeting
+- Ayala said (and convinced me) that i did no mistake in the specification. 
+- I'll need to change the specification of commutative function, so that it takes a
+  pair. 
+- For the function unify, now i'll need a sequence of correct solutions (context +
+  substitution). He said it won't be necessary using a tree, a list is good enough. 

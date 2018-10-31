@@ -1,0 +1,5 @@
+Before the meeting 
+- I did the modifications for commutative function as we agreed
+- I tried doing the algorithm with a list, and Ayala said this is the right
+approach... but i did it with mutual recursion, which is not allowed on PVS. I'll
+need to think of a way to use just one function unify. 

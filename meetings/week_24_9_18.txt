@@ -1,0 +1,16 @@
+Before the meeting
+    - I run Ana Cristina proves again, I think they are correct. I discovered a way
+      to run them on automatic, but i did not run them on my computer. 
+      How to know whether they are correct?
+    - I started reading Washington article. The bound obtained for commutative
+      operators seemed suspicious because it appears to disagree with Baader book... 
+    - can i be dismissed of summer school?
+    - when can i present the research i have been doing in the seminar? 
+
+After the meeting 
+    - Specification appear to be ok. 
+    - I read the wrong Washington article. Must read nominal C-unification next time
+    - Search the article on Capes Newspaper next time
+    - I don't need to take classes in summer school. I should present something new
+      by 23/11. 
+    - He explained to me more about Washington research 

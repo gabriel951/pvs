@@ -1,0 +1,4 @@
+Meeting 
+- I did the specification until freshness.pvs, but the more difficult proofs are in
+the files high in the hierarchy 
+- He explained to me about Washington circles 

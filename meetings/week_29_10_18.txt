@@ -1,0 +1,22 @@
+Before the Meeting
+- Started adapting the algorithm for it to take into account fixpoint equation
+- Coded one auxiliar function, i am in the other but forgot to handle fixpoint
+equation 
+- There is lex 3 on nasalib
+- I thought about the case of the commutative function receiving a variable... the
+  algorithm must enforce it receives a pair 
+- On the specification of alpha, function now needs to get a list of fixpoint
+  equations
+
+After the Meeting 
+- I must think about how the fixpoint equations will be handled by the algorithm, on
+  the case of a pair.
+- Try unifying h(f(s0, s1), s0) = h(f(t0, t1), t0) where h is not-commutative, but f
+  is commutative. Look at Washington example. 
+- We tried to solve the equation from the last example of Washington article... we
+  missed the order of the swappings, but after a while ayala fixed it. 
+- The function should handle case of a commutative function with one argument, where
+  this argument is a variable!! f(X) = f(s, t) is valid!!
+- He asked me once again why the algorithm does not take simply a list of terms to
+  unify
+- Focus on the algorithm, not on the presentation

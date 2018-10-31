@@ -1,0 +1,11 @@
+
+# Before the meeting
+I did not met Ayala last week, so this is the same as last week 
+-> Read article on nominal rewriting...
+-> I did the leveling test and got into advanced I... 
+-> I have not started the polynomial unification algorithm article.
+-> I should ask if I can use LaForce
+
+# After the meeting 
+-> I can use LaForce :) 
+-> I must find some time in the week to meet with him - ok, i've already emailed. 

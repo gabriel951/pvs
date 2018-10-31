@@ -1,0 +1,11 @@
+In this week I should present to Ayala what I have done... But I have not finished
+reading the articles he sent me... 
+
+# Before the meeting
+-> Read all the nominal rewriting article.
+-> I did the leveling test and got into advanced I. 
+-> I have not started the polynomial unification algorithm article.
+-> I should ask if I can use LaForce
+
+# After the meeting 
+I did not met him

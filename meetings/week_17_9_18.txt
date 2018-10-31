@@ -1,0 +1,13 @@
+Before the Meeting
+    - I tried installing the proofs on my computer, but they didn't run on automatic. 
+    - Put appropriate quotes on Ana Cristina proof, but nevertheless i did not run
+      them on my computer. The problem is that the proofs are not running on
+      automatic. 
+
+Meeting
+    - Explained research of Washington. 
+    - Think about how to put Washington research in pvs 
+
+After the Meeting 
+    - Read about Washington research
+    - Run the proofs on my computer 

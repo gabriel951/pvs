@@ -1,0 +1,16 @@
+Before the Meeting
+- Adapted function to behave like unify or unify_lst, according to a boolean
+- Put documentation
+- No need for function alpha? apparently
+- Some auxiliary functions are missing: 4 of them, I guess
+- I need to specify correclty soundness and completeness of the algorithm
+- Where is lex2 defined and how will i use it? 
+- Some TCC's are unproved 
+
+After the Meeting 
+- Did not handle the case of a commutative function properly with variable
+- Solutions from the algorithm should include a list of fixpoint equations 
+- Look prelude.pvs to see how ordinal was defined
+- For function lex2, i could try lex2(lex2(), )
+- I'll need to prove TCC's
+- I should have the algorithm specified until 23/11
