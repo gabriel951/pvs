@@ -37,10 +37,12 @@ fix_pnt_eq: TYPE = [perm, variable]
 % TODO: one nominal solution is a list consisting of a fresh context and a substitution. 
 nominal_sol:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
 
+% TODO: variables needed to specify algorithm
 sol: VAR nominal_sol
 sol_lst: VAR list[nominal_sol]
+ctxt_lst: VAR list[fresh_context]
 
-
+% Why are unifiable and unifier defined? I mean: they don't seem to be used anywhere
 % Two terms are unifiable if there is a solution (Delta, sigma)
 % that makes them alpha-equivalent.
 % Definition 4.1
@@ -183,7 +185,7 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] =
 				    % unify list of second terms 
 				    sol_lst_snd = unify_wrapper(t, s, TRUE, t2_subs_lst, s2_subs_lst),
 				    % applies list of substitutions to list of contexts (if possible) obtaining new contexts for fst solution
-				    % TODO: substitutions need to be applied to the list of fixpoint equations too. 
+				    % also, applies list 	     of substitutions to list of fixpoint equations, obtaining new fixpoint equations for second solution
 				    sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst_fst_pre, sol_lst_snd)
 				    % concatenate lists of solutions
 				    IN append(sol_lst_fst_final, sol_lst_snd)
@@ -194,8 +196,8 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] =
 	       	         ELSIF a = abstr(s) THEN unify_wrapper(bd, body(s), FALSE, (::), (::))
 		         ELSE (::) LET % unify body of abstractions, according to the rules. Obtain preliminar list of solutions
 			               sol_lst1 = unify_wrapper(bd, ext((:(a, abstr(s)):))(body(s)), FALSE, (::), (::)),
-		    	               % TODO: computes minimal context in which a is fresh on each solution of the lst of solutions
-			               (Delta_lst, bool_lst) = fresh?_lst(a, sol_lst1)
+		    	               % TODO: for each solution of the list, compute the minimal context in which a is fresh on the body 
+			               (Delta_lst, bool_lst) = fresh?_lst(a, body(s), sol_lst1)
 				       % concatenate this list of contexts with the solutions, case the boolean indicate it is possible
 				       IN add_context_aux(Delta_lst, bool_lst, sol_lst1)
 		         ENDIF,
@@ -217,6 +219,7 @@ unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] =
 ENDIF
 MEASURE lex2(card(Vars(t,s)), depth(t))
 % TODO: Here, I need to add the length of lst_t. There is lex3 on PVS 
+
 
 
 %%%%%%%%%%%%
