@@ -33,6 +33,11 @@ BEGIN
 	
 % TODO: a fixed point equation is a permutation and a variable
 fix_pnt_eq: TYPE = [perm, variable]
+fix_pnt_eq_lst: VAR list[fix_pnt_eq]
+
+% TODO: a unification problem is a list containing the two terms to be unified
+unif_prb: TYPE = [term, term]
+unif_prb_lst: VAR list[unif_prb]
 
 % TODO: one nominal solution is a list consisting of a fresh context and a substitution. 
 nominal_sol:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
@@ -40,7 +45,6 @@ nominal_sol:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
 % TODO: variables needed to specify algorithm
 sol: VAR nominal_sol
 sol_lst: VAR list[nominal_sol]
-ctxt_lst: VAR list[fresh_context]
 
 % Why are unifiable and unifier defined? I mean: they don't seem to be used anywhere
 % Two terms are unifiable if there is a solution (Delta, sigma)
@@ -51,6 +55,7 @@ unifiable?(t, s): bool =
    alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
 
 % A unifier is a unification solution to unifiable terms.
+
 % Definition 4.1
 unifier(t, (s | unifiable?(t,s)))(Delta,sigma): bool =
    alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
@@ -65,161 +70,98 @@ x(solve1, solve2): [fresh_context, Sub, bool] =
       ELSE ((::), Id, FALSE)
    ENDIF
 
-%%%%%%%%%%%%
-% Auxiliar functions for the algorithm unify wrapper
-% The following are the auxiliar function for the algorithm:
-  % apply subs
-  % apply_lst_sub_lst_ctxt
+%%% new function
+unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): RECURSIVE list[nominal_sol] =
+% base case: if there is no problem left to unify, the solution given is good enough
+IF null(unif_prb_lst) THEN (Delta, sigma, fix_pnt_eq_lst)
 
-%% Function: apply_subs.
-%  Receives:
-	% 1. A list of nominal solutions, which contains the substitutions to be applied simultaneously to terms t and s
-	% 2. A term t
-	% 3. A term s 
-%  Returns:
-	% a list containing two elements. The first element is a list of term in which each term is the result of applying a substitution to the term t.
-	% The second element is also a list of terms: each term is the result of applying the same substitution to the term s
-apply_subs(sol_lst, t, s): RECURSIVE [list[term] , list[term]] = 
-    IF null(sol_lst) THEN ((::), (::)) 
-    ELSE LET sub = car(sol_lst)`2,
-	     t_first_lst = (:Subs(sub)(t):),
-	     s_first_lst = (:Subs(sub)(t):),
-	     (t_tail_lst, s_tail_lst) = apply_subs(cdr(sol_lst), t, s),
-	     lst_t = append(t_first_lst, t_tail_lst),
-	     lst_s = append(s_first_lst, s_tail_lst) 
-	     IN (lst_t, lst_s)
-    ENDIF
-MEASURE sol_lst BY <<
+% start unifying first problem of the list
+ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
+     	 IN % we divide in cases
+	    IF susp?(s) AND NOT occurs(V(s), t)
+	    THEN LET % substitution that will be added 
+	             sigma1 = (: (V(s), ext(reverse(p(s)))(t) ) :),
+		     % apply substitution to context and check if it is consistent
+		     (new_Delta, bool1) = fresh_subs?(sigma1, Delta)
+		     % get new substitution list 
+		     new_sigma = append(sigma1, sigma) 
+	    	    ,% get new problem list - TODO: code this function
+		     new_unif_prb_lst = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)) 
+	    	     % TODO - check if the fixed point equations remain consistent under substitution
+		     (new_fix_pnt_eq_lst, bool2) = check_consistency_fix_pnt_eq_lst(sigma1, fix_pnt_eq_lst),
+		     % output solution, take into account if context and fix point equations remain consistent
+		     IN IF bool1 AND bool2 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, new_fix_pnt_eq_lst)
+		        ELSE (::) % here, OR the context is not fresh anymore OR the fixpoint equations lst is not fresh anymore
+			ENDIF
+            ELSE CASES t OF
+	    	 at(a): IF s = at(a) THEN unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst) 
+      		 	ELSE (::)
+			ENDIF
+			
+		 % this case is similar to s not being a suspension	   
+	         *(pm, X): IF NOT occurs(X, s) THEN LET % this is the same as above, code here is similar. Consult comments above		       	      
+	            					sigma1 = (: (X, ext(reverse(pm))(s)) :),
+							(new_Delta, bool1) = fresh_subs?(sigma1, Delta),
+		     					new_sigma = append(sigma1, sigma),  
+							new_unif_prb_lst = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)) 
+							(new_fix_pnt_eq_lst, bool2) = check_consistency_fix_pnt_eq_lst(sigma1, fix_pnt_eq_lst),
+							IN IF bool1 AND bool2 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, new_fix_pnt_eq_lst)
+		        				ELSE (::) 
+							ENDIF
+		       	   ELSIF susp?(s) AND occurs(X, s) THEN LET new_fix_pnt_eq = (:(append(pm, reverse(p(s))), X):),
+			   	 	      		   	    new_fix_pnt_eq_lst = append(new_fix_pnt_eq, fix_pnt_eq_lst)
+			   	 	      		   	    IN unify(Delta, sigma, cdr(unif_prb_lst), new_fix_pnt_eq_lst)
+			   ELSE (::) 
+			   ENDIF 
 
+		 unit: IF s = unit THEN unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst)
+		       ELSE (::)
+		       ENDIF
 
-%% Function: apply_lst_sub_lst_ctxt
-% Variables needed for this function
-sol_lst1_pre: VAR list[nominal_sol] % preliminar list of solutions for unificating first terms of a pair
-sol_lst2_final: VAR list[nominal_sol] % final list of solutions for unificating second terms of a pair
+		 pair(t1, t2): IF NOT pair?(s) THEN (::)
+		               ELSE LET unif_prb1 = (:(t1, term1(s)):),
+			       	    	unif_prb2 = (:(t2, term2(s)):),
+			                new_unif_prb_lst = append(append(unif_prb1, unif_prb2), cdr(unif_prb_lst)),
+			       	    IN  unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+			       ENDIF 
 
-% This function applies a list of substitutions to a list of contexts, if it's possible.
-% To see if it's possible to apply a substitution to a context, we call function fresh_subs?
-% Function receives:
-  % 1. List of preliminar solutions, from which we obtain list of preliminar contexts
-  % 2. List of solutions for second term, from which we obtain list of substitutions to be applied
-% Returns:
-  % A list of solutions from the preliminar list given, taking into account if they satisfy the substitutions from the second list
-sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst1_pre, sol_lst2_final): RECURSIVE list[nominal_sol] =
-    % if any of the two lists is null, it was not possible to find a solution for one part of the problem, so we return
-    % an empty list, 
-    IF null(sol_lst_snd) OR null(sol_lst_sn) THEN (::)
-    % apply every substitution to head of the list and then apply t 
-    ELSE LET sub_head = car(sol_lst2_final),
-    	     sol_lst1_pre_head = car(sol_lst1_pre),
-	     (ctxt_final, bool1) = fresh_subs?(sub_head, sol_lst1_pre_head`1) % bool1 is not needed
-	     sol_first = (ctxt_final, , ) % TODO: apply subs to fix point equation too!
+                 abs(a, bd): IF NOT abs(s) THEN (::)
+		 	     ELSIF a = abstr(s) THEN LET new_unif_prb = (:(bd, body(s)):),
+			     	       		     	 new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst)),
+							 IN unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+		             ELSE LET % derives minimal context in which a is fresh in body(s) 
+			     	      (Delta1, bool1) = fresh?(a, body(s)),
+				      % new context under which we must unify the remaining problems 
+				      new_Delta = append(Delta1, Delta),
+				      % new problem to be unified
+				      new_unif_prb = (: (bd, ext((: (a, abstr(s)) :))(body(s))) :),
+				      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst)),
+				      % unify
+				      IN unify(new_Delta, sigma, new_unif_prb_lst, new_fix_pnt_eq_lst)
+			     ENDIF
 
- ELSE LET (Delta1, sig1, b1) = unify(t1,term1(s)),
-			      	  (Delta2, sig2, b2) = unify(Subs(sig1)(t2),Subs(sig1)(term2(s))),
-			      	  (Delta3, b3) = fresh_subs?(sig2, Delta1) IN
-			          x((Delta2,sig2,b2), (Delta3,sig1, b1 AND b3)) ENDIF,	
+	         app(f, ag): IF NOT app?(s) OR f /= sym(s) THEN (::)
+		 	     ELSE LET new_unif_prb = (:(ag, arg(s)):),
+			     	      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst)),
+				      IN unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+			     ENDIF
 
-%%%%%%%%%% END
-
-% The function unify_wrapper encapsulates two functions (unify) and (unify_lst) in one.
-% The function unify calls unify_lst, and unify_lst calls unify. However, since PVS does not support mutual recursion, we need to
-% encapsulate them both in the same function. A boolean parameter decides which function is currently running. The return type is
-% the same for both functions: a list of nominal solutions.
-% Function receives:
-  % 1. Term t to unify (if we are in function unify)
-  % 2. Term s to unify (if we are in function unify) 
-  % 3. Boolean unify_lst. If FALSE, we are unifying two terms (we are in function unify). If TRUE, we are unifying two lists (we
-               		   % are in function unify_lst)
-  % 4. lst_t to unify (if we are in function unify_lst)
-  % 5. lst_s to unify (if we are in function unify_lst)
-% Function returns
-  % a list of nominal solution. The list is empty if no solution could be found.  
-unify_wrapper(t, s, unify_lst, lst_t, lst_s): RECURSIVE list[nominal_sol] = 
-
-    % if unify_lst is True, we are trying to unify lst_t and lst_s. 
-    IF unify_lst THEN
-       IF null(lst_t) OR null(lst_s) THEN (::)
-       % append list of solutions of head with list of solutions of tail of the list
-       ELSE LET sol_head = unify_wrapper(car(lst_t), car(lst_s), FALSE, (::), (::)),
-       	    	sol_tail = unify_wrapper(t, s, TRUE, cdr(lst_t), cdr(lst_s)) IN
-		append(sol_head, sol_tail)
-       ENDIF
-
-    % if unify_lst is False, we are in the normal algorithm for unifying two terms 
-    ELSE
-	% handle case of s being a suspended variable not occurring in t
-	IF susp?(s) AND NOT occurs(V(s), t) THEN
-	LET sol = ( (::), (: (V(s), ext(reverse(p(s)))(t)) :), (::)) IN
-	       (:sol:)
-	       
-	ELSE CASES t of
-	     % atom - simple base case of our induction
-	     at(a): IF s = at(a) THEN LET sol = ( (::), Id, (::)) IN
-	     	       	   	      	  (:sol:)
-		    ELSE (::)
-		    ENDIF, 
-
-	     % suspended variable - TODO: i am not calling function alpha? (from Ana's specification)
-	     *(pm, X): IF NOT occurs(X, s) THEN LET sol = ((::), (: (X, ext(reverse(pm))(s)) :), (::)) IN
-	     	       	      		   	    (:sol:)
-		       % TODO: here we have a fixed point problem. Adapt algorithm?
-		       ELSIF susp?(s) AND occurs(X, s) THEN LET fxd_pnt_eq = (append(pm, reverse(p(s))), X),
-		       	     	      	  	       	    	sol = ((::), Id, (:fxd_pnt_eq:)) IN
-                       	     	      	  	       	    	(:sol:)
-		       ELSE (::)                              % here, t is a suspension and s is not a suspension, but it contains X.
-                 	  				      % there is no possible solution
-		       ENDIF,
-
-	     % unit - a simple base case of our induction
-	     unit: IF s = unit THEN LET sol = ( (::), Id, (::)) IN
-	     	      	       	    	(:sol:)
-		   ELSE (::)
-		   ENDIF,
-
-	     % pair - TODO: i'll need to code 2 auxiliary functions
-	     pair(t1, t2): IF NOT pair?(s) THEN (::)
-	                   ELSE LET % unify first terms - obtain preliminar list of solutions
-			            sol_lst_fst_pre = unify_wrapper(t1, term1(s), FALSE, (::), (::)), 
-                                    % apply every possible substitution to second terms
-                                    (t2_subs_lst, s2_subs_lst) = apply_subs(sol_lst_fst_pre, t2, term2(s))
-				    % unify list of second terms 
-				    sol_lst_snd = unify_wrapper(t, s, TRUE, t2_subs_lst, s2_subs_lst),
-				    % applies list of substitutions to list of contexts (if possible) obtaining new contexts for fst solution
-				    % also, applies list 	     of substitutions to list of fixpoint equations, obtaining new fixpoint equations for second solution
-				    sol_lst_fst_final = apply_lst_sub_lst_ctxt(sol_lst_fst_pre, sol_lst_snd)
-				    % concatenate lists of solutions
-				    IN append(sol_lst_fst_final, sol_lst_snd)
-		           ENDIF,
-
-	     % abstraction - TODO: I will need to code two more functions.
-	     abs(a, bd): IF NOT abs?(s) THEN (::)
-	       	         ELSIF a = abstr(s) THEN unify_wrapper(bd, body(s), FALSE, (::), (::))
-		         ELSE (::) LET % unify body of abstractions, according to the rules. Obtain preliminar list of solutions
-			               sol_lst1 = unify_wrapper(bd, ext((:(a, abstr(s)):))(body(s)), FALSE, (::), (::)),
-		    	               % TODO: for each solution of the list, compute the minimal context in which a is fresh on the body 
-			               (Delta_lst, bool_lst) = fresh?_lst(a, body(s), sol_lst1)
-				       % concatenate this list of contexts with the solutions, case the boolean indicate it is possible
-				       IN add_context_aux(Delta_lst, bool_lst, sol_lst1)
-		         ENDIF,
-
-	     % application of a function - easy commutative case
-             app(f, ag): IF NOT app?(s) OR f /= sym(s) THEN (::)
-	     	    	 ELSE unify_wrapper(ag, arg(s), FALSE, (::), (::))
-			 ENDIF, 
-	     
-	     % commutative function - how should we handle commutative functions not being called with a pair?
-	     c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(arg(t)) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
-	     	      	      % try both ways of unifying the pair (t1, t2) with (s1, s2) and concatenate this solutions
-	     	      	      ELSE LET sol1_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term1(arg(s)), term2(arg(s))), FALSE, (::), (::)),
-			      	       sol2_lst = unify_wrapper(pair(term1(arg(t)), term2(arg(t))), pair(term2(arg(s)), term1(arg(s))), FALSE, (::), (::))
-				       IN append(sol1_lst, sol2_lst) 
-			      ENDIF	     
-	ENDCASES
-    ENDIF
+		c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(arg(t)) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
+			 	 ELSE LET % solve problem, trying to unify (t1 with s1) and (t2 with s2) 
+					  unif_prb1_1 = (:(term1(arg(t)), term1(arg(s))):),
+					  unif_prb2_2 = (:(term2(arg(t)), term2(arg(s))):),
+					  unif_prb_lst1 = append(append(unif_prb1_1, unif_prb2_2), cdr(unif_prb_lst1)),
+					  sol1 = unify(Delta, sigma, unif_prb_lst1, fix_pnt_eq_lst), 
+					  % solve problem, trying to unify (t1 with s2) and (t2 with s3)
+					  unif_prb1_2 = (:(term1(arg(t)), term2(arg(s))):),
+					  unif_prb2_1 = (:(term2(arg(t)), term1(arg(s))):),
+					  unif_prb_lst2 = append(append(unif_prb1_2, unif_prb2_2), cdr(unif_prb_lst2)),
+					  sol2 = unify(Delta, sigma, unif_prb_lst2, fix_pnt_eq_lst)
+					  IN append(sol1, sol2) 
+			 	 ENDIF 
+	   
 ENDIF
-MEASURE lex2(card(Vars(t,s)), depth(t))
-% TODO: Here, I need to add the length of lst_t. There is lex3 on PVS 
-
+MEASURE lex2(length(unif_prb_lst), length(unif_prb_lst))
 
 
 %%%%%%%%%%%%
