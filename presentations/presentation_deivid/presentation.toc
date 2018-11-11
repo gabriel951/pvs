@@ -1,0 +1,6 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Nominal Terms and Syntax}{3}{0}{1}
+\beamer@sectionintoc {2}{Freshness and Equality}{9}{0}{2}
+\beamer@sectionintoc {3}{Nominal Unification}{15}{0}{3}
+\beamer@sectionintoc {4}{Nominal Disunification}{25}{0}{4}

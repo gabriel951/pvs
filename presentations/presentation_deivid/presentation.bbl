@@ -1,0 +1,20 @@
+\begin{thebibliography}{1}
+
+\bibitem{Buntine:1994:SED:179812.179813}
+W.~L. Buntine and H.-J. B\"{u}rckert.
+\newblock On solving equations and disequations.
+\newblock {\em J. ACM}, 41(4):591--629, July 1994.
+
+\bibitem{gabbay:nomr-jv}
+M.~Fernández and M.~J. Gabbay.
+\newblock \href{http://www.gabbay.org.uk/papers.html\#nomr-jv}{Nominal
+  rewriting (journal version)}.
+\newblock 205(6):917--965, June 2007.
+
+\bibitem{gabbay:nomuae}
+M.~J. Gabbay and A.~Mathijssen.
+\newblock \href{http://www.gabbay.org.uk/papers.html\#nomuae}{Nominal universal
+  algebra: equational logic with names and binding}.
+\newblock 19(6):1455--1508, December 2009.
+
+\end{thebibliography}

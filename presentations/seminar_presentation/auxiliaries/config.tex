@@ -1,0 +1,74 @@
+% Configure the document math mode and theorems style.
+\usepackage{microtype}
+
+%Beamer Options
+\mode<presentation>
+\usepackage{beamerthemesplit}
+\usetheme[progressbar=frametitle, subsectionpage=progressbar]{metropolis}
+
+\usepackage{appendixnumberbeamer}
+
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+
+%Fonts and Language
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+%load figures in full page
+\usepackage{incgraph,tikz}
+
+%Frames and Boxes
+\usepackage{mdframed}
+
+%Reset the chapter numbering in each of the book part's
+%\makeatletter\@addtoreset{chapter}{part}\makeatother
+
+%Use this workaround the appendix error with portuguese language
+\usepackage{etoolbox}
+
+%Math Packages - General
+\usepackage{amsmath,amsthm,amssymb,amsfonts,amscd, amsbsy,mathtools}
+\usepackage{mathtools}
+\usepackage{wasysym}
+\everymath{\displaystyle}
+
+\usepackage{accsupp} %Package accsupp uses the ActualText feature of PDF (for PDF viewers that support this feature such as Acrobat Reader).
+
+%Algorithms
+% \usepackage[noend]{algpseudocode}
+% \usepackage{algorithm}
+% \usepackage{algorithmicx}
+
+\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+
+% Logic
+\usepackage{bussproofs}
+
+\everymath{\displaystyle}
+\DeclareMathAlphabet{\mathcal}{OMS}{cmsy}{m}{n}
+\usepackage{bussproofs}
+
+%Document Packages - General
+\usepackage{enumerate}
+\usepackage{faktor}
+
+%Add optional argument
+\usepackage{xparse}
+
+%Enviroments configuration
+% \theoremstyle{definition}\newtheorem{definition}{Definition}[chapter]
+% \newtheorem{example}{Example}[chapter]
+% \newtheorem{lemma}{Lemma}[chapter]
+% \newtheorem{theorem}{Theorem}[chapter]
+% \newtheorem{proposition}{Proposition}[chapter]
+% \newtheorem{col}{Corollary}[chapter]
+\theoremstyle{remark}\newtheorem{remark}{Remark}

@@ -1,0 +1,43 @@
+%TODO: Make a revision in notation commands, they are very confusing...
+
+% General
+\newcommand{\signature}{\Sigma}             %The signature set.
+\newcommand{\subs}{\mathcal{S}ub}           %The substitutions set.
+\newcommand{\vars}[1]{\mathtt{vars}(#1)}   %The set of variables.
+\newcommand{\dom}[1]{\mathtt{dom}(#1)}     %The domain.
+\newcommand{\ran}[1]{\mathtt{ran}(#1)}      %The range of a substitution.
+\newcommand{\vran}[1]{\mathtt{v}\ran{#1}}
+
+% Nominal Terms and Equality
+\newcommand{\atomSet}{\mathbb{A}}           %The set of all atoms.
+\newcommand{\varSet}{\mathbb{X}}               %The set of all META variables.
+\newcommand{\abs}[2]{\left[ #1 \right]#2}   %Abstraction term.
+\newcommand{\support}[1]{\mathtt{supp}(#1)}          %Support of an permutation.
+\newcommand{\permID}{\mathtt{id}}           %Identity permutation.
+\newcommand{\pAction}[2]{#1 \cdot #2}       %The action of a permutation on a term.
+\newcommand{\pGroup}{\mathbb{P}}            %The group of all permutations acting on the set fo atoms.
+\newcommand{\swapping}[2]{(#1 \ \ #2)}      %The Swapping permutation.
+\newcommand{\terms}{T(\signature,\atomSet,\var)}    %In context of nominal this is the set of terms.
+
+\newcommand{\fresh}{\#}
+\newcommand{\instOrder}{\leq}
+\newcommand{\aeq}{\mathrel{\approx_\alpha}}
+\newcommand{\adis}{\mathrel{\not\approx_\alpha}}
+
+\newcommand{\pair}[2]{\left\langle #1 \mid\mid #2 \right\rangle}
+
+\newcommand{\pairEx}[3]{\pair{#1}{#2} - #3}
+
+\newcommand{\dset}[2]{\mathtt{ds}(#1,#2)}
+
+\newcommand{\pNF}[1]{\left\langle #1 \right\rangle\downarrow\,}
+
+
+\newcommand{\algUnif}[1]{\mathtt{Unif}\left(#1\right)}
+
+%\newcommand{\solution}[1]{\mathcal{S}(#1)} %solution set of the problem P
+\newcommand{\eqUnif}{\overset{?}{\aeq}} %an unification equational problem
+\newcommand{\eqDis}{\overset{?}{\adis}}
+\newcommand{\freshPr}{\overset{?}{\fresh}}
+\newcommand{\sol}[1]{\mathcal{U}\left(#1\right)}
+

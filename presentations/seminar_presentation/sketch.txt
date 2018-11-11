@@ -1,0 +1,11 @@
+Presentation Sketch
+0. Introduction
+1. Background
+2. Nominal C Unification - Proposed algorithm (estimated time: )
+3. Future work  (estimated time: )
+
+Possible questions 
+1. Why is nominal rewriting useful?
+2. Why is unification useful
+3. Why is extending nominal unification to commutative symbols useful?
+4. Why is verifying this on PVS useful?
