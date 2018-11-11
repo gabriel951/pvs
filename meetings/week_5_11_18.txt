@@ -1,0 +1,12 @@
+Before the Meeting 
+- I perceived the algorithm was wrong, the whole approach seemed wrong to me. I
+  changed the design, in order for it to be closed to Washington's approach, thinking
+in terms of trees. 
+- I also viewed how to adapt the specification of soundness and completeness to take
+  into account alpha equivalence UNDER a context Delta and UNDER a set of fixpoint
+equations. 
+
+After the Meeting
+- I have to correct a few details on the algorithm 
+- Ayala liked very much my progress 
+- I have to make slides, study for presentation and fix a bit of the algorithm 

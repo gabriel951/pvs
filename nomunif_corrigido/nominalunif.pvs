@@ -27,7 +27,6 @@ BEGIN
 	X: VAR variable
 
 	% TODO: unify_lst - boolean that indicates whether the algorith unify_wrapper is working as unify or unify_lst
-	unify_lst: VAR bool
         lst_t: VAR list[term]
 	lst_s: VAR list[term]
 	
@@ -70,11 +69,41 @@ x(solve1, solve2): [fresh_context, Sub, bool] =
       ELSE ((::), Id, FALSE)
    ENDIF
 
-%%% new function
+%%%%% auxiliary functions for the main function in the algorithm
+% applies a substitution to a list of unification problems. Apply substitution to every term in unification problem list
+% return the resulting unification problem list 
+apply_sub_prb_lst(sigma, unif_prb_lst): RECURSIVE list[unif_prb] =
+IF null(unif_prb_lst) THEN (::)
+ELSE LET t = car(unif_prb_lst)`1,
+     	 s = car(unif_prb_lst)`2,
+	 new_t = Subs(sigma)(t),
+	 new_s = Subs(sigma)(s),
+	 new_unif_prb = (:(new_t, new_s):) 
+	 IN append(new_unif_prb, apply_sub_prb_lst(sigma, cdr(unif_prb_lst)))
+ENDIF
+MEASURE unif_prb_lst BY <<          
+
+% convert a list of fixpoint equations to a list of unification problems via a substitution and apply substitution to them 
+fix_pnt_to_unif_prb_via_sub(sigma, fix_pnt_eq_lst): RECURSIVE list[unif_prb] =
+IF null(fix_pnt_eq_lst) THEN (::)
+ELSE LET fix_pnt_eq = car(fix_pnt_eq_lst),
+     	 perm = fix_pnt_eq`1, 
+	 variable = fix_pnt_eq`2,
+	 t = *(perm, variable), 
+	 s = *((::), variable),
+	 new_t = Subs(sigma)(t),
+	 new_s = Subs(sigma)(s),
+	 new_unif_prb = (:(new_t, new_s):)
+	 IN append(new_unif_prb, fix_pnt_to_unif_prb_via_sub(sigma, cdr(fix_pnt_eq_lst))) 
+ENDIF
+MEASURE fix_pnt_eq_lst BY <<
+
+%%%%% end of auxiliary functions for main algorithm
+
+%%% function to unify a list of terms 
 unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): RECURSIVE list[nominal_sol] =
 % base case: if there is no problem left to unify, the solution given is good enough
-IF null(unif_prb_lst) THEN (Delta, sigma, fix_pnt_eq_lst)
-
+IF null(unif_prb_lst) THEN (:(Delta, sigma, fix_pnt_eq_lst):)
 % start unifying first problem of the list
 ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
      	 IN % we divide in cases
@@ -82,52 +111,54 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 	    THEN LET % substitution that will be added 
 	             sigma1 = (: (V(s), ext(reverse(p(s)))(t) ) :),
 		     % apply substitution to context and check if it is consistent
-		     (new_Delta, bool1) = fresh_subs?(sigma1, Delta)
+		     (new_Delta, bool1) = fresh_subs?(sigma1, Delta),
 		     % get new substitution list 
-		     new_sigma = append(sigma1, sigma) 
-	    	    ,% get new problem list - TODO: code this function
-		     new_unif_prb_lst = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)) 
-	    	     % TODO - check if the fixed point equations remain consistent under substitution
-		     (new_fix_pnt_eq_lst, bool2) = check_consistency_fix_pnt_eq_lst(sigma1, fix_pnt_eq_lst),
+		     new_sigma = append(sigma1, sigma), 
+	    	     % get new problem list - apply substitution to remaining problems and to fixpoint equations.
+		     % convert fixpoint equations back on unification problems
+		     unif_prb_lst1 = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)), 
+		     unif_prb_lst2 = fix_pnt_to_unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
+		     new_unif_prb_lst = append(unif_prb_lst1, unif_prb_lst2)
 		     % output solution, take into account if context and fix point equations remain consistent
-		     IN IF bool1 AND bool2 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, new_fix_pnt_eq_lst)
-		        ELSE (::) % here, OR the context is not fresh anymore OR the fixpoint equations lst is not fresh anymore
+		     IN IF bool1 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
+		        ELSE (::) % here, OR the context is not fresh anymore OR the fixpoint equations lst is not consistent anymore
 			ENDIF
             ELSE CASES t OF
 	    	 at(a): IF s = at(a) THEN unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst) 
       		 	ELSE (::)
-			ENDIF
+			ENDIF,
 			
-		 % this case is similar to s not being a suspension	   
-	         *(pm, X): IF NOT occurs(X, s) THEN LET % this is the same as above, code here is similar. Consult comments above		       	      
-	            					sigma1 = (: (X, ext(reverse(pm))(s)) :),
-							(new_Delta, bool1) = fresh_subs?(sigma1, Delta),
-		     					new_sigma = append(sigma1, sigma),  
-							new_unif_prb_lst = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)) 
-							(new_fix_pnt_eq_lst, bool2) = check_consistency_fix_pnt_eq_lst(sigma1, fix_pnt_eq_lst),
-							IN IF bool1 AND bool2 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, new_fix_pnt_eq_lst)
-		        				ELSE (::) 
+		 % this case is similar to s being a suspension	   
+	         *(pm, X): IF NOT occurs(X, s) THEN LET % this is the same as the case above where s is a suspension.
+	             					sigma1 = (: (V(s), ext(reverse(p(s)))(t) ) :),
+		   					(new_Delta, bool1) = fresh_subs?(sigma1, Delta),
+							new_sigma = append(sigma1, sigma), 
+							unif_prb_lst1 = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)), 
+		     					unif_prb_lst2 = fix_pnt_to_unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
+		     					new_unif_prb_lst = append(unif_prb_lst1, unif_prb_lst2)
+							IN IF bool1 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
+		       					ELSE (::)
 							ENDIF
 		       	   ELSIF susp?(s) AND occurs(X, s) THEN LET new_fix_pnt_eq = (:(append(pm, reverse(p(s))), X):),
 			   	 	      		   	    new_fix_pnt_eq_lst = append(new_fix_pnt_eq, fix_pnt_eq_lst)
 			   	 	      		   	    IN unify(Delta, sigma, cdr(unif_prb_lst), new_fix_pnt_eq_lst)
 			   ELSE (::) 
-			   ENDIF 
+			   ENDIF, 
 
 		 unit: IF s = unit THEN unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst)
 		       ELSE (::)
-		       ENDIF
+		       ENDIF,
 
 		 pair(t1, t2): IF NOT pair?(s) THEN (::)
 		               ELSE LET unif_prb1 = (:(t1, term1(s)):),
 			       	    	unif_prb2 = (:(t2, term2(s)):),
-			                new_unif_prb_lst = append(append(unif_prb1, unif_prb2), cdr(unif_prb_lst)),
+			                new_unif_prb_lst = append(append(unif_prb1, unif_prb2), cdr(unif_prb_lst))
 			       	    IN  unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
-			       ENDIF 
+			       ENDIF, 
 
-                 abs(a, bd): IF NOT abs(s) THEN (::)
+                 abs(a, bd): IF NOT abs?(s) THEN (::)
 		 	     ELSIF a = abstr(s) THEN LET new_unif_prb = (:(bd, body(s)):),
-			     	       		     	 new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst)),
+			     	       		     	 new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst))
 							 IN unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
 		             ELSE LET % derives minimal context in which a is fresh in body(s) 
 			     	      (Delta1, bool1) = fresh?(a, body(s)),
@@ -135,34 +166,44 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 				      new_Delta = append(Delta1, Delta),
 				      % new problem to be unified
 				      new_unif_prb = (: (bd, ext((: (a, abstr(s)) :))(body(s))) :),
-				      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst)),
+				      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst))
 				      % unify
-				      IN unify(new_Delta, sigma, new_unif_prb_lst, new_fix_pnt_eq_lst)
-			     ENDIF
+				      IN IF bool1 THEN unify(new_Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+				      	 ELSE (::)
+					 ENDIF
+			     ENDIF,
 
 	         app(f, ag): IF NOT app?(s) OR f /= sym(s) THEN (::)
 		 	     ELSE LET new_unif_prb = (:(ag, arg(s)):),
-			     	      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst)),
+			     	      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst))
 				      IN unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
-			     ENDIF
+			     ENDIF,
 
 		c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(arg(t)) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
-			 	 ELSE LET % solve problem, trying to unify (t1 with s1) and (t2 with s2) 
+			 	 ELSE LET % solve problem, trying to unify (t1 with s1) and (t2 with s2)
 					  unif_prb1_1 = (:(term1(arg(t)), term1(arg(s))):),
 					  unif_prb2_2 = (:(term2(arg(t)), term2(arg(s))):),
-					  unif_prb_lst1 = append(append(unif_prb1_1, unif_prb2_2), cdr(unif_prb_lst1)),
-					  sol1 = unify(Delta, sigma, unif_prb_lst1, fix_pnt_eq_lst), 
+					  unif_prb_lst1 = append(append(unif_prb1_1, unif_prb2_2), cdr(unif_prb_lst)),
+					  sol1 = unify(Delta, sigma, unif_prb_lst1, fix_pnt_eq_lst),
 					  % solve problem, trying to unify (t1 with s2) and (t2 with s3)
 					  unif_prb1_2 = (:(term1(arg(t)), term2(arg(s))):),
 					  unif_prb2_1 = (:(term2(arg(t)), term1(arg(s))):),
-					  unif_prb_lst2 = append(append(unif_prb1_2, unif_prb2_2), cdr(unif_prb_lst2)),
+					  unif_prb_lst2 = append(append(unif_prb1_2, unif_prb2_2), cdr(unif_prb_lst)),
 					  sol2 = unify(Delta, sigma, unif_prb_lst2, fix_pnt_eq_lst)
 					  IN append(sol1, sol2) 
 			 	 ENDIF 
-	   
+	        ENDCASES
+	    ENDIF
 ENDIF
 MEASURE lex2(length(unif_prb_lst), length(unif_prb_lst))
+% lex 3 -> TODO? (number of variables in all problems, number of commutative symbols, sum of depth of terms) 
 
+% new soundness of unify - TODO: how should i specify this?
+%unify_sound: LEMMA
+%FORALL (Delta, sigma, fix_pnt_eq_lst) IN unify((::), (::), (:(t, s):), (::))
+%alpha(Delta, fix_pnt_eq_lst)(sigma(t), sigma(s)) % extend this procedure to be alpha equivalence under a context AND a list of fixpoint equations 
+
+% new completeness of unify - TODO
 
 %%%%%%%%%%%%
 %  original function

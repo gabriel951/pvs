@@ -123,7 +123,6 @@ alpha_weakening: LEMMA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Function that computes the minimal context that derivates
 % t and s alpha-equivalent.
-% TODO: this should now be a list of contexts? Maybe there is no need for this function after all...
 alpha?(t, s): RECURSIVE [fresh_context,bool] =
    CASES t OF
    	 at(a): ((::) ,s = at(a)),
