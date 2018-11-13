@@ -1,0 +1,89 @@
+\section{Nominal C Unification}
+\subsection{Definition of the Problem}
+% what is a unification problem - TODO: check how this is done
+\begin{frame}{Unification Problem}
+    \begin{definition}[Unification Problem] 
+        A unification problem is a pair $\langle \Delta, P \rangle$, where $\Delta$ is 
+        a freshness context and $P$ is a finite set of equations ($s \eqUnif t$) and freshness
+        constraints ($a \freshPr s$).
+    \end{definition}
+\end{frame}
+
+% solution for a unification problem 
+\begin{frame}{Solution to a Unification Problem} 
+    \begin{definition}[Solution to a Unification Problem]
+        TO DO.
+        %A solution for a triple \mathbb{P} = 
+    \end{definition}
+\end{frame}
+
+% more general solutions
+\begin{frame}{More General Solutions}
+    \begin{definition}[More General Solution]
+        TO DO 
+    \end{definition}
+\end{frame}
+
+% the algorithm
+\subsection{A Nominal C Unification Algorithm}
+
+\begin{frame}
+    Hi
+\end{frame}
+
+% general idea for my algorithm 
+\begin{frame}[allowframebreaks]{An Algorithm for Nominal C-Unification: General Idea}
+    \begin{algorithmic}[1]
+        \Procedure{unify}{$\Delta,\sigma,UnPrb, FxPntEq$}
+        \If{null($UnPrb$)} 
+            \State \textbf{return} list(($\Delta, \sigma, FxPntEq$)) 
+        \Else 
+        \State $t =$ head($UnPrb$)[1]
+        \State $s =$ head($UnPrb$)[2]
+            \If {($s == \pi \cdot X$) and ($X$ not in $t$)}
+                \State $\sigma_1 = \{X \rightarrow t \}$
+                \State $\sigma'$ = $\sigma_1 \cup \sigma$ 
+                \State ($\Delta'$, bool1) = appSub2Ctxt($\sigma_1, \Delta$) 
+                \State $UnPrb'$ = $UnPrb\sigma_1$ \cup $FxPntEq\sigma_1$
+
+            \ElsIf{huuuuuHIdjklasf}
+                \State Hi
+            \ElsIf{HI}
+                \State Hi
+            \ElsIf{HI}
+                \State Hi
+            \Else 
+                \State Hey
+            \Endif
+        \Endif
+        \EndProcedure
+    \end{algorithmic}
+\end{frame}
+
+% remaining parts of algorithm 
+\begin{frame}{Reduction Rules for Equational Problems}
+    TO DO 
+\end{frame}
+
+\begin{frame}{Reduction Rules for Freshness Problems}
+    TO DO 
+\end{frame}
+
+% distictions from nominal unification: fixpoint equations and set of solutions
+\begin{frame}{Difference from Nominal Unification - Fixpoint Equations}
+    TO DO
+\end{frame}
+
+\begin{frame}{Difference from Nominal Unification - Set of Solutions}
+    TO DO
+\end{frame}
+
+\subsection{Examples}
+% copy paste washington examples here
+\begin{frame}{Example 1}
+    TO DO
+\end{frame}
+
+\begin{frame}{Example 2}
+    TO DO 
+\end{frame}

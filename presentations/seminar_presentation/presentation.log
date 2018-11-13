@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.11.8)  11 NOV 2018 14:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.11.8)  13 NOV 2018 17:27
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1347,94 +1347,75 @@ LaTeX Font Info:    Overwriting symbol font `wasy' in version `bold'
 Package: accsupp 2010/01/16 v0.3 Accessibility support by marked content (HO)
  (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/accsupp-pdftex.def
 File: accsupp-pdftex.def 2010/01/16 v0.3 accsupp driver for pdfTeX (HO)
-)) (/usr/share/texlive/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
-Package: algorithm2e 2013/01/06 v5.00 algorithms environments
-\c@AlgoLine=\count287
- (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+)) (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
+ (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count287
+\float@exts=\toks57
+\float@box=\box80
+\@float@everytoks=\toks58
+\@floatcapt=\box81
+) (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
-\algocf@hangindent=\skip141
- (/usr/share/texlive/texmf-dist/tex/latex/relsize/relsize.sty
-Package: relsize 2013/03/29 ver 4.1
+\@float@every@algorithm=\toks59
+\c@algorithm=\count288
+) (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+Package: algpseudocode 
+ (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
+
+Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
+\c@ALG@line=\count289
+\c@ALG@rem=\count290
+\c@ALG@nested=\count291
+\ALG@tlm=\skip141
+\ALG@thistlm=\skip142
+\c@ALG@Lnr=\count292
+\c@ALG@blocknr=\count293
+\c@ALG@storecount=\count294
+\c@ALG@tmpcounter=\count295
+\ALG@tmplength=\skip143
 )
-********************************************************
-Package `algorithm2e' Release 5.1 -- october 19 2015 --
-- algorithm2e-announce@lirmm.fr mailing list for announcement about releases
-- algorithm2e-discussion@lirmm.fr mailing list for discussion about package
-subscribe by emailing sympa@lirmm.fr with 'subscribe <list> <firstname name>'
-- Author: Christophe Fiorio (christophe.fiorio@umontpellier.fr)
-********************************************************
-\skiptotal=\skip142
-\skiplinenumber=\skip143
-\skiprule=\skip144
-\skiphlne=\skip145
-\skiptext=\skip146
-\skiplength=\skip147
-\algomargin=\skip148
-\skipalgocfslide=\skip149
-\algowidth=\dimen328
-\inoutsize=\dimen329
-\inoutindent=\dimen330
-\interspacetitleruled=\dimen331
-\interspacealgoruled=\dimen332
-\interspacetitleboxruled=\dimen333
-\algocf@ruledwidth=\skip150
-\algocf@inoutbox=\box80
-\algocf@inputbox=\box81
-\AlCapSkip=\skip151
-\AlCapHSkip=\skip152
-\algoskipindent=\skip153
-\algocf@nlbox=\box82
-\algocf@hangingbox=\box83
-\algocf@untilbox=\box84
-\algocf@skipuntil=\skip154
-\algocf@capbox=\box85
-\algoheightruledefault=\skip155
-\algoheightrule=\skip156
-\algotitleheightruledefault=\skip157
-\algotitleheightrule=\skip158
-\c@algocfline=\count288
-\c@algocfproc=\count289
-\c@algocf=\count290
-\algocf@algoframe=\box86
-\algocf@algobox=\box87
+Document Style - pseudocode environments for use with the `algorithmicx' style
 ) (/usr/share/texlive/texmf-dist/tex/latex/bussproofs/bussproofs.sty
 Proof Tree (bussproofs) style macros. Version 1.1.
-\theLevel=\count291
-\myMaxLevel=\count292
-\myBoxA=\box88
-\myBoxB=\box89
-\myBoxC=\box90
-\myBoxD=\box91
-\myBoxLL=\box92
-\myBoxRL=\box93
-\thisAboveSkip=\dimen334
-\thisBelowSkip=\dimen335
-\newScoreStart=\dimen336
-\newScoreEnd=\dimen337
-\newCenter=\dimen338
-\displace=\dimen339
-\leftLowerAmt=\dimen340
-\rightLowerAmt=\dimen341
-\scoreHeight=\dimen342
-\scoreDepth=\dimen343
-\htLbox=\dimen344
-\htRbox=\dimen345
-\htRRbox=\dimen346
-\htRRRbox=\dimen347
-\htAbox=\dimen348
-\htCbox=\dimen349
+\theLevel=\count296
+\myMaxLevel=\count297
+\myBoxA=\box82
+\myBoxB=\box83
+\myBoxC=\box84
+\myBoxD=\box85
+\myBoxLL=\box86
+\myBoxRL=\box87
+\thisAboveSkip=\dimen328
+\thisBelowSkip=\dimen329
+\newScoreStart=\dimen330
+\newScoreEnd=\dimen331
+\newCenter=\dimen332
+\displace=\dimen333
+\leftLowerAmt=\dimen334
+\rightLowerAmt=\dimen335
+\scoreHeight=\dimen336
+\scoreDepth=\dimen337
+\htLbox=\dimen338
+\htRbox=\dimen339
+\htRRbox=\dimen340
+\htRRRbox=\dimen341
+\htAbox=\dimen342
+\htCbox=\dimen343
 )
 LaTeX Font Info:    Redeclaring math alphabet \mathcal on input line 57.
  (/usr/share/texlive/texmf-dist/tex/latex/faktor/faktor.sty
 Package: faktor 2006/04/05 v0.1b Faktor-Ringe, -Gruppen, -Raeume (PE)
-\faktor@zaehlerhoehe=\skip159
-\faktor@nennerhoehe=\skip160
-))
-\c@remark=\count293
- (./auxiliaries/notation.tex) (/usr/share/texlive/texmf-dist/tex/latex/beamertheme-metropolis/pgfplotsthemetol.sty
+\faktor@zaehlerhoehe=\skip144
+\faktor@nennerhoehe=\skip145
+)
+\c@remark=\count298
+) (./auxiliaries/notation.tex) (/usr/share/texlive/texmf-dist/tex/latex/beamertheme-metropolis/pgfplotsthemetol.sty
 Package: pgfplotsthemetol 2016/03/14 PGFplots colors based on Paul Tol's SRON technical note
-) (./presentation.aux (./auxiliaries/background.aux))
+) (./presentation.aux (./auxiliaries/nominal_cunification.aux))
 \openout1 = `presentation.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -1488,17 +1469,17 @@ LaTeX Font Info:    ... okay on input line 16.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count294
-\scratchdimen=\dimen350
-\scratchbox=\box94
-\nofMPsegments=\count295
-\nofMParguments=\count296
-\everyMPshowfont=\toks57
-\MPscratchCnt=\count297
-\MPscratchDim=\dimen351
-\MPnumerator=\count298
-\makeMPintoPDFobject=\count299
-\everyMPtoPDFconversion=\toks58
+\scratchcounter=\count299
+\scratchdimen=\dimen344
+\scratchbox=\box88
+\nofMPsegments=\count300
+\nofMParguments=\count301
+\everyMPshowfont=\toks60
+\MPscratchCnt=\count302
+\MPscratchDim=\dimen345
+\MPnumerator=\count303
+\makeMPintoPDFobject=\count304
+\everyMPtoPDFconversion=\toks61
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
  (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -1510,14 +1491,14 @@ Package grfext Info: Graphics extension search list:
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 )) ABD: EveryShipout initializing macros
-\AtBeginShipoutBox=\box95
+\AtBeginShipoutBox=\box89
 Package hyperref Info: Link coloring OFF on input line 16.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count300
+\c@section@level=\count305
 )
 LaTeX Info: Redefining \ref on input line 16.
 LaTeX Info: Redefining \pageref on input line 16.
@@ -1608,32 +1589,7 @@ Overfull \vbox (15.63992pt too high) detected at line 18
 
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./presentation.toc
-LaTeX Font Info:    Try loading font information for U+msa on input line 5.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 5.
- (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-LaTeX Font Info:    Try loading font information for U+wasy on input line 5.
- (/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd
-File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
-)
-LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input line 5.
- (/usr/share/texlive/texmf-dist/tex/latex/sansmathaccent/ot1mathkerncmss.fd
-File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/mathkerncmss.
-)
-Package microtype Info: Loading generic settings for font family
-(microtype)             `mathkerncmss' (encoding: OT1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./presentation.toc)
 Overfull \hbox (0.4pt too wide) in paragraph at lines 23--23
 [][]  
  []
@@ -1649,104 +1605,190 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 [2
 
 ]
-\openout2 = `auxiliaries/background.aux'.
+\openout2 = `auxiliaries/nominal_cunification.aux'.
 
- (./auxiliaries/background.tex [3
+ (./auxiliaries/nominal_cunification.tex
+LaTeX Font Info:    Try loading font information for U+msa on input line 1.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msa.cfg
+File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 1.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-msb.cfg
+File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
+)
+LaTeX Font Info:    Try loading font information for U+wasy on input line 1.
+ (/usr/share/texlive/texmf-dist/tex/latex/wasysym/uwasy.fd
+File: uwasy.fd 2003/10/30 v2.0 Wasy-2 symbol font definitions
+)
+LaTeX Font Info:    Try loading font information for OT1+mathkerncmss on input line 1.
+ (/usr/share/texlive/texmf-dist/tex/latex/sansmathaccent/ot1mathkerncmss.fd
+File: ot1mathkerncmss.fd 2013/03/27 Fontinst v1.933 font definitions for OT1/mathkerncmss.
+)
+Package microtype Info: Loading generic settings for font family
+(microtype)             `mathkerncmss' (encoding: OT1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+ [3
 
 
 ] [4
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 6--6
+Overfull \hbox (0.4pt too wide) in paragraph at lines 10--10
 [][]  
  []
 
 [5
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 16--16
+Overfull \hbox (0.4pt too wide) in paragraph at lines 18--18
 [][]  
  []
 
 [6
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 29--29
+Overfull \hbox (0.4pt too wide) in paragraph at lines 25--25
 [][]  
  []
 
 [7
 
-]
-LaTeX Font Info:    Try loading font information for OMS+cmss on input line 41.
-LaTeX Font Info:    No file OMScmss.fd. on input line 41.
+] [8
 
-
-LaTeX Font Warning: Font shape `OMS/cmss/m/n' undefined
-(Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbullet' on input line 41.
-
-
-Overfull \hbox (0.4pt too wide) in paragraph at lines 41--41
-[][]  
- []
-
-[8
+] [9
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 57--57
-[][]  
- []
 
-[9
+LaTeX Font Warning: Font shape `OT1/cmss/m/sc' in size <10.95> not available
+(Font)              Font shape `OT1/cmr/m/sc' tried instead on input line 61.
 
-]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 65--65
+(/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
+)
+./auxiliaries/nominal_cunification.tex:61: Missing $ inserted.
+<inserted text> 
+                $
+l.61 \end{frame}
+                
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+./auxiliaries/nominal_cunification.tex:61: Missing $ inserted.
+<inserted text> 
+                $
+l.61 \end{frame}
+                
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+
+./auxiliaries/nominal_cunification.tex:61: Undefined control sequence.
+<inserted text> ...ate Hi \Else \State Hey \Endif 
+                                                  \Endif \EndProcedure \end ...
+l.61 \end{frame}
+                
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+./auxiliaries/nominal_cunification.tex:61: Undefined control sequence.
+<inserted text> ...\Else \State Hey \Endif \Endif 
+                                                  \EndProcedure \end {algori...
+l.61 \end{frame}
+                
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
+./auxiliaries/nominal_cunification.tex:61: Missing number, treated as zero.
+<to be read again> 
+                   \ALG@b@2@EndProcedure@0 
+l.61 \end{frame}
+                
+A number should have been here; I inserted `0'.
+(If you can't figure out why I needed to see a number,
+look up `weird error' in the index to The TeXbook.)
+
+
+./auxiliaries/nominal_cunification.tex:61: Package algorithmicx Error: Some blocks are not closed!!!.
+
+See the algorithmicx package documentation for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.61 \end{frame}
+                
+This error message was generated by an \errmessage
+command, so I can't give any explicit help.
+Pretend that you're Hercule Poirot: Examine all clues,
+and deduce the truth by order and method.
+
+
+Overfull \hbox (0.4pt too wide) in paragraph at lines 61--61
 [][]  
  []
 
 [10
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 84--84
+Overfull \hbox (0.4pt too wide) in paragraph at lines 61--61
 [][]  
  []
 
 [11
 
+
 ]
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 86.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\alpha' on input line 86.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 86.
+Overfull \hbox (0.4pt too wide) in paragraph at lines 66--66
+[][]  
+ []
 
 [12
 
 ]
-Overfull \hbox (0.4pt too wide) in paragraph at lines 96--96
+Overfull \hbox (0.4pt too wide) in paragraph at lines 70--70
 [][]  
  []
 
 [13
 
 ]
-\myBox1=\box96
-\myScoreStart1=\dimen352
-\myCenter1=\dimen353
-\myScoreEnd1=\dimen354
-
-Overfull \hbox (0.4pt too wide) in paragraph at lines 119--119
+Overfull \hbox (0.4pt too wide) in paragraph at lines 75--75
 [][]  
  []
 
 [14
+
+]
+Overfull \hbox (0.4pt too wide) in paragraph at lines 79--79
+[][]  
+ []
+
+[15
+
+] [16
+
+]
+Overfull \hbox (0.4pt too wide) in paragraph at lines 85--85
+[][]  
+ []
+
+[17
+
+]
+Overfull \hbox (0.4pt too wide) in paragraph at lines 89--89
+[][]  
+ []
+
+[18
 
 ])
 \tf@nav=\write5
@@ -1758,34 +1800,31 @@ Overfull \hbox (0.4pt too wide) in paragraph at lines 119--119
 \tf@snm=\write7
 \openout7 = `presentation.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 29.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 29.
- (./presentation.aux (./auxiliaries/background.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 29.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 29.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 30.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 30.
+ (./presentation.aux (./auxiliaries/nominal_cunification.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 30.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 30.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-
-LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 29.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 30.
  ) 
 Here is how much of TeX's memory you used:
- 42334 strings out of 493029
- 959519 string characters out of 6136234
- 1146835 words of memory out of 5000000
- 45025 multiletter control sequences out of 15000+600000
- 15729 words of font info for 63 fonts, out of 8000000 for 9000
+ 42106 strings out of 493029
+ 954934 string characters out of 6136234
+ 1132111 words of memory out of 5000000
+ 44773 multiletter control sequences out of 15000+600000
+ 14674 words of font info for 61 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  76i,13n,98p,10428b,755s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on presentation.pdf (14 pages, 118561 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on presentation.pdf (18 pages, 118305 bytes).
 PDF statistics:
- 168 PDF objects out of 1000 (max. 8388607)
- 132 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 13379 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 193 PDF objects out of 1000 (max. 8388607)
+ 154 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 500000)
+ 16971 words of extra memory for PDF output out of 17280 (max. 10000000)
 

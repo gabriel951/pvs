@@ -44,11 +44,11 @@
 \usepackage{accsupp} %Package accsupp uses the ActualText feature of PDF (for PDF viewers that support this feature such as Acrobat Reader).
 
 %Algorithms
-% \usepackage[noend]{algpseudocode}
-% \usepackage{algorithm}
-% \usepackage{algorithmicx}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
 
-\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
+%\usepackage[linesnumbered,lined,commentsnumbered]{algorithm2e}
 
 % Logic
 \usepackage{bussproofs}
@@ -72,3 +72,6 @@
 % \newtheorem{proposition}{Proposition}[chapter]
 % \newtheorem{col}{Corollary}[chapter]
 \theoremstyle{remark}\newtheorem{remark}{Remark}
+
+% double space between column of tables
+\setlength{\tabcolsep}{12pt}

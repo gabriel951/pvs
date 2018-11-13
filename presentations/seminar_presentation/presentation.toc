@@ -1,5 +1,6 @@
 \beamer@endinputifotherversion {3.36pt}
 \select@language {english}
-\beamer@sectionintoc {1}{Background}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{Nominal Terms, Permutations and Substitutions}{4}{0}{1}
-\beamer@subsectionintoc {1}{2}{Freshness and $\alpha $-Equality}{12}{0}{1}
+\beamer@sectionintoc {1}{Nominal C Unification}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Definition of the Problem}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{A Nominal C Unification Algorithm}{8}{0}{1}
+\beamer@subsectionintoc {1}{3}{Examples}{16}{0}{1}

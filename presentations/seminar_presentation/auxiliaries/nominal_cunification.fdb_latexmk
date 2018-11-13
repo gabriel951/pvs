@@ -1,0 +1,13 @@
+# Fdb version 3
+["pdflatex"] 1542137272 "nominal_cunification.tex" "nominal_cunification.pdf" "nominal_cunification" 1542137272
+  "/etc/texmf/web2c/texmf.cnf" 1541710465 1101 af7716885e081ab43982cab7b4672c1a ""
+  "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1272929888 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
+  "/usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm" 1136768653 1328 c834bbb027764024c09d3d2bf908b5f0 ""
+  "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1503343927 31343 93828589fb0cea665e553ee5a17ad2d4 ""
+  "/usr/share/texmf/web2c/texmf.cnf" 1503343927 31343 93828589fb0cea665e553ee5a17ad2d4 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1541710547 3861613 190890e9276275ca90dbe2d059dee102 ""
+  "nominal_cunification.aux" 1542137272 0 d41d8cd98f00b204e9800998ecf8427e ""
+  "nominal_cunification.tex" 1542137267 2597 49ae9ee17b167ad6a5e1133126432b95 ""
+  (generated)
+  "nominal_cunification.pdf"
+  "nominal_cunification.log"
