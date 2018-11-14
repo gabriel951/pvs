@@ -24,52 +24,8 @@
     \end{definition}
 \end{frame}
 
-% the algorithm
-\subsection{A Nominal C Unification Algorithm}
-
-\begin{frame}
-    Hi
-\end{frame}
-
-% general idea for my algorithm 
-\begin{frame}[allowframebreaks]{An Algorithm for Nominal C-Unification: General Idea}
-    \begin{algorithmic}[1]
-        \Procedure{unify}{$\Delta,\sigma,UnPrb, FxPntEq$}
-        \If{null($UnPrb$)} 
-            \State \textbf{return} list(($\Delta, \sigma, FxPntEq$)) 
-        \Else 
-        \State $t =$ head($UnPrb$)[1]
-        \State $s =$ head($UnPrb$)[2]
-            \If {($s == \pi \cdot X$) and ($X$ not in $t$)}
-                \State $\sigma_1 = \{X \rightarrow t \}$
-                \State $\sigma'$ = $\sigma_1 \cup \sigma$ 
-                \State ($\Delta'$, bool1) = appSub2Ctxt($\sigma_1, \Delta$) 
-                \State $UnPrb'$ = $UnPrb\sigma_1$ \cup $FxPntEq\sigma_1$
-
-            \ElsIf{huuuuuHIdjklasf}
-                \State Hi
-            \ElsIf{HI}
-                \State Hi
-            \ElsIf{HI}
-                \State Hi
-            \Else 
-                \State Hey
-            \Endif
-        \Endif
-        \EndProcedure
-    \end{algorithmic}
-\end{frame}
-
-% remaining parts of algorithm 
-\begin{frame}{Reduction Rules for Equational Problems}
-    TO DO 
-\end{frame}
-
-\begin{frame}{Reduction Rules for Freshness Problems}
-    TO DO 
-\end{frame}
-
 % distictions from nominal unification: fixpoint equations and set of solutions
+\subsection{Differences from Nominal Unification}
 \begin{frame}{Difference from Nominal Unification - Fixpoint Equations}
     TO DO
 \end{frame}
@@ -78,12 +34,130 @@
     TO DO
 \end{frame}
 
-\subsection{Examples}
-% copy paste washington examples here
-\begin{frame}{Example 1}
-    TO DO
+
+% the algorithm
+\subsection{A Functional Nominal C-Unification Algorithm}
+
+% general idea for my algorithm 
+\begin{frame}{General Comments about the Functional Nominal C-Unification Algorithm}
+
 \end{frame}
 
-\begin{frame}{Example 2}
-    TO DO 
+% my algorithm 
+\begin{frame}[allowframebreaks]{A Functional Nominal C-Unification Algorithm}
+\begin{algorithmic}[1]
+\Procedure{unify}{$\Delta,\sigma,UnPrb, FxPntEq$}
+    \If{null($UnPrb$)} 
+        \State \Return {list(($\Delta, \sigma, FxPntEq$))} 
+    \Else 
+    \State $t =$ head($UnPrb$)[1]
+    \State $s =$ head($UnPrb$)[2]
+    \State $UnPrb' =$ tail($UnPrb$)
+        \If {($s == \pi \cdot X$) and ($X$ not in $t$)}
+            \State $\sigma' = \{X \rightarrow t \}$
+            \State $\sigma''$ = $\sigma' \cup \sigma$ 
+            \State ($\Delta'$, bool1) = appSub2Ctxt($\sigma_1, \Delta$) 
+            \State $UnPrb' = (UnPrb)\sigma' +   (FxPntEq)\sigma'$
+            % quick and dirty fix since i could not handle nested ifs. 
+            % if then else
+            \Statex
+            \State \textbf{if} bool1 \textbf{then} \Return{\Call{unify}{$\Delta',
+            \sigma'', UnPrb', null$}} 
+            \State \textbf{else} \Return{null}
+        \Else 
+            \If{$t == a$} 
+                % if
+                \State \textbf{if} s == a \textbf{then} 
+                \State \hspace{8 \algorithmicxindent} 
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb', FxPntEq$}} 
+                % else
+                \State \textbf{else} \Return{null}
+            \ElsIf{$t == \pi \cdot X$}
+                % if 
+                \State \textbf{if} (X not in s) \textbf{then}
+                \State \hspace{8 \algorithmicxindent}
+                \Comment Similar to case above where s is a suspension
+                % else if
+                \Statex \Statex
+                \State \textbf{else if} $(s == \pi' \cdot X)$ \textbf{then}
+                \State \hspace{8 \algorithmicxindent}
+                $FxPntEq' = FxPntEq \cup \{((\pi')^{-1} \oplus \pi) \cdot X\}$
+                \State \hspace{8 \algorithmicxindent}
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb, FxPntEq'$}}
+                % else 
+                \State \textbf{else} \Return{null}
+
+            % unit
+            \ElsIf{$t == \langle \rangle$}
+                \State \textbf{if} $s == \langle \rangle$ \textbf{then} 
+                \State \hspace{8 \algorithmicxindent}
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb, FxPntEq$}}
+                \State \textbf{else} \Return{null}
+            % pair
+            \ElsIf{$t == \langle t_1, t_2 \rangle$}
+                \State \textbf{if} $s == \langle s_1, s_2 \rangle$ \textbf{then} 
+                \State \hspace{8 \algorithmicxindent}
+                $UnPrb'' = UnPrb' + [(s_1, t_1)] + [(s_2, t_2)]$
+                \State \hspace{8 \algorithmicxindent}
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb'', FxPntEq$}}
+                \State \textbf{else} \Return{null}
+            % abs
+            \ElsIf{$t == [a]t_1$}
+                \State \textbf{if} $s == [a]s_1$ \textbf{then}        
+                    \State \hspace{8 \algorithmicxindent}
+                    $UnPrb'' = UnPrb' + [(t_1, s_1)] + [(t_2, s_2)]$
+                    \State \hspace{8 \algorithmicxindent}
+                    \Return{\Call{unify}{$\Delta, \sigma, UnPrb'', FxPntEq$}}
+                \State \textbf{else if} $s == [b]s_1$ \textbf{then}        
+                    \State \hspace{8 \algorithmicxindent}
+                    $(\Delta', bool1) =  fresh(a, s_1)$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    $\Delta'' = \Delta \cup \Delta'$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    $UnPrb'' = UnPrb + [(t_1, \ \ (a \ b) \ s_1)]$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    \textbf{if} bool1 \textbf{then} 
+                    \State \hspace{16 \algorithmicxindent}
+                    \Return{\Call{unify}{$\Delta'', \sigma, UnPrb'', FxPntEq$}}
+                    \State \hspace{8 \algorithmicxindent}
+                    \textbf{else} \Return{null}
+                \State \textbf{else} 
+                    \State \hspace{8 \algorithmicxindent}
+                    \Return{null}
+            \ElsIf{$t == f t_1$} \Comment f is not commutative
+                \State \textbf{if} $s$ != $f s_1$ \textbf{then} \Return{null}
+                \State \textbf{else} 
+                    \State \hspace{8 \algorithmicxindent}
+                    $UnPrb'' = UnPrb + [(t_1, s_1)]$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    \Return{\Call{unify}{$\Delta, \sigma, UnPrb'', FxPntEq$}}
+            \Statex\Statex\Statex\Statex
+            \Statex\Statex\Statex\Statex
+            \Else \Comment $t$ is of the form $f(t_1, t_2)$
+                %\State \textbf{if} $s$ != $f(s_1, s_2)$ \textbf{then} \Return{null}
+                \If{$s$ != $f(s_1, s_2)$} \Return{null}
+                \Else
+                    \State $UnPrb_1 = UnPrb' + [(s_1, t_1)] + [(s_2, t_2)]$
+                    \State $s_1$ = \Return{\Call{unify}{$\Delta, \sigma, UnPrb_1, FxPntEq$}}
+                    \State $UnPrb_2 = UnPrb' + [(s_1, t_2)] + [(s_2, t_1)]$
+                    \State $s_2$ = \Return{\Call{unify}{$\Delta, \sigma, UnPrb_2, FxPntEq$}}
+                    \State \Return{\Call{append}{$s_1, s_2$}}
+                \Endif
+            \Endif
+        \Endif
+    \Endif
+\EndProcedure
+\end{algorithmic}
 \end{frame}
+
+% remaining parts of algorithm 
+% TODO: do this slide, if there is time!
+%\begin{frame}{Reduction Rules for Equational Problems}
+%    TO DO 
+%\end{frame}
+%
+%\begin{frame}{Reduction Rules for Freshness Problems}
+%    TO DO 
+%\end{frame}
+
+% do one example on the blackboard
