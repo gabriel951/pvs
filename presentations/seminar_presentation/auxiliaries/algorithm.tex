@@ -1,0 +1,135 @@
+% the algorithm
+\subsection{A Functional Nominal C-Unification Algorithm}
+
+% general idea for my algorithm 
+\begin{frame}{General Comments About the Functional Nominal C-Unification Algorithm}
+\begin{itemize}
+    \item We will show a functional nominal C-unification algorithm, that allow us to
+    unify two terms $t$ and $s$.
+    \item Since the algorithm is recursive and needs to keep track of the current context,
+        the substitutions made so far, the remaining terms to unify and the current
+        fixpoint equations, the algorithm receives as input a quadruple 
+        $(\Delta, \sigma, UnPrb, FxPntEq)$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{General Comments About the Functional Nominal C-Unification Algorithm}
+\begin{itemize}
+    \item Call to unify terms $t$ and $s$: 
+    \begin{algorithmic}[1]
+        \Call{unify}{$\emptyset, Id, [[t, s]], \emptyset$}.
+    \end{algorithmic}
+    \item The algorithm returns a list (possibly empty) of solutions. Each solution
+        is of the form $(\Delta, \sigma, FxPntEq)$
+\end{itemize}
+\end{frame}
+
+% my algorithm 
+\begin{frame}[allowframebreaks]{A Functional Nominal C-Unification Algorithm}
+\begin{algorithmic}[1]
+\Procedure{unify}{$\Delta,\sigma,UnPrb, FxPntEq$}
+    \If{null($UnPrb$)} 
+        \State \Return {list(($\Delta, \sigma, FxPntEq$))} 
+    \Else 
+    \State $(t, s) =$ head($UnPrb$)
+    \State $UnPrb' =$ tail($UnPrb$)
+        \If {($s == \pi \cdot X$) and ($X$ not in $t$)}
+            \State $\sigma' = \{X \rightarrow t \}$
+            \State $\sigma''$ = $\sigma' \cup \sigma$ 
+            \State ($\Delta'$, bool1) = appSub2Ctxt($\sigma_1, \Delta$) 
+            \State $UnPrb'' = (UnPrb')\sigma' +   (FxPntEq)\sigma'$
+            % quick and dirty fix since i could not handle nested ifs. 
+            % if then else
+            \Statex
+            \State \textbf{if} bool1 \textbf{then} \Return{\Call{unify}{$\Delta',
+            \sigma'', UnPrb'', null$}} 
+            \State \textbf{else} \Return{null}
+            %\If{bool1} \Return{\Call{unify}{$\Delta', \sigma'', UnPrb', null$}} 
+            %\Else \Return{null}
+            %\Endif
+        \Else 
+            \If{$t == a$} 
+                % if
+                \State \textbf{if} s == a \textbf{then} 
+                \State \hspace{8 \algorithmicxindent} 
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb', FxPntEq$}} 
+                % else
+                \State \textbf{else} \Return{null}
+            \ElsIf{$t == \pi \cdot X$}
+                % if 
+                \State \textbf{if} (X not in s) \textbf{then}
+                \State \hspace{8 \algorithmicxindent}
+                \Comment Similar to case above where s is a suspension
+                % else if
+                \Statex \Statex \Statex
+                \State \textbf{else if} $(s == \pi' \cdot X)$ \textbf{then}
+                \State \hspace{8 \algorithmicxindent}
+                $FxPntEq' = FxPntEq \cup \{((\pi')^{-1} \oplus \pi) \cdot X\}$
+                \State \hspace{8 \algorithmicxindent}
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb', FxPntEq'$}}
+                % else 
+                \State \textbf{else} \Return{null}
+
+            % unit
+            \ElsIf{$t == \langle \rangle$}
+                \State \textbf{if} $s == \langle \rangle$ \textbf{then} 
+                \State \hspace{8 \algorithmicxindent}
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb', FxPntEq$}}
+                \State \textbf{else} \Return{null}
+            % pair
+            \ElsIf{$t == \langle t_1, t_2 \rangle$}
+                \State \textbf{if} $s == \langle s_1, s_2 \rangle$ \textbf{then} 
+                \State \hspace{8 \algorithmicxindent}
+                $UnPrb'' = UnPrb' + [(s_1, t_1)] + [(s_2, t_2)]$
+                \State \hspace{8 \algorithmicxindent}
+                \Return{\Call{unify}{$\Delta, \sigma, UnPrb'', FxPntEq$}}
+                \State \textbf{else} \Return{null}
+            % abs
+            \ElsIf{$t == [a]t_1$}
+                \State \textbf{if} $s == [a]s_1$ \textbf{then}        
+                    \State \hspace{8 \algorithmicxindent}
+                    $UnPrb'' = UnPrb' + [(t_1, s_1)]$
+                    \State \hspace{8 \algorithmicxindent}
+                    \Return{\Call{unify}{$\Delta, \sigma, UnPrb'', FxPntEq$}}
+                \State \textbf{else if} $s == [b]s_1$ \textbf{then}        
+                    \State \hspace{8 \algorithmicxindent}
+                    $(\Delta', bool1) =  fresh(a, s_1)$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    $\Delta'' = \Delta \cup \Delta'$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    $UnPrb'' = UnPrb' + [(t_1, \ \ (a \ b) \ s_1)]$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    \textbf{if} bool1 \textbf{then} 
+                    \State \hspace{16 \algorithmicxindent}
+                    \Return{\Call{unify}{$\Delta'', \sigma, UnPrb'', FxPntEq$}}
+                    \State \hspace{8 \algorithmicxindent}
+                    \textbf{else} \Return{null}
+                \State \textbf{else} 
+                    \State \hspace{8 \algorithmicxindent}
+                    \Return{null}
+            \ElsIf{$t == f t_1$} \Comment f is not commutative
+                \State \textbf{if} $s$ != $f s_1$ \textbf{then} \Return{null}
+                \State \textbf{else} 
+                    \State \hspace{8 \algorithmicxindent}
+                    $UnPrb'' = UnPrb' + [(t_1, s_1)]$ 
+                    \State \hspace{8 \algorithmicxindent}
+                    \Return{\Call{unify}{$\Delta, \sigma, UnPrb'', FxPntEq$}}
+            \Statex\Statex\Statex\Statex
+            \Statex\Statex\Statex\Statex
+            \Else \Comment $t$ is of the form $f(t_1, t_2)$
+                %\State \textbf{if} $s$ != $f(s_1, s_2)$ \textbf{then} \Return{null}
+                \If{$s$ != $f(s_1, s_2)$} \Return{null}
+                \Else
+                    \State $UnPrb_1 = UnPrb' + [(s_1, t_1)] + [(s_2, t_2)]$
+                    \State $s_1$ = \Call{unify}{$\Delta, \sigma, UnPrb_1, FxPntEq$}
+                    \State $UnPrb_2 = UnPrb' + [(s_1, t_2)] + [(s_2, t_1)]$
+                    \State $s_2$ = \Call{unify}{$\Delta, \sigma, UnPrb_2, FxPntEq$}
+                    \State \Return{\Call{append}{$s_1, s_2$}}
+                \Endif
+            \Endif
+        \Endif
+    \Endif
+\EndProcedure
+\end{algorithmic}
+\end{frame}
+

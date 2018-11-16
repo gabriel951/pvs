@@ -3,46 +3,8 @@
 \headcommand {\beamer@framepages {1}{1}}
 \headcommand {\slideentry {0}{0}{2}{2/2}{}{0}}
 \headcommand {\beamer@framepages {2}{2}}
-\headcommand {\sectionentry {1}{Nominal C Unification}{3}{Nominal C Unification}{0}}
-\headcommand {\beamer@sectionpages {1}{2}}
+\headcommand {\beamer@partpages {1}{2}}
 \headcommand {\beamer@subsectionpages {1}{2}}
-\headcommand {\slideentry {1}{0}{1}{3/3}{}{0}}
-\headcommand {\beamer@framepages {3}{3}}
-\headcommand {\beamer@subsectionentry {0}{1}{1}{4}{Definition of the Problem}}\headcommand {\beamer@subsectionpages {3}{3}}
-\headcommand {\slideentry {1}{1}{1}{4/4}{Definition of the Problem}{0}}
-\headcommand {\beamer@framepages {4}{4}}
-\headcommand {\slideentry {1}{1}{2}{5/5}{Definition of the Problem}{0}}
-\headcommand {\beamer@framepages {5}{5}}
-\headcommand {\slideentry {1}{1}{3}{6/6}{Definition of the Problem}{0}}
-\headcommand {\beamer@framepages {6}{6}}
-\headcommand {\slideentry {1}{1}{4}{7/7}{Definition of the Problem}{0}}
-\headcommand {\beamer@framepages {7}{7}}
-\headcommand {\beamer@subsectionentry {0}{1}{2}{8}{Differences from Nominal Unification}}\headcommand {\beamer@subsectionpages {4}{7}}
-\headcommand {\slideentry {1}{2}{1}{8/8}{Differences from Nominal Unification}{0}}
-\headcommand {\beamer@framepages {8}{8}}
-\headcommand {\slideentry {1}{2}{2}{9/9}{Differences from Nominal Unification}{0}}
-\headcommand {\beamer@framepages {9}{9}}
-\headcommand {\slideentry {1}{2}{3}{10/10}{Differences from Nominal Unification}{0}}
-\headcommand {\beamer@framepages {10}{10}}
-\headcommand {\beamer@subsectionentry {0}{1}{3}{11}{A Functional Nominal C-Unification Algorithm}}\headcommand {\beamer@subsectionpages {8}{10}}
-\headcommand {\slideentry {1}{3}{1}{11/11}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {11}{11}}
-\headcommand {\slideentry {1}{3}{2}{12/12}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {12}{12}}
-\headcommand {\slideentry {1}{3}{3}{13/13}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {13}{13}}
-\headcommand {\slideentry {1}{3}{3}{13/14}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {13}{14}}
-\headcommand {\slideentry {1}{3}{3}{13/15}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {13}{15}}
-\headcommand {\slideentry {1}{3}{3}{13/16}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {13}{16}}
-\headcommand {\slideentry {1}{3}{3}{13/17}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {13}{17}}
-\headcommand {\slideentry {1}{3}{3}{13/18}{A Functional Nominal C-Unification Algorithm}{0}}
-\headcommand {\beamer@framepages {13}{18}}
-\headcommand {\beamer@partpages {1}{18}}
-\headcommand {\beamer@subsectionpages {11}{18}}
-\headcommand {\beamer@sectionpages {3}{18}}
-\headcommand {\beamer@documentpages {18}}
-\headcommand {\def \inserttotalframenumber {13}}
+\headcommand {\beamer@sectionpages {1}{2}}
+\headcommand {\beamer@documentpages {2}}
+\headcommand {\def \inserttotalframenumber {1}}

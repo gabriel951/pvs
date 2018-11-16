@@ -11,7 +11,7 @@
     $\atomSet$
     and is usually represented by a list of swappings: 
 \begin{equation*}
-    \pi = (a_1, b_1):: ... ::(a_n, b_n)::nil 
+    \pi = (a_1, b_2):: ... ::(a_n, b_n)::nil 
 \end{equation*}
 \end{frame}
 
@@ -94,11 +94,11 @@
     \end{itemize}
 \end{frame}
 
-% TODO: put here what is a freshness context 
 \begin{frame}{Contexts}
-    TO DO. 
+    Contexts (or reduced constraints) are constraints of the form $a\#a$ or $a\#X$. 
+    We denote contexts by the letters $\Delta$, $\nabla$ or  $\Gamma$ and say that they are
+    consistent if there are no constraints of the form $a\#a$.
 \end{frame}
-
 
 \begin{frame}{Derivation Rules for Freshness}
     \begin{tabular}{ c c }
@@ -148,9 +148,68 @@
 \end{frame}
 
 \begin{frame}{Derivation Rules for $\alpha$-Equivalence}
-    TO DO. 
+\begin{tabular}{c}
+    % unit 
+        \AxiomC{}
+        \RightLabel{($\aeq  \langle \rangle$)}
+        \UnaryInfC{$\Delta \vdash \langle \rangle \aeq \langle \rangle$}
+        \DisplayProof 
+    \\ \\
+    % atom
+        \AxiomC{}
+        \RightLabel{($\aeq  atom$)}
+        \UnaryInfC{$\Delta \vdash a \aeq a$}
+        \DisplayProof 
+    \\ \\ 
+    % application
+        \AxiomC{$\Delta \vdash s \aeq t$}
+        \RightLabel{($\aeq  app$)}
+        \UnaryInfC{$\Delta \vdash f s \aeq f t$}
+        \DisplayProof 
+    \\ \\
+    % abstraction a
+        \AxiomC{$\Delta \vdash s \aeq t$}
+        \RightLabel{($\aeq  [a]a$)}
+        \UnaryInfC{$\Delta \vdash [a]s \aeq [a]t$}
+        \DisplayProof 
+    \\ \\
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Derivation Rules for $\alpha$-Equivalence}
+\begin{tabular}{c}
+    %% abstraction b
+        \AxiomC{$\Delta \vdash s \aeq (a b) \cdot t$, \  $\Delta \vdash a\#t$}
+        \RightLabel{($\aeq [a]a$)}
+        \UnaryInfC{$\Delta \vdash [a]s \aeq [b]t$}
+        \DisplayProof 
+    \\ \\
+    %% variable
+        \AxiomC{$ds(\pi, \pi')\#X \subseteq \Delta$}
+        \RightLabel{($\aeq var$)}
+        \UnaryInfC{$\Delta \vdash \pi \cdot X \aeq \pi' \cdot X$}
+        \DisplayProof 
+    %% pair 
+    \\ \\ 
+        \AxiomC{$\Delta \vdash s_0 \aeq t_0$, \ $\Delta \vdash s_1 \aeq t_0$}
+        \RightLabel{($\aeq pair$)}
+        \UnaryInfC{$\Delta \vdash \langle s_0, s_1 \rangle \aeq \langle t_0, t_1
+        \rangle$}
+        \DisplayProof 
+    
+\end{tabular} 
 \end{frame}
 
 \begin{frame}{Additional Rule for $\alpha$-Equivalence with Commutative Symbols}
-    TO DO. 
+We need to add a rule to take into account commutative function symbols. Therefore, if a
+function symbol is commutative, the following rule can be applied:
+\newline \newline
+\begin{tabular}{c}
+    % commutative pair
+        \AxiomC{$\Delta \vdash s_0 \aeq t_1$, \ $\Delta \vdash s_1 \aeq t_0$}
+        \RightLabel{($\aeq C-pair$)}
+        \UnaryInfC{$\Delta \vdash f(\langle s_0, s_1 \rangle) \aeq f(\langle t_0, t_1
+        \rangle)$}
+        \DisplayProof 
+\end{tabular} 
 \end{frame}
