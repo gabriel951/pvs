@@ -1,0 +1,202 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.11.8)  17 NOV 2018 17:06
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**notes.tex
+(./notes.tex
+LaTeX2e <2016/02/01>
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (/usr/share/texlive/texmf-dist/tex/latex/qtree/qtree.sty
+Package: 2008/12/12 v.3.1bQtree: tree-drawing for linguistics
+Package: qtree 2008/12/12 v.3.1bQtree: tree-drawing for linguistics
+(/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.sty
+Package: pict2e 2016/02/05 v0.3b Improved picture commands (HjG,RN,JT)
+ (/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.cfg
+File: pict2e.cfg 2016/02/05 v0.1u pict2e configuration for teTeX/TeXLive
+)
+Package pict2e Info: Driver file: pdftex.def on input line 119.
+ (/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
+ (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
+) (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
+)
+\Gread@gobject=\count87
+)
+Package pict2e Info: Driver file for pict2e: p2e-pdftex.def on input line 121.
+ (/usr/share/texlive/texmf-dist/tex/latex/pict2e/p2e-pdftex.def
+File: p2e-pdftex.def 2016/02/05 v0.1u Driver-dependant file (RN,HjG,JT)
+) (/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+\pIIe@GRAPH=\toks14
+\@arclen=\dimen103
+\@arcrad=\dimen104
+\@tempdimd=\dimen105
+)
+\c@treecount=\count88
+\c@branchcount=\count89
+\parentbox=\box26
+\treebox=\box27
+\treeboxone=\box28
+\treeboxtwo=\box29
+\treeboxthree=\box30
+\treeboxfour=\box31
+\treeboxfive=\box32
+\treeboxsix=\box33
+\treeboxseven=\box34
+\treeboxeight=\box35
+\treeboxnine=\box36
+\treeboxten=\box37
+\treeboxeleven=\box38
+\treeboxtwelve=\box39
+\treeboxthirteen=\box40
+\treeboxfourteen=\box41
+\treeboxfifteen=\box42
+\treeboxsixteen=\box43
+\treeboxseventeen=\box44
+\treeboxeighteen=\box45
+\treeboxnineteen=\box46
+\treeboxtwenty=\box47
+\treeoffsetone=\skip43
+\treeoffsettwo=\skip44
+\treeoffsetthree=\skip45
+\treeoffsetfour=\skip46
+\treeoffsetfive=\skip47
+\treeoffsetsix=\skip48
+\treeoffsetseven=\skip49
+\treeoffseteight=\skip50
+\treeoffsetnine=\skip51
+\treeoffsetten=\skip52
+\treeoffseteleven=\skip53
+\treeoffsettwelve=\skip54
+\treeoffsetthirteen=\skip55
+\treeoffsetfourteen=\skip56
+\treeoffsetfifteen=\skip57
+\treeoffsetsixteen=\skip58
+\treeoffsetseventeen=\skip59
+\treeoffseteighteen=\skip60
+\treeoffsetnineteen=\skip61
+\treeoffsettwenty=\skip62
+\treeshiftone=\skip63
+\treeshifttwo=\skip64
+\treeshiftthree=\skip65
+\treeshiftfour=\skip66
+\treeshiftfive=\skip67
+\treeshiftsix=\skip68
+\treeshiftseven=\skip69
+\treeshifteight=\skip70
+\treeshiftnine=\skip71
+\treeshiftten=\skip72
+\treeshifteleven=\skip73
+\treeshifttwelve=\skip74
+\treeshiftthirteen=\skip75
+\treeshiftfourteen=\skip76
+\treeshiftfifteen=\skip77
+\treeshiftsixteen=\skip78
+\treeshiftseventeen=\skip79
+\treeshifteighteen=\skip80
+\treeshiftnineteen=\skip81
+\treeshifttwenty=\skip82
+\treewidthone=\skip83
+\treewidthtwo=\skip84
+\treewidththree=\skip85
+\treewidthfour=\skip86
+\treewidthfive=\skip87
+\treewidthsix=\skip88
+\treewidthseven=\skip89
+\treewidtheight=\skip90
+\treewidthnine=\skip91
+\treewidthten=\skip92
+\treewidtheleven=\skip93
+\treewidthtwelve=\skip94
+\treewidththirteen=\skip95
+\treewidthfourteen=\skip96
+\treewidthfifteen=\skip97
+\treewidthsixteen=\skip98
+\treewidthseventeen=\skip99
+\treewidtheighteen=\skip100
+\treewidthnineteen=\skip101
+\treewidthtwenty=\skip102
+\daughteroffsetone=\skip103
+\daughteroffsettwo=\skip104
+\daughteroffsetthree=\skip105
+\daughteroffsetfour=\skip106
+\branchwidthone=\skip107
+\branchwidthtwo=\skip108
+\branchwidththree=\skip109
+\branchwidthfour=\skip110
+\parentoffset=\skip111
+\treeoffset=\skip112
+\daughteroffset=\skip113
+\branchwidth=\skip114
+\parentwidth=\skip115
+\treewidth=\skip116
+\qta=\toks15
+\qtb=\toks16
+\nbranches=\count90
+\qroofx=\count91
+\qroofy=\count92
+\@qrscratchbox=\box48
+) (./notes.aux)
+\openout1 = `notes.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 4.
+LaTeX Font Info:    ... okay on input line 4.
+ (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count93
+\scratchdimen=\dimen106
+\scratchbox=\box49
+\nofMPsegments=\count94
+\nofMParguments=\count95
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count96
+\MPscratchDim=\dimen107
+\MPnumerator=\count97
+\makeMPintoPDFobject=\count98
+\everyMPtoPDFconversion=\toks18
+) (./notes.aux) ) 
+Here is how much of TeX's memory you used:
+ 1255 strings out of 493029
+ 16140 string characters out of 6136234
+ 74372 words of memory out of 5000000
+ 4845 multiletter control sequences out of 15000+600000
+ 3640 words of font info for 14 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 27i,1n,19p,236b,37s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+No pages of output.
+PDF statistics:
+ 0 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+

@@ -53,9 +53,9 @@
 \begin{frame}{Difference from Syntactic Unification - Fixpoint Equations}
      \par However, this approach is not complete in C-unification, because of
      commutativity. 
-     \par Take for example $\pi = (a \ b)$, $\pi' = Id$ and the
+     \par Take for example $\pi = (a \ b)$, $\pi' = nil$ and the
      substitution $X \rightarrow a+b$. In this case, $b + a \aeq a+b$. However,
-     the treatment of syntactic unification would loose this solution, since neither
+     the treatment of syntactic unification would lose this solution, since neither
      $a$ or $b$ are fresh in $a+b$. 
      \par Because of that, fixpoint equations are part of the solution for a
      C-unification problem. 

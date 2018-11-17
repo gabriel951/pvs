@@ -1,0 +1,23 @@
+# Fdb version 3
+["pdflatex"] 1542481594 "notes.tex" "notes.pdf" "notes" 1542481594
+  "/etc/texmf/web2c/texmf.cnf" 1541710465 1101 af7716885e081ab43982cab7b4672c1a ""
+  "/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii" 1337017135 71627 94eb9990bed73c364d7f53f960cc8c5b ""
+  "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty" 1335995445 8253 3bdedc8409aa5d290a2339be6f09af03 ""
+  "/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty" 1335995445 18425 775b341047ce304520cc7c11ca41392e ""
+  "/usr/share/texlive/texmf-dist/tex/latex/base/article.cls" 1454284088 20708 39fdf9e2fb65617012fa7382a351f485 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo" 1454284088 9179 4cd3c5f593e63512893b8ac0123f1bd7 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty" 1454284088 3980 0a268fbfda01e381fa95821ab13b6aee ""
+  "/usr/share/texlive/texmf-dist/tex/latex/pdftex-def/pdftex.def" 1306616590 55368 3c8a0d99822330f2dfabc0dfb09ce897 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/pict2e/p2e-pdftex.def" 1454715303 1168 efb94e82cc1584d4f62679f3487b5339 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.cfg" 1454715303 1920 2185073db458618f4a8a794158cf3681 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/pict2e/pict2e.sty" 1454715303 27382 d61cb379c145d74974b90e517d3dae46 ""
+  "/usr/share/texlive/texmf-dist/tex/latex/qtree/qtree.sty" 1232900045 37840 af733ddbac7a85c7a51356efa3682b6c ""
+  "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1503343927 31343 93828589fb0cea665e553ee5a17ad2d4 ""
+  "/usr/share/texmf/web2c/texmf.cnf" 1503343927 31343 93828589fb0cea665e553ee5a17ad2d4 ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1541710547 3861613 190890e9276275ca90dbe2d059dee102 ""
+  "notes.aux" 1542481594 8 a94a2480d3289e625eea47cd1b285758 ""
+  "notes.tex" 1542481593 76 f85a091a2d9efd3191b3bf08e7ba3d5b ""
+  (generated)
+  "notes.log"
+  "notes.aux"
+  "notes.pdf"

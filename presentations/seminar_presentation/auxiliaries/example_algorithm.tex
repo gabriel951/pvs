@@ -1,0 +1,27 @@
+\begin{frame}{Example of the algorithm} 
+\scalebox{0.8}{
+\Tree [.{unify($\emptyset$, id, [$f((a \ b) \cdot X, c) \ \aeq \ f(X, c)$], $\emptyset$)} 
+            [.{unify($\emptyset$, id, [$(a \ b) \cdot X \aeq X, \ c \aeq c$], 
+                    $\emptyset$)} 
+                [.{unify($\emptyset$, id, [$c \aeq c$], 
+                    $(a \ b) \cdot X \aeq X$)} 
+                    [.{unify($\emptyset$, id, null, 
+                    $(a \ b) \cdot X \aeq X$)} 
+                        [.{$(\emptyset, id, (a \ b) \cdot X \aeq X))$} ]
+                    ]
+                ]
+            ] 
+            [.{unify($\emptyset$, id, [$(a \ b) \cdot X \aeq c, \ X \aeq c$], 
+                    $\emptyset$)} 
+                    [.{unify($\emptyset$, $\{X \rightarrow c \}$, 
+                        [$c \aeq c$], $\emptyset$)} 
+                        [.{unify($\emptyset$, $\{X \rightarrow c \}$, 
+                            [], $\emptyset$)} 
+                            [.{$(\emptyset, \{X \rightarrow c \}, \emptyset)$} ]
+                        ]
+                    ]
+            ] 
+       ]
+}
+\end{frame}
+

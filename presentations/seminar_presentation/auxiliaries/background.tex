@@ -7,11 +7,11 @@
 
 % permutation
 \begin{frame}{Permutations}
-    A permutation $\pi$ represents an exchange of a finite amount of atoms in
+    An atom permutation $\pi$ represents an exchange of a finite amount of atoms in
     $\atomSet$
-    and is usually represented by a list of swappings: 
+    and is represented by a list of swappings: 
 \begin{equation*}
-    \pi = (a_1, b_2):: ... ::(a_n, b_n)::nil 
+    \pi = (a_1, b_1):: ... ::(a_n, b_n)::nil 
 \end{equation*}
 \end{frame}
 
@@ -24,38 +24,48 @@
                     \ \ \langle s, t \rangle \ \       | \ \ f \ t \ \   
     \end{equation*}
     \end{definition}
-    The symbols denote respectively: unit, atom term, moderated variable,
+    The symbols denote respectively: unit, atom term, suspended variable,
     abstraction, pair and function application.
 \end{frame}
 
-% permutation action
-\begin{frame}{Permutation Action on an Atom}
-    \begin{definition}[Permutation Action on an Atom]
-    The action of a permutation on an atom is defined by induction: 
-    \begin{itemize} 
-        \item $nil \cdot a \coloneqq a$ 
-        \item $(b \ c):: \pi \cdot a \coloneqq \pi \cdot a$ 
-        \item $(b \ c):: \pi \cdot b \coloneqq \pi \cdot c$ 
+% permutation action definition
+%\begin{frame}{Permutation Action on an Atom}
+%    \begin{definition}[Permutation Action on an Atom]
+%    The action of a permutation on an atom is defined by induction: 
+%    \begin{itemize} 
+%        \item $nil \cdot a \coloneqq a$ 
+%        \item $(b \ c):: \pi \cdot a \coloneqq \pi \cdot a$ 
+%        \item $(b \ c):: \pi \cdot b \coloneqq \pi \cdot c$ 
+%    \end{itemize}
+%    \end{definition}
+%\end{frame}
+
+%\begin{frame}{Permutation Action on a Term}
+%    \begin{definition}[Permutation Action on a Term]
+%    The action of a permutation $\pi$ on a term $t$ is defined by induction:
+%    \begin{align*}
+%        \pi \cdot  \langle \rangle &= \langle \rangle & 
+%        \pi \cdot (\pi' \cdot X) &= (\pi \oplus \pi') \cdot X & 
+%        \\ 
+%        \pi \cdot \langle s, t \rangle &= \langle \pi \cdot s, \pi \cdot t \rangle  & 
+%        \pi \cdot ([a]t) &= [\pi \cdot a](\pi \cdot t) & 
+%        \\
+%        \pi \cdot (f \ t) &= f(\pi \cdot t) 
+%    \end{align*}
+%    \end{definition}
+%\end{frame}
+
+% Examples of Permutation Action
+\begin{frame}{Examples of Permutation Actions}
+    Permutations acts on atoms and terms, here are some examples: 
+    \begin{itemize}
+        \item $t = a$, $\pi = (a \ b)$, $\pi \cdot t = b$.
+        \item $t = f(a, c)$, $\pi = (a \ b)$ and $\pi \cdot t = f(b, c)$.
+        \item $t = [a]a$, $\pi = (a \ b)::(b \ c)$, $\pi \cdot t = [b]b$.
     \end{itemize}
-    \end{definition}
 \end{frame}
 
-\begin{frame}{Permutation Action on a Term}
-    \begin{definition}[Permutation Action on a Term]
-    The action of a permutation $\pi$ on a term $t$ is defined by induction:
-    \begin{align*}
-        \pi \cdot  \langle \rangle &= \langle \rangle & 
-        \pi \cdot (\pi' \cdot X) &= (\pi \oplus \pi') \cdot X & 
-        \\ 
-        \pi \cdot \langle s, t \rangle &= \langle \pi \cdot s, \pi \cdot t \rangle  & 
-        \pi \cdot ([a]t) &= [\pi \cdot a](\pi \cdot t) & 
-        \\
-        \pi \cdot (f \ t) &= f(\pi \cdot t) 
-    \end{align*}
-    \end{definition}
-\end{frame}
-
-% substitution 
+% substitution
 \begin{frame}{Substitution}
     \begin{definition}[Substitution]
     A substitution $\sigma$ is a mapping from variables to terms, such that
@@ -64,22 +74,31 @@
 \end{frame}
 
 % substitution action
-\begin{frame}{Substitution Action on Terms}
-    \begin{definition}[Substitution Action on a Term]    
-        The action of a substitution $\sigma$ on a term $t$ is denoted by $\sigma t$ and
-        defined recursively by: 
-    \begin{align*}
-        \langle \rangle \sigma &= \langle \rangle & 
-        (\pi \cdot X) \sigma &= \pi \cdot (X \sigma)  & 
-        \\ 
-        \langle s, t \rangle \sigma &= \langle  s \sigma, t \sigma \rangle  & 
-        ([a]t) \sigma &= [a](t \sigma) & 
-        \\
-        (f \ t) \sigma &= f (t \sigma) 
-    \end{align*}
-    
-    OBS: Substitutions and permutations commute. 
-    \end{definition}
+%\begin{frame}{Substitution Action on Terms}
+%    \begin{definition}[Substitution Action on a Term]    
+%        The action of a substitution $\sigma$ on a term $t$ is denoted by $\sigma t$ and
+%        defined recursively by: 
+%    \begin{align*}
+%        \langle \rangle \sigma &= \langle \rangle & 
+%        (\pi \cdot X) \sigma &= \pi \cdot (X \sigma)  & 
+%        \\ 
+%        \langle s, t \rangle \sigma &= \langle  s \sigma, t \sigma \rangle  & 
+%        ([a]t) \sigma &= [a](t \sigma) & 
+%        \\
+%        (f \ t) \sigma &= f (t \sigma) 
+%    \end{align*}
+%    
+%    OBS: Substitutions and permutations commute. 
+%    \end{definition}
+%\end{frame}
+
+% TODO
+\begin{frame}{Examples of Substitutions Acting on Terms}
+    Substitutions also act on terms: 
+    \begin{itemize}
+        \item $\sigma = \{X \rightarrow a\}$, $t = f(X, X)$, $t\sigma = f(a, a)$.
+        \item $\sigma = \{X \rightarrow f(a, b)\}$, $t = f(X, c)$, $t\sigma = f(f(a, b), c)$.
+    \end{itemize}
 \end{frame}
 
 \subsection{Freshness and $\alpha$-Equality}
@@ -95,9 +114,8 @@
 \end{frame}
 
 \begin{frame}{Contexts}
-    Contexts (or reduced constraints) are constraints of the form $a\#a$ or $a\#X$. 
-    We denote contexts by the letters $\Delta$, $\nabla$ or  $\Gamma$ and say that they are
-    consistent if there are no constraints of the form $a\#a$.
+    A context is a set of constraints of the form $a\#X$. Contexts are denoted by the letters
+    $\Delta$, $\nabla$ or $\Gamma$.
 \end{frame}
 
 \begin{frame}{Derivation Rules for Freshness}
@@ -148,13 +166,14 @@
 \end{frame}
 
 \begin{frame}{Derivation Rules for $\alpha$-Equivalence}
-\begin{tabular}{c}
+\scalebox{0.9}{
+\begin{tabular}{c c}
     % unit 
         \AxiomC{}
         \RightLabel{($\aeq  \langle \rangle$)}
         \UnaryInfC{$\Delta \vdash \langle \rangle \aeq \langle \rangle$}
         \DisplayProof 
-    \\ \\
+    &
     % atom
         \AxiomC{}
         \RightLabel{($\aeq  atom$)}
@@ -166,30 +185,25 @@
         \RightLabel{($\aeq  app$)}
         \UnaryInfC{$\Delta \vdash f s \aeq f t$}
         \DisplayProof 
-    \\ \\
+    &  
     % abstraction a
         \AxiomC{$\Delta \vdash s \aeq t$}
         \RightLabel{($\aeq  [a]a$)}
         \UnaryInfC{$\Delta \vdash [a]s \aeq [a]t$}
         \DisplayProof 
     \\ \\
-\end{tabular}
-\end{frame}
-
-\begin{frame}{Derivation Rules for $\alpha$-Equivalence}
-\begin{tabular}{c}
     %% abstraction b
-        \AxiomC{$\Delta \vdash s \aeq (a b) \cdot t$, \  $\Delta \vdash a\#t$}
-        \RightLabel{($\aeq [a]a$)}
+        \AxiomC{$\Delta \vdash$  $s \aeq (a b) \cdot t$, $a\#t$}
+        \RightLabel{($\aeq [a]b$)}
         \UnaryInfC{$\Delta \vdash [a]s \aeq [b]t$}
         \DisplayProof 
-    \\ \\
+    &
     %% variable
         \AxiomC{$ds(\pi, \pi')\#X \subseteq \Delta$}
         \RightLabel{($\aeq var$)}
         \UnaryInfC{$\Delta \vdash \pi \cdot X \aeq \pi' \cdot X$}
         \DisplayProof 
-    %% pair 
+    % pair
     \\ \\ 
         \AxiomC{$\Delta \vdash s_0 \aeq t_0$, \ $\Delta \vdash s_1 \aeq t_0$}
         \RightLabel{($\aeq pair$)}
@@ -197,7 +211,7 @@
         \rangle$}
         \DisplayProof 
     
-\end{tabular} 
+\end{tabular}}
 \end{frame}
 
 \begin{frame}{Additional Rule for $\alpha$-Equivalence with Commutative Symbols}
@@ -212,4 +226,11 @@ function symbol is commutative, the following rule can be applied:
         \rangle)$}
         \DisplayProof 
 \end{tabular} 
+\end{frame}
+
+% TODO: put here some examples. 
+\begin{frame}{Examples of Derivation Rules as a Calculus}
+    The derivation rules for freshness and $\alpha$-equivalence can be seen as a
+    calculus:
+
 \end{frame}
