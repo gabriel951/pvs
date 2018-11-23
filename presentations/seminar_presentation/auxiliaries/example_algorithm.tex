@@ -1,4 +1,4 @@
-\begin{frame}{Example of the algorithm} 
+\begin{frame}{Example of the Algorithm} 
 \scalebox{0.8}{
 \Tree [.{unify($\emptyset$, id, [$f((a \ b) \cdot X, c) \ \aeq \ f(X, c)$], $\emptyset$)} 
             [.{unify($\emptyset$, id, [$(a \ b) \cdot X \aeq X, \ c \aeq c$], 
@@ -7,7 +7,7 @@
                     $(a \ b) \cdot X \aeq X$)} 
                     [.{unify($\emptyset$, id, null, 
                     $(a \ b) \cdot X \aeq X$)} 
-                        [.{$(\emptyset, id, (a \ b) \cdot X \aeq X))$} ]
+                        [.{$(\emptyset, id, (a \ b) \cdot X \aeq X)$} ]
                     ]
                 ]
             ] 
@@ -16,7 +16,7 @@
                     [.{unify($\emptyset$, $\{X \rightarrow c \}$, 
                         [$c \aeq c$], $\emptyset$)} 
                         [.{unify($\emptyset$, $\{X \rightarrow c \}$, 
-                            [], $\emptyset$)} 
+                            null, $\emptyset$)} 
                             [.{$(\emptyset, \{X \rightarrow c \}, \emptyset)$} ]
                         ]
                     ]
@@ -24,4 +24,18 @@
        ]
 }
 \end{frame}
+
+\begin{frame}{Sketch of a Bigger Example}
+    Let $t$ and $s$ be the two terms we unified in the previous example. Imagine 
+    we are trying to unify $f(t, Y) = f(s, \pi \cdot Y)$ where $f$ is a commutative
+    operator: 
+    \begin{itemize}
+        \item In one branch, first we unify $t$ and $s$ obtaining the solutions of
+            the previous slide. We add to these 2 solutions the fixpoint equation
+            $Y \aeq \pi \cdot Y$. 
+        \item In the other branch, we unify $t$ with $\pi \cdot Y$ 
+            and then proceed to unify $s$ with $\pi^{-1} \cdot t$.
+    \end{itemize}
+\end{frame}
+
 

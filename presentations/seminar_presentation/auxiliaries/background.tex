@@ -11,7 +11,7 @@
     $\atomSet$
     and is represented by a list of swappings: 
 \begin{equation*}
-    \pi = (a_1, b_1):: ... ::(a_n, b_n)::nil 
+    \pi = (a_1 \ b_1):: ... ::(a_n \ b_n)::nil 
 \end{equation*}
 \end{frame}
 
@@ -25,7 +25,10 @@
     \end{equation*}
     \end{definition}
     The symbols denote respectively: unit, atom term, suspended variable,
-    abstraction, pair and function application.
+    abstraction, pair and function application. 
+    \newline
+    We impose a restriction on the syntax
+    of commutative function symbols: they must receive pairs. 
 \end{frame}
 
 % permutation action definition
@@ -57,11 +60,11 @@
 
 % Examples of Permutation Action
 \begin{frame}{Examples of Permutation Actions}
-    Permutations acts on atoms and terms, here are some examples: 
+    Permutations act on atoms and terms:
     \begin{itemize}
         \item $t = a$, $\pi = (a \ b)$, $\pi \cdot t = b$.
         \item $t = f(a, c)$, $\pi = (a \ b)$ and $\pi \cdot t = f(b, c)$.
-        \item $t = [a]a$, $\pi = (a \ b)::(b \ c)$, $\pi \cdot t = [b]b$.
+        \item $t = [a]a$, $\pi = (a \ b)::(b \ c)$, $\pi \cdot t = [c]c$.
     \end{itemize}
 \end{frame}
 
@@ -107,9 +110,9 @@
     Two important predicates are the freshness predicate $\#$ and the $\alpha$-equality
     predicate $\aeq$: 
     \begin{itemize}
-        \item $a\#t$ intuitively means that if $a$ occurs in $t$ then it must do so
+        \item $a\#t$ means that if $a$ occurs in $t$ then it must do so
             under an abstractor $[a]$. 
-        \item $s \aeq t$ intuitively means that $s$ and $t$ are $\alpha$-equivalent.
+        \item $s \aeq t$ means that $s$ and $t$ are $\alpha$-equivalent.
     \end{itemize}
 \end{frame}
 
@@ -193,7 +196,7 @@
         \DisplayProof 
     \\ \\
     %% abstraction b
-        \AxiomC{$\Delta \vdash$  $s \aeq (a b) \cdot t$, $a\#t$}
+        \AxiomC{$\Delta \vdash$  $s \aeq (a \ b) \cdot t$, $a\#t$}
         \RightLabel{($\aeq [a]b$)}
         \UnaryInfC{$\Delta \vdash [a]s \aeq [b]t$}
         \DisplayProof 
@@ -205,7 +208,7 @@
         \DisplayProof 
     % pair
     \\ \\ 
-        \AxiomC{$\Delta \vdash s_0 \aeq t_0$, \ $\Delta \vdash s_1 \aeq t_0$}
+        \AxiomC{$\Delta \vdash s_0 \aeq t_0$, \ $\Delta \vdash s_1 \aeq t_1$}
         \RightLabel{($\aeq pair$)}
         \UnaryInfC{$\Delta \vdash \langle s_0, s_1 \rangle \aeq \langle t_0, t_1
         \rangle$}
@@ -228,9 +231,35 @@ function symbol is commutative, the following rule can be applied:
 \end{tabular} 
 \end{frame}
 
-% TODO: put here some examples. 
-\begin{frame}{Examples of Derivation Rules as a Calculus}
-    The derivation rules for freshness and $\alpha$-equivalence can be seen as a
-    calculus:
+\begin{frame}{Derivation Rules as a Sequent Calculus}
+    The derivation rules for freshness and $\alpha$-equivalence are a sequent calculus. 
 
+    Deriving $a\#\langle X, [a]Y\rangle$ with  $\Delta = \{a\#X\}$:
+    \newline \newline \newline
+    \begin{tabular}{c}
+        \AxiomC{$a\#X$}
+        \AxiomC{}
+        \RightLabel{($\#[a]a$)}
+        \UnaryInfC{$a\#[a]Y$}
+        \RightLabel{(\#pair)}
+        \BinaryInfC{$a\#\langle X, [a]Y\rangle$}
+        \DisplayProof 
+    \end{tabular} 
 \end{frame}
+
+\begin{frame}{Derivation Rules as a Sequent Calculus}
+    Deriving $[a]a \aeq [b]b$:
+    \newline \newline \newline
+    \begin{tabular}{c}
+        \AxiomC{}
+        \RightLabel{($\aeq  atom$)}
+        \UnaryInfC{$a \aeq (a \ b) \cdot b$}
+        \AxiomC{}
+        \RightLabel{($\# atom$)}
+        \UnaryInfC{$a\# b$}
+        \RightLabel{($\aeq [a]b$)}
+        \BinaryInfC{$[a]a \aeq [b]b$}
+        \DisplayProof 
+    \end{tabular} 
+\end{frame}
+

@@ -1,5 +1,11 @@
 \beamer@endinputifotherversion {3.36pt}
 \select@language {english}
-\beamer@sectionintoc {1}{Background}{3}{0}{1}
-\beamer@subsectionintoc {1}{1}{Nominal Terms, Permutations and Substitutions}{4}{0}{1}
-\beamer@subsectionintoc {1}{2}{Freshness and $\alpha $-Equality}{11}{0}{1}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@sectionintoc {2}{Background}{6}{0}{2}
+\beamer@subsectionintoc {2}{1}{Nominal Terms, Permutations and Substitutions}{7}{0}{2}
+\beamer@subsectionintoc {2}{2}{Freshness and $\alpha $-Equality}{14}{0}{2}
+\beamer@sectionintoc {3}{Nominal C-Unification}{22}{0}{3}
+\beamer@subsectionintoc {3}{1}{Definition of the Problem}{23}{0}{3}
+\beamer@subsectionintoc {3}{2}{Differences from Nominal Syntactic Unification}{26}{0}{3}
+\beamer@subsectionintoc {3}{3}{A Functional Nominal C-Unification Algorithm}{30}{0}{3}
+\beamer@sectionintoc {4}{Conclusion and Future Work}{43}{0}{4}

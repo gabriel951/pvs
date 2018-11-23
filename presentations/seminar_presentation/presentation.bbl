@@ -1,0 +1,25 @@
+\begin{thebibliography}{1}
+
+\bibitem{nominal_c_unification}
+M.~Ayala-Rinc{\'o}n, W.~de~Carvalho-Segundo, M.~Fern{\'a}ndez, and
+  D.~Nantes-Sobrinho.
+\newblock Nominal c-unification.
+\newblock {\em arXiv preprint arXiv:1709.05384}, 2017.
+
+\bibitem{pvs_nominal_unification}
+M.~Ayala-Rinc{\'o}n, M.~Fern{\'a}ndez, and A.~C. Rocha-Oliveira.
+\newblock Completeness in pvs of a nominal unification algorithm.
+\newblock {\em Electronic Notes in Theoretical Computer Science}, 323:57--74,
+  2016.
+
+\bibitem{nominal_rewriting}
+M.~Fern{\'a}ndez and M.~J. Gabbay.
+\newblock Nominal rewriting.
+\newblock {\em Information and Computation}, 205(6):917--965, 2007.
+
+\bibitem{nominal_unification}
+C.~Urban, A.~M. Pitts, and M.~J. Gabbay.
+\newblock Nominal unification.
+\newblock {\em Theoretical Computer Science}, 323(1-3):473--497, 2004.
+
+\end{thebibliography}

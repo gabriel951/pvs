@@ -4,14 +4,42 @@ Presentation Sketch
 2. Nominal C Unification - Proposed algorithm (estimated time: )
 3. Future work  (estimated time: )
 
+Comments to Make
+#. Introduction
+-> Nominal C-Unification is in the field of unification modulo equational theories. 
+
+# Background
+
+
+
 Possible questions 
+# Introduction
+0. Why is rewriting useful?
+Aplications in algebra and computer science. 
+
 1. Why is nominal syntax useful?
+It allow us to represents system with bindings, such as lambda calculus beta
+reduction rules. 
+
 2. Why is unification useful?
+Logic Programming.
+
 3. Why is extending nominal unification to commutative symbols useful?
+We are extending unification to consider the semantic in question. Commutative
+symbols happen often enough to justify this work, in my opinion.
+
+# Background
+
+# Nominal Unification
+1. Why you define this way a solution to a unification problem? 
+This is in the paper of Washington. We define solutions for a triple because this
+allow us to keep track of the substitution made so far, i guess. 
+
+2. Example of Infinite solutions?
+X/a+b, X/(a+b)*...*(a+b), X/f(a) + f(b) 
+
+ 
+
+# Future work
 4. Why is verifying this on PVS useful?
 
-Interesting Comments 
-1. Introduction
--> Nominal C-Unification is in the field of unification modulo equational theories. 
--> Where is unification useful? lambda-calculus beta reduction rules are a nice
-example

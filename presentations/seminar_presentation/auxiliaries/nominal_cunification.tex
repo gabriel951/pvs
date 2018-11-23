@@ -1,6 +1,7 @@
 \section{Nominal C-Unification}
 \subsection{Definition of the Problem}
 % what is a unification problem - TODO: check how this is done
+% TODO: maybe add an example
 \begin{frame}{Unification Problem}
     \begin{definition}[Unification Problem] 
         A unification problem is a pair $\langle \Delta, P \rangle$, where $\Delta$ is 
@@ -12,7 +13,9 @@
 % solution for a unification problem 
 \begin{frame}{Solution to a Unification Problem} 
     \begin{definition}[Solution to a Unification Problem]
-        The pair $\langle \nabla, \sigma \rangle$ is a 
+    The unification problem $\langle \Delta, P \rangle$ is associated with the triple 
+    $\langle \Delta, id, P \rangle$.
+    \par The pair $\langle \nabla, \sigma \rangle$ is a 
         solution for a triple $\mathcal{P} = \langle \Delta, \delta, P \rangle$ when
         \begin{itemize}
             \item $\nabla \vdash \Delta \sigma$
@@ -22,8 +25,6 @@
                 \sigma$
         \end{itemize}
     \end{definition}
-    The unification problem $\langle \Delta, P \rangle$ is associated with the triple 
-    $\langle \Delta, id, P \rangle$.
 \end{frame}
 
 % more general solutions
@@ -44,16 +45,16 @@
 % distictions from nominal unification: fixpoint equations and set of solutions
 \subsection{Differences from Nominal Syntactic Unification}
 \begin{frame}{Difference from Syntactic Unification - Fixpoint Equations}
-     \par A fixpoint equation is of the form $ \pi \cdot X \aeq \pi' \cdot X$. In syntactic nominal
-     unification, this is resolved by adding to the context the constraints that
-     guarantee that 
-     atoms that are affected in different ways by $\pi$ and $\pi'$ must be fresh in
-     X.  
+     \par A fixpoint equation is of the form $ \pi \cdot X \aeq \gamma \cdot X$. 
+     In syntactic nominal unification, this is resolved by adding to the context the
+     constraints that guarantee that atoms that are affected in different ways by
+     $\pi$ and $\gamma$ must be fresh in X.  
 \end{frame}
+
 \begin{frame}{Difference from Syntactic Unification - Fixpoint Equations}
      \par However, this approach is not complete in C-unification, because of
      commutativity. 
-     \par Take for example $\pi = (a \ b)$, $\pi' = nil$ and the
+     \par Take for example $\pi = (a \ b)$, $\gamma = nil$ and the
      substitution $X \rightarrow a+b$. In this case, $b + a \aeq a+b$. However,
      the treatment of syntactic unification would lose this solution, since neither
      $a$ or $b$ are fresh in $a+b$. 

@@ -20,7 +20,7 @@
         \Call{unify}{$\emptyset, id, [(t, s)], \emptyset$}.
     \end{algorithmic}
     \item The algorithm returns a list (possibly empty) of solutions. Each solution
-        is of the form $(\Delta, \sigma, FxPntEq)$
+        is of the form $(\Delta, \sigma, FxPntEq)$.
 \end{itemize}
 \end{frame}
 
@@ -31,8 +31,8 @@
     \If{null($UnPrb$)} 
         \State \Return {list(($\Delta, \sigma, FxPntEq$))} 
     \Else 
-        \State $(t, s) \cdot UnPrb' =$ $UnPrb$
-        \State [Code that analyses according to the type $t$ and $s$]
+        \State $(t, s) \oplus UnPrb' = UnPrb$
+        \State [Code that analyses according to $t$ and $s$]
     \EndIf
 \EndProcedure
 \end{algorithmic}
@@ -45,14 +45,14 @@
     \If{null($UnPrb$)} 
         \State \Return {list(($\Delta, \sigma, FxPntEq$))} 
     \Else 
-    \State $(t, s) \cdot UnPrb' =$ $UnPrb$
+    \State $(t, s) \oplus UnPrb' =$ $UnPrb$
         \If {($s == \pi \cdot X$) and ($X$ not in $t$)}
-            \State $\sigma' = \{X \rightarrow t \}$
+            \State $\sigma' = \{X \rightarrow \pi^{-1} \cdot t \}$
             \State $\sigma''$ = $\sigma' \cup \sigma$ 
-            \State ($\Delta'$, bool1) = appSub2Ctxt($\sigma_1, \Delta$) 
+            \State ($\Delta'$, bool1) = appSub2Ctxt($\sigma', \Delta$) 
             \State $UnPrb'' = (UnPrb')\sigma' +   (FxPntEq)\sigma'$
             \Statex \Statex \Statex
-            \If{bool1} \Return{\Call{unify}{$\Delta', \sigma'', UnPrb', null$}} 
+            \If{bool1} \Return{\Call{unify}{$\Delta', \sigma'', UnPrb'', null$}} 
             \Else  \  \Return{null}
             \EndIf
         \Else 
@@ -105,6 +105,7 @@
                     \EndIf
                 \Else \ \Return{null}
                 \EndIf
+            % app
             \ElsIf{$t == f \ t_1$} \Comment f is not commutative
                 \If{$s$ != $f \ s_1$} \Return{null}
                 \Else 
@@ -113,12 +114,13 @@
                 \EndIf
             \Statex\Statex\Statex\Statex
             \Statex\Statex
+            % c app 
             \Else \Comment $t$ is of the form $f(t_1, t_2)$
                 \If{$s$ != $f(s_1, s_2)$} \Return{null}
                 \Else
-                    \State $UnPrb_1 = UnPrb' + [(s_1, t_1)] + [(s_2, t_2)]$
+                    \State $UnPrb_1 = [(s_1, t_1)] + [(s_2, t_2)] + UnPrb'$
                     \State $sol_1$ = \Call{unify}{$\Delta, \sigma, UnPrb_1, FxPntEq$}
-                    \State $UnPrb_2 = UnPrb' + [(s_1, t_2)] + [(s_2, t_1)]$
+                    \State $UnPrb_2 = [(s_1, t_2)] + [(s_2, t_1)] + UnPrb'$
                     \State $sol_2$ = \Call{unify}{$\Delta, \sigma, UnPrb_2, FxPntEq$}
                     \State \Return{\Call{append}{$sol_1, sol_2$}}
                 \EndIf
