@@ -1,0 +1,22 @@
+TITLE: Functional Nominal C-Unification
+ABSTRACT:  Nominal syntax extends first-order syntax by bringing mechanisms to deal 
+with bound and free variables in a natural manner. However, profiting from the nominal
+paradigm implies adapting basic notions such as substitution, rewriting and equality
+to it. 
+Recent work presents advances in nominal unification modulo equational theories. In this field, 
+there is the problem of nominal unification with commutative operators. We revisit
+this problem, specify a functional algorithm for the task and discuss its
+formalization. This is a work in progress, with Mauricio Ayala-Rincón. 
+
+
+AFTER MODIFICATIONS
+ABSTRACT:  Nominal syntax extends first-order syntax by bringing 
+mechanisms to deal with bound and free variables in a natural manner. 
+However, profiting from the nominal paradigm implies adapting basic 
+notions such as substitution, rewriting and equational deduction to 
+it. Extensions of nominal unification modulo equational theories are of 
+great relevance. In this context, recent work deals with theories such 
+as associativity (A) and commutativity (C). This work discuss the 
+problem of nominal C-unification, that is, unification with commutative 
+operators. The problem is revisited, discussing current progress on a 
+new functional algorithm and its formalization.

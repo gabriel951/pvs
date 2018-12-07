@@ -1,0 +1,11 @@
+Before the Meeting
+- I did well on the presentation, though i have to correct some little things
+    * There should be a composition of substitutions, instead of a union
+    * I should have mentioned that we don't pass context problems... we solve
+      it locally
+    * In my code, i should 
+
+- I did nothing. Maybe we can try specifying soundness and completeness.
+
+After the Meeting
+- 

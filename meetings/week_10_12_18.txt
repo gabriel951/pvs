@@ -1,0 +1,20 @@
+Before the Meeting
+# Things i should have said for the meeting of 10/12
+-> I needed to make sure to put a restrictive on the type of parameters commutative
+functions receive: they must receive pairs. 
+-> I am convinced that commutative function should receive two arguments, instead of
+a pair. I don't want a commutative function being called with f(a, b, c). 
+    Ex: f(a, b, c) = f(f(a, b), c) = f(d, c) = e 
+        f(a, b, c) = f(a, f(b, c)) = f(a, x) = y
+    * a pair can be used to pass more than 2 arguments to a function! This shouldn't
+      be possible with a commutative function. 
+-> How should i extend the function less to handle fixpoint equations? My first try
+is to see if one set of fixpoint equations is contained in the other set. This does
+not take into account substitutions applied on set of fixpoint equations...
+-> I was able to add pair as a subtype. Then, i can define a commutative function to
+take a pair. But i don't think this is the right approach. This approach also clutter
+the notation.
+
+# Thing i should say as the meeting of 10/12
+-> The code is typechecked :) 
+-> I am beggining 

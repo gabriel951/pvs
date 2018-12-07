@@ -21,18 +21,19 @@ BEGIN
 		  structure_extra[[variable,term]],
 		  atoms
 
-	Delta, Nabla: VAR fresh_context
-	sigma, gamma, theta: VAR Sub
+	Delta, Delta1, Nabla: VAR fresh_context
+	sigma, sigma1, gamma, theta: VAR Sub
 	t, s, u: VAR term
 	X: VAR variable
 
-	% TODO: unify_lst - boolean that indicates whether the algorith unify_wrapper is working as unify or unify_lst
         lst_t: VAR list[term]
 	lst_s: VAR list[term]
 	
-% TODO: a fixed point equation is a permutation and a variable
+% TODO: Fixed point equation is a permutation and a variable
 fix_pnt_eq: TYPE = [perm, variable]
+fix_pnt_eq1: VAR fix_pnt_eq                  % I'll need a variable of type fix point equation
 fix_pnt_eq_lst: VAR list[fix_pnt_eq]
+fix_pnt_eq_lst1, fix_pnt_eq_lst2: VAR list[fix_pnt_eq]
 
 % TODO: a unification problem is a list containing the two terms to be unified
 unif_prb: TYPE = [term, term]
@@ -97,6 +98,25 @@ ELSE LET fix_pnt_eq = car(fix_pnt_eq_lst),
 	 IN append(new_unif_prb, fix_pnt_to_unif_prb_via_sub(sigma, cdr(fix_pnt_eq_lst))) 
 ENDIF
 MEASURE fix_pnt_eq_lst BY <<
+
+% get set of different variables in a list of terms
+% this functions build on the work of function Vars
+vars_lst(unif_prb_lst): RECURSIVE finite_set[variable] =
+IF null(unif_prb_lst) THEN (::)
+ELSE LET t = car(unif_prb_lst)`1,
+     	 s = car(unif_prb_lst)`2
+	 IN union(vars_lst(cdr(unif_prb_lst)), union(Vars(t), Vars(s)))
+ENDIF
+MEASURE unif_prb_lst BY << 
+
+% get sum of depth of every term in the list of terms
+depth_lst(unif_prb_lst): RECURSIVE nat =
+IF null(unif_prb_lst) THEN 0
+ELSE LET t = car(unif_prb_lst)`1
+     	 IN depth(t) + depth_lst(cdr(unif_prb_lst))
+ENDIF
+MEASURE unif_prb_lst BY << 
+
 
 %%%%% end of auxiliary functions for main algorithm
 
@@ -185,7 +205,7 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 					  unif_prb2_2 = (:(term2(arg(t)), term2(arg(s))):),
 					  unif_prb_lst1 = append(append(unif_prb1_1, unif_prb2_2), cdr(unif_prb_lst)),
 					  sol1 = unify(Delta, sigma, unif_prb_lst1, fix_pnt_eq_lst),
-					  % solve problem, trying to unify (t1 with s2) and (t2 with s3)
+					  % solve problem, trying to unify (t1 with s2) and (t2 with s1)
 					  unif_prb1_2 = (:(term1(arg(t)), term2(arg(s))):),
 					  unif_prb2_1 = (:(term2(arg(t)), term1(arg(s))):),
 					  unif_prb_lst2 = append(append(unif_prb1_2, unif_prb2_2), cdr(unif_prb_lst)),
@@ -195,15 +215,31 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 	        ENDCASES
 	    ENDIF
 ENDIF
-MEASURE lex2(length(unif_prb_lst), length(unif_prb_lst))
-% lex 3 -> TODO? (number of variables in all problems, number of commutative symbols, sum of depth of terms) 
+MEASURE lex2(card(vars_lst(unif_prb_lst)), depth_lst(unif_prb_lst))
+% lex 2 -> TODO? (number of variables in all problems, sum of depth of terms) 
+% lex 3 should only be used if i also need to handle the number of commutative function symbols.
 
-% new soundness of unify - TODO: how should i specify this?
-%unify_sound: LEMMA
-%FORALL (Delta, sigma, fix_pnt_eq_lst) IN unify((::), (::), (:(t, s):), (::))
-%alpha(Delta, fix_pnt_eq_lst)(sigma(t), sigma(s)) % extend this procedure to be alpha equivalence under a context AND a list of fixpoint equations 
+% new soundness of unify - TODO: is this how i should specify?
+c_unify_sound: LEMMA 
+FORALL (Delta: fresh_context), (sigma: Sub), (fix_pnt_eq_lst: list[fix_pnt_eq]| member((Delta, sigma, fix_pnt_eq_lst), unify((::), (::), (:(t, s):), (::)))) :
+c_alpha(Delta, fix_pnt_eq_lst)(Subs(sigma)(t), Subs(sigma)(s)) % extend this procedure to be alpha equivalence under a context AND a list of fixpoint equations 
 
-% new completeness of unify - TODO
+% new completeness of unify - TODO: this lemma needs function less. So, here is my adaptation from Ana's less function
+% this function compares a triple (Delta, sigma, fix_pnt_eq_lst1) with a triple (Nabla, gamma, fix_pnt_eq_lst2)
+% the function return true if the first_triple <= second_triple.
+% 
+c_less((Delta, sigma, fix_pnt_eq_lst1), (Nabla,gamma, fix_pnt_eq_lst2)): bool = % Definition 4.11
+   EXISTS theta: fresh_subs(Nabla)(theta, Delta)
+   AND
+   FORALL X : alpha(Nabla)(Subs(append(theta,sigma))((::)*X), Subs(gamma)((::)*X))
+   AND
+   FORALL fix_pnt_eq1: member(fix_pnt_eq1, fix_pnt_eq_lst1) => member(fix_pnt_eq1, fix_pnt_eq_lst2)
+
+
+c_unify_complete: LEMMA
+c_alpha(Delta1, fix_pnt_eq_lst1)(Subs(sigma1)(t), Subs(sigma1)(s)) IMPLIES
+EXISTS (Delta: fresh_context), (sigma: Sub), (fix_pnt_eq_lst: list[fix_pnt_eq]| member((Delta, sigma, fix_pnt_eq_lst), unify((::), (::), (:(t, s):), (::)) )):
+c_less(Delta, sigma, fix_pnt_eq_lst, Delta1, sigma1, fix_pnt_eq_lst1)
 
 %%%%%%%%%%%%
 %  original function

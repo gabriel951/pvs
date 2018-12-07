@@ -19,15 +19,40 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   atom?, susp?, unit?, pair?, abs?, app?, c_app?: [term -> boolean]
 
+  no_pair(x: term):  boolean =
+          atom?(x) OR susp?(x) OR unit?(x) OR abs?(x) OR app?(x)
+       OR c_app?(x);
+
+  no_pair: TYPE =
+        {x: term |
+                     atom?(x) OR susp?(x) OR unit?(x) OR abs?(x) OR app?(x)
+                  OR c_app?(x)}
+
+  pair(x: term):  boolean = pair?(x);
+
+  pair: TYPE = (pair?)
+
+  JUDGEMENT (atom?) SUBTYPE_OF no_pair
+
+  JUDGEMENT (susp?) SUBTYPE_OF no_pair
+
+  JUDGEMENT (unit?) SUBTYPE_OF no_pair
+
+  JUDGEMENT (abs?) SUBTYPE_OF no_pair
+
+  JUDGEMENT (app?) SUBTYPE_OF no_pair
+
+  JUDGEMENT (c_app?) SUBTYPE_OF no_pair
+
   a: [(atom?) -> atom]
 
   p: [(susp?) -> perm]
 
   V: [(susp?) -> variable]
 
-  term1: [(pair?) -> term]
+  term1: [pair -> term]
 
-  term2: [(pair?) -> term]
+  term2: [pair -> term]
 
   abstr: [(abs?) -> atom]
 
@@ -39,7 +64,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   c_sym: [(c_app?) -> commutative_symbol]
 
-  c_arg: [(c_app?) -> term]
+  c_arg: [(c_app?) -> pair]
 
   at: [atom -> (atom?)]
 
@@ -53,7 +78,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   app: [[symbol, term] -> (app?)]
 
-  c_app: [[commutative_symbol, term] -> (c_app?)]
+  c_app: [[commutative_symbol, pair] -> (c_app?)]
 
   term_ord: [term -> upto(6)]
 
@@ -65,7 +90,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
             term_ord(pair(term1, term2)) = 3)
      AND (FORALL (abstr: atom, body: term): term_ord(abs(abstr, body)) = 4)
      AND (FORALL (sym: symbol, arg: term): term_ord(app(sym, arg)) = 5)
-     AND (FORALL (c_sym: commutative_symbol, c_arg: term):
+     AND (FORALL (c_sym: commutative_symbol, c_arg: pair):
             term_ord(c_app(c_sym, c_arg)) = 6);
 
   ord(x: term): [term -> upto(6)] =
@@ -148,11 +173,11 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   term_term1_pair: AXIOM
     FORALL (pair1_var: term, pair2_var: term):
-      term1(pair(pair1_var, pair2_var)) = pair1_var;
+      term1(pair(pair1_var, pair2_var):: (pair?)) = pair1_var;
 
   term_term2_pair: AXIOM
     FORALL (pair1_var: term, pair2_var: term):
-      term2(pair(pair1_var, pair2_var)) = pair2_var;
+      term2(pair(pair1_var, pair2_var):: (pair?)) = pair2_var;
 
   term_abstr_abs: AXIOM
     FORALL (abs1_var: atom, abs2_var: term):
@@ -171,11 +196,11 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
       arg(app(app1_var, app2_var)) = app2_var;
 
   term_c_sym_c_app: AXIOM
-    FORALL (c_app1_var: commutative_symbol, c_app2_var: term):
+    FORALL (c_app1_var: commutative_symbol, c_app2_var: pair):
       c_sym(c_app(c_app1_var, c_app2_var)) = c_app1_var;
 
   term_c_arg_c_app: AXIOM
-    FORALL (c_app1_var: commutative_symbol, c_app2_var: term):
+    FORALL (c_app1_var: commutative_symbol, c_app2_var: pair):
       c_arg(c_app(c_app1_var, c_app2_var)) = c_app2_var;
 
   term_inclusive: AXIOM
@@ -197,7 +222,7 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
               p1(abs2_var) IMPLIES p1(abs(abs1_var, abs2_var))
         AND FORALL (app1_var: symbol, app2_var: term):
               p1(app2_var) IMPLIES p1(app(app1_var, app2_var))
-        AND FORALL (c_app1_var: commutative_symbol, c_app2_var: term):
+        AND FORALL (c_app1_var: commutative_symbol, c_app2_var: pair):
               p1(c_app2_var) IMPLIES p1(c_app(c_app1_var, c_app2_var)))
        IMPLIES (FORALL (term_var: term): p1(term_var));
 
@@ -448,7 +473,8 @@ term_adt_map[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
       f3: [variable -> variable1], f4: [symbol -> symbol1],
       f5: [commutative_symbol -> commutative_symbol1])
      (a1: term[atom, perm, variable, symbol, commutative_symbol]):
-        term[atom1, perm1, variable1, symbol1, commutative_symbol1] =
+        {x: term[atom1, perm1, variable1, symbol1, commutative_symbol1] |
+                 (pair?(a1) => pair?(x))} =
       CASES a1
         OF at(at1_var): at(f1(at1_var)),
            *(times1_var, times2_var): f2(times1_var) * f3(times2_var),
@@ -468,7 +494,8 @@ term_adt_map[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
       f3: [variable -> variable1], f4: [symbol -> symbol1],
       f5: [commutative_symbol -> commutative_symbol1],
       a1: term[atom, perm, variable, symbol, commutative_symbol]):
-        term[atom1, perm1, variable1, symbol1, commutative_symbol1] =
+        {x: term[atom1, perm1, variable1, symbol1, commutative_symbol1] |
+                 (pair?(a1) => pair?(x))} =
       CASES a1
         OF at(at1_var): at(f1(at1_var)),
            *(times1_var, times2_var): f2(times1_var) * f3(times2_var),
