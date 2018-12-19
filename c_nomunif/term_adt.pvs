@@ -19,11 +19,11 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   atom?, susp?, unit?, pair?, abs?, app?, c_app?: [term -> boolean]
 
-  no_pair(x: term):  boolean =
+  plain(x: term):  boolean =
           atom?(x) OR susp?(x) OR unit?(x) OR abs?(x) OR app?(x)
        OR c_app?(x);
 
-  no_pair: TYPE =
+  plain: TYPE =
         {x: term |
                      atom?(x) OR susp?(x) OR unit?(x) OR abs?(x) OR app?(x)
                   OR c_app?(x)}
@@ -32,17 +32,17 @@ term_adt[atom: TYPE+, perm: TYPE+, variable: TYPE+, symbol: TYPE+,
 
   pair: TYPE = (pair?)
 
-  JUDGEMENT (atom?) SUBTYPE_OF no_pair
+  JUDGEMENT (atom?) SUBTYPE_OF plain
 
-  JUDGEMENT (susp?) SUBTYPE_OF no_pair
+  JUDGEMENT (susp?) SUBTYPE_OF plain
 
-  JUDGEMENT (unit?) SUBTYPE_OF no_pair
+  JUDGEMENT (unit?) SUBTYPE_OF plain
 
-  JUDGEMENT (abs?) SUBTYPE_OF no_pair
+  JUDGEMENT (abs?) SUBTYPE_OF plain
 
-  JUDGEMENT (app?) SUBTYPE_OF no_pair
+  JUDGEMENT (app?) SUBTYPE_OF plain
 
-  JUDGEMENT (c_app?) SUBTYPE_OF no_pair
+  JUDGEMENT (c_app?) SUBTYPE_OF plain
 
   a: [(atom?) -> atom]
 

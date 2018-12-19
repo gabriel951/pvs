@@ -1,0 +1,152 @@
+(|nominalunif|
+ (|is_alpha_eq_lst_TCC1| 0
+  (|is_alpha_eq_lst_TCC1-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL) NIL NIL))
+ (|is_alpha_eq_lst_TCC2| 0
+  (|is_alpha_eq_lst_TCC2-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL
+   NIL))
+ (|is_alpha_eq_lst_TCC3| 0
+  (|is_alpha_eq_lst_TCC3-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL) NIL NIL))
+ (|apply_sub_prb_lst_TCC1| 0
+  (|apply_sub_prb_lst_TCC1-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL
+   NIL))
+ (|fix_pnt2unif_prb_via_sub_TCC1| 0
+  (|fix_pnt2unif_prb_via_sub_TCC1-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL)
+   NIL NIL))
+ (|fix_pnt2unif_prb_via_sub_TCC2| 0
+  (|fix_pnt2unif_prb_via_sub_TCC2-1| NIL 3754037948
+   ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|fix_pnt2unif_prb_via_sub_TCC3| 0
+  (|fix_pnt2unif_prb_via_sub_TCC3-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL)
+   NIL NIL))
+ (|vars_lst_TCC1| 0
+  (|vars_lst_TCC1-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL) NIL NIL))
+ (|vars_lst_TCC2| 0
+  (|vars_lst_TCC2-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|size_lst_TCC1| 0
+  (|size_lst_TCC1-1| NIL 3754204811 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|fix_pnt2unif_prb_TCC1| 0
+  (|fix_pnt2unif_prb_TCC1-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL
+   NIL))
+ (|c_unify_TCC1| 0
+  (|c_unify_TCC1-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC2| 0
+  (|c_unify_TCC2-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC3| 0
+  (|c_unify_TCC3-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC4| 0
+  (|c_unify_TCC4-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC5| 0
+  (|c_unify_TCC5-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC6| 0
+  (|c_unify_TCC6-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC7| 0
+  (|c_unify_TCC7-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC8| 0
+  (|c_unify_TCC8-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC9| 0
+  (|c_unify_TCC9-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC10| 0
+  (|c_unify_TCC10-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC11| 0
+  (|c_unify_TCC11-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC12| 0
+  (|c_unify_TCC12-1| NIL 3754037948 ("" (SUBTYPE-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC13| 0
+  (|c_unify_TCC13-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_TCC14| 0
+  (|c_unify_TCC14-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
+ (|c_unify_sound| 0
+  (|c_unify_sound-1| NIL 3754038916
+   (""
+    (MEASURE-INDUCT+
+     "lex2(card(vars_lst(unif_prb_lst)), size_lst(unif_prb_lst))"
+     "unif_prb_lst")
+    (("" (SKOLEM! 1)
+      (("" (PROP)
+        (("" (EXPAND "c_unify")
+          (("" (HIDE -1 -3)
+            (("" (LIFT-IF -1)
+              (("" (SPLIT)
+                (("1" (PROP)
+                  (("1" (EXPAND "member")
+                    (("1" (PROP)
+                      (("1" (REVEAL -2)
+                        (("1" (EXPAND "fix_pnt2unif_prb")
+                          (("1" (LIFT-IF -1)
+                            (("1" (SPLIT)
+                              (("1" (PROP)
+                                (("1" (HIDE -1) (("1" (GRIND) NIL NIL)) NIL))
+                                NIL)
+                               ("2" (PROP)
+                                (("2" (HIDE -1 -2 -3 -5 2)
+                                  (("2" (GRIND) NIL NIL)) NIL))
+                                NIL))
+                              NIL))
+                            NIL))
+                          NIL))
+                        NIL)
+                       ("2" (HIDE -2 1) (("2" (GRIND) NIL NIL)) NIL))
+                      NIL))
+                    NIL))
+                  NIL)
+                 ("2" (FLATTEN)
+                  (("2" (SPLIT)
+                    (("1" (HIDE 1)
+                      (("1" (NAME-REPLACE "s1" "car(x!1)`2")
+                        (("1" (NAME-REPLACE "t1" "car(x!1)`1")
+                          (("1" (PROP)
+                            (("1"
+                              (NAME-REPLACE "new_Delta_alg"
+                               "fresh_subs?((: (V(s1), ext(reverse(p(s1)))(t1)) :), Delta!1)`1")
+                              (("1"
+                                (NAME-REPLACE "sigma1_alg"
+                                 "(: (V(s1), ext(reverse(p(s1)))(t1)) :)")
+                                (("1"
+                                  (NAME-REPLACE "bool1"
+                                   "fresh_subs?(sigma1_alg, Delta!1)`2")
+                                  (("1"
+                                    (NAME-REPLACE "new_sigma_alg"
+                                     "append(sigma1_alg, sigma!1)")
+                                    (("1"
+                                      (NAME-REPLACE "unif_prb_lst1_alg"
+                                       "apply_sub_prb_lst(sigma1_alg, cdr(x!1))")
+                                      (("1"
+                                        (NAME-REPLACE "unif_prb_lst2_alg"
+                                         "fix_pnt2unif_prb_via_sub(sigma1_alg, (: :))")
+                                        (("1"
+                                          (NAME-REPLACE "new_unif_prb_lst_alg"
+                                           "append(unif_prb_lst1_alg, unif_prb_lst2_alg)")
+                                          (("1" (HIDE -1 -3 1)
+                                            (("1" (EXPAND "is_sol_prb_trp")
+                                              (("1" (PROP)
+                                                (("1" (POSTPONE) NIL NIL)
+                                                 ("2" (POSTPONE) NIL NIL)
+                                                 ("3" (POSTPONE) NIL NIL))
+                                                NIL))
+                                              NIL))
+                                            NIL))
+                                          NIL))
+                                        NIL))
+                                      NIL))
+                                    NIL))
+                                  NIL))
+                                NIL))
+                              NIL)
+                             ("2" (HIDE-ALL-BUT -1) (("2" (GRIND) NIL NIL))
+                              NIL))
+                            NIL))
+                          NIL))
+                        NIL))
+                      NIL)
+                     ("2" (POSTPONE) NIL NIL))
+                    NIL))
+                  NIL))
+                NIL))
+              NIL))
+            NIL))
+          NIL))
+        NIL))
+      NIL))
+    NIL)
+   NIL SHOSTAK)))
+

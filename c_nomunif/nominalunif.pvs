@@ -21,60 +21,62 @@ BEGIN
 		  structure_extra[[variable,term]],
 		  atoms
 
-	Delta, Delta1, Nabla: VAR fresh_context
-	sigma, sigma1, gamma, theta: VAR Sub
+	Delta, Delta1, Delta_sol, Nabla: VAR fresh_context
+	sigma, sigma_sol, sigma1, gamma, theta, lambda1: VAR Sub
 	t, s, u: VAR term
 	X: VAR variable
 
-        lst_t: VAR list[term]
-	lst_s: VAR list[term]
-	
-% TODO: Fixed point equation is a permutation and a variable
-fix_pnt_eq: TYPE = [perm, variable]
-fix_pnt_eq1: VAR fix_pnt_eq                  % I'll need a variable of type fix point equation
-fix_pnt_eq_lst: VAR list[fix_pnt_eq]
-fix_pnt_eq_lst1, fix_pnt_eq_lst2: VAR list[fix_pnt_eq]
+%%%%%%%%%% preliminar definitions
+% TODO: see if i've used all this variables i've defined
+% A fix point equation type is a permutation and a variable 
+fix_pnt_eq_typ: TYPE = [perm, variable]
+fix_pnt_eq: VAR fix_pnt_eq_typ                  % I'll need a variable of type fix point equation
+fix_pnt_eq_lst, fix_pnt_eq_lst1, fix_pnt_eq_lst2, fix_pnt_eq_lst_sol: VAR list[fix_pnt_eq_typ]
 
-% TODO: a unification problem is a list containing the two terms to be unified
-unif_prb: TYPE = [term, term]
-unif_prb_lst: VAR list[unif_prb]
+% a unification problem type is a list containing the two terms to be unified
+unif_prb_typ: TYPE = [term, term]
+unif_prb: VAR unif_prb_typ
+unif_prb_lst, unif_prb_lst_sol: VAR list[unif_prb_typ]
 
-% TODO: one nominal solution is a list consisting of a fresh context and a substitution. 
-nominal_sol:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
+% a nominal solution type is a list consisting of (fresh context, substitution, list[fix_point_equations]) 
+nominal_sol_typ:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
+nominal_sol: VAR nominal_sol_typ
 
-% TODO: variables needed to specify algorithm
-sol: VAR nominal_sol
-sol_lst: VAR list[nominal_sol]
+% variables needed to specify algorithm
+sol: VAR nominal_sol_typ
+sol_lst: VAR list[nominal_sol_typ]
+%%%%%%%%%%% end of preliminar definitions
 
-% Why are unifiable and unifier defined? I mean: they don't seem to be used anywhere
-% Two terms are unifiable if there is a solution (Delta, sigma)
-% that makes them alpha-equivalent.
-% Definition 4.1
-unifiable?(t, s): bool =
-   EXISTS(Delta, sigma): 
-   alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
+%%%%%%%%%%% solution to a problem triple
+% auxiliar function that checks whether every pair on a list of unification problem list is alpha equivalent,
+% after you apply a substitution sigma and under a context Nabla
+is_alpha_eq_lst(Delta, sigma, unif_prb_lst): RECURSIVE bool =
+IF null?(unif_prb_lst) THEN TRUE
+ELSE LET t = car(unif_prb_lst)`1,
+     	 s = car(unif_prb_lst)`2 IN 
+	 IF alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s)) THEN is_alpha_eq_lst(Delta, sigma, cdr(unif_prb_lst))
+	 ELSE FALSE
+	 ENDIF 
+ENDIF
+MEASURE unif_prb_lst BY << 
 
-% A unifier is a unification solution to unifiable terms.
 
-% Definition 4.1
-unifier(t, (s | unifiable?(t,s)))(Delta,sigma): bool =
-   alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
+% returns a boolean indicating if the pair (Nabla, sigma) is a solution to a problem triple (Delta, gamma, unif_prb_lst) 
+is_sol_prb_trp((Nabla, sigma), (Delta, gamma, unif_prb_lst)): bool =
+    % Nabla |- Delta sigma
+    fresh_subs(Nabla)(sigma, Delta) AND
+    % Nabla |- s(sigma) = t(sigma), for all s and t in the unification problem list
+    is_alpha_eq_lst(Nabla, sigma, unif_prb_lst) AND
+    % There exists lambda1 such that Nabla |- gamma lambda1 = sigma
+    EXISTS lambda1:
+        FORALL X: alpha(Nabla)(Subs(append(gamma, lambda1))((::)*X), Subs(sigma)((::)*X))
+%%%%%%%%%%% end of solution to a problem triple 
 
-   	solve1, solve2: VAR [fresh_context, Sub, bool]
-
-% Concatenation of contexts and substitutions/
-% conjunction of booleans (concatenating triplets).
-x(solve1, solve2): [fresh_context, Sub, bool] =
-   IF solve1`3 AND solve2`3
-      THEN (append(solve1`1, solve2`1),append(solve1`2, solve2`2), TRUE)
-      ELSE ((::), Id, FALSE)
-   ENDIF
-
-%%%%% auxiliary functions for the main function in the algorithm
+%%%%%%%%%% auxiliary functions for the main function: c_unify AND for the specification
 % applies a substitution to a list of unification problems. Apply substitution to every term in unification problem list
 % return the resulting unification problem list 
-apply_sub_prb_lst(sigma, unif_prb_lst): RECURSIVE list[unif_prb] =
-IF null(unif_prb_lst) THEN (::)
+apply_sub_prb_lst(sigma, unif_prb_lst): RECURSIVE list[unif_prb_typ] =
+IF null?(unif_prb_lst) THEN (::)
 ELSE LET t = car(unif_prb_lst)`1,
      	 s = car(unif_prb_lst)`2,
 	 new_t = Subs(sigma)(t),
@@ -85,8 +87,8 @@ ENDIF
 MEASURE unif_prb_lst BY <<          
 
 % convert a list of fixpoint equations to a list of unification problems via a substitution and apply substitution to them 
-fix_pnt_to_unif_prb_via_sub(sigma, fix_pnt_eq_lst): RECURSIVE list[unif_prb] =
-IF null(fix_pnt_eq_lst) THEN (::)
+fix_pnt2unif_prb_via_sub(sigma, fix_pnt_eq_lst): RECURSIVE list[unif_prb_typ] =
+IF null?(fix_pnt_eq_lst) THEN (::)
 ELSE LET fix_pnt_eq = car(fix_pnt_eq_lst),
      	 perm = fix_pnt_eq`1, 
 	 variable = fix_pnt_eq`2,
@@ -95,35 +97,47 @@ ELSE LET fix_pnt_eq = car(fix_pnt_eq_lst),
 	 new_t = Subs(sigma)(t),
 	 new_s = Subs(sigma)(s),
 	 new_unif_prb = (:(new_t, new_s):)
-	 IN append(new_unif_prb, fix_pnt_to_unif_prb_via_sub(sigma, cdr(fix_pnt_eq_lst))) 
+	 IN append(new_unif_prb, fix_pnt2unif_prb_via_sub(sigma, cdr(fix_pnt_eq_lst))) 
 ENDIF
 MEASURE fix_pnt_eq_lst BY <<
 
 % get set of different variables in a list of terms
 % this functions build on the work of function Vars
 vars_lst(unif_prb_lst): RECURSIVE finite_set[variable] =
-IF null(unif_prb_lst) THEN (::)
+IF null?(unif_prb_lst) THEN (::)
 ELSE LET t = car(unif_prb_lst)`1,
      	 s = car(unif_prb_lst)`2
 	 IN union(vars_lst(cdr(unif_prb_lst)), union(Vars(t), Vars(s)))
 ENDIF
 MEASURE unif_prb_lst BY << 
 
-% get sum of depth of every term in the list of terms
-depth_lst(unif_prb_lst): RECURSIVE nat =
-IF null(unif_prb_lst) THEN 0
+% get sum of size of every term in the list of terms
+size_lst(unif_prb_lst): RECURSIVE nat =
+IF null?(unif_prb_lst) THEN 0
 ELSE LET t = car(unif_prb_lst)`1
-     	 IN depth(t) + depth_lst(cdr(unif_prb_lst))
+     	 IN size(t) + size_lst(cdr(unif_prb_lst))
 ENDIF
 MEASURE unif_prb_lst BY << 
 
+% convert a list of fix point equations in a list of unification problems
+fix_pnt2unif_prb(fix_pnt_eq_lst): RECURSIVE list[unif_prb_typ] =
+IF null?(fix_pnt_eq_lst) THEN (::)
+ELSE LET fix_pnt_eq = car(fix_pnt_eq_lst),
+     	 perm = fix_pnt_eq`1, 
+	 variable = fix_pnt_eq`2,
+	 t = *(perm, variable), 
+	 s = *((::), variable),
+	 unif_prb = (:(t, s):)
+	 IN append(unif_prb, fix_pnt2unif_prb(cdr(fix_pnt_eq_lst)))
+ENDIF
+MEASURE fix_pnt_eq_lst BY << 
 
-%%%%% end of auxiliary functions for main algorithm
+%%%%%%%%%% end of auxiliary functions for main algorithm AND for specification
 
-%%% function to unify a list of terms 
-unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): RECURSIVE list[nominal_sol] =
+%%%%%%%%%% function to unify (modulo C) a list of terms 
+c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): RECURSIVE list[nominal_sol_typ] =
 % base case: if there is no problem left to unify, the solution given is good enough
-IF null(unif_prb_lst) THEN (:(Delta, sigma, fix_pnt_eq_lst):)
+IF null?(unif_prb_lst) THEN (:(Delta, sigma, fix_pnt_eq_lst):)
 % start unifying first problem of the list
 ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
      	 IN % we divide in cases
@@ -137,14 +151,14 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 	    	     % get new problem list - apply substitution to remaining problems and to fixpoint equations.
 		     % convert fixpoint equations back on unification problems
 		     unif_prb_lst1 = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)), 
-		     unif_prb_lst2 = fix_pnt_to_unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
+		     unif_prb_lst2 = fix_pnt2unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
 		     new_unif_prb_lst = append(unif_prb_lst1, unif_prb_lst2)
 		     % output solution, take into account if context and fix point equations remain consistent
-		     IN IF bool1 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
+		     IN IF bool1 THEN c_unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
 		        ELSE (::) % here, OR the context is not fresh anymore OR the fixpoint equations lst is not consistent anymore
 			ENDIF
             ELSE CASES t OF
-	    	 at(a): IF s = at(a) THEN unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst) 
+	    	 at(a): IF s = at(a) THEN c_unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst) 
       		 	ELSE (::)
 			ENDIF,
 			
@@ -154,18 +168,18 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 		   					(new_Delta, bool1) = fresh_subs?(sigma1, Delta),
 							new_sigma = append(sigma1, sigma), 
 							unif_prb_lst1 = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)), 
-		     					unif_prb_lst2 = fix_pnt_to_unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
+		     					unif_prb_lst2 = fix_pnt2unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
 		     					new_unif_prb_lst = append(unif_prb_lst1, unif_prb_lst2)
-							IN IF bool1 THEN unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
+							IN IF bool1 THEN c_unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
 		       					ELSE (::)
 							ENDIF
 		       	   ELSIF susp?(s) AND occurs(X, s) THEN LET new_fix_pnt_eq = (:(append(pm, reverse(p(s))), X):),
 			   	 	      		   	    new_fix_pnt_eq_lst = append(new_fix_pnt_eq, fix_pnt_eq_lst)
-			   	 	      		   	    IN unify(Delta, sigma, cdr(unif_prb_lst), new_fix_pnt_eq_lst)
+			   	 	      		   	    IN c_unify(Delta, sigma, cdr(unif_prb_lst), new_fix_pnt_eq_lst)
 			   ELSE (::) 
 			   ENDIF, 
 
-		 unit: IF s = unit THEN unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst)
+		 unit: IF s = unit THEN c_unify(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst)
 		       ELSE (::)
 		       ENDIF,
 
@@ -173,13 +187,13 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 		               ELSE LET unif_prb1 = (:(t1, term1(s)):),
 			       	    	unif_prb2 = (:(t2, term2(s)):),
 			                new_unif_prb_lst = append(append(unif_prb1, unif_prb2), cdr(unif_prb_lst))
-			       	    IN  unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+			       	    IN  c_unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
 			       ENDIF, 
 
                  abs(a, bd): IF NOT abs?(s) THEN (::)
 		 	     ELSIF a = abstr(s) THEN LET new_unif_prb = (:(bd, body(s)):),
 			     	       		     	 new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst))
-							 IN unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+							 IN c_unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
 		             ELSE LET % derives minimal context in which a is fresh in body(s) 
 			     	      (Delta1, bool1) = fresh?(a, body(s)),
 				      % new context under which we must unify the remaining problems 
@@ -188,7 +202,7 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 				      new_unif_prb = (: (bd, ext((: (a, abstr(s)) :))(body(s))) :),
 				      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst))
 				      % unify
-				      IN IF bool1 THEN unify(new_Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+				      IN IF bool1 THEN c_unify(new_Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
 				      	 ELSE (::)
 					 ENDIF
 			     ENDIF,
@@ -196,7 +210,7 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 	         app(f, ag): IF NOT app?(s) OR f /= sym(s) THEN (::)
 		 	     ELSE LET new_unif_prb = (:(ag, arg(s)):),
 			     	      new_unif_prb_lst = append(new_unif_prb, cdr(unif_prb_lst))
-				      IN unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
+				      IN c_unify(Delta, sigma, new_unif_prb_lst, fix_pnt_eq_lst)
 			     ENDIF,
 
 		c_app(f, c_arg): IF NOT c_app?(s) OR NOT pair?(arg(t)) OR NOT pair?(arg(s)) OR f /= sym(s) THEN (::)
@@ -204,87 +218,48 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 					  unif_prb1_1 = (:(term1(arg(t)), term1(arg(s))):),
 					  unif_prb2_2 = (:(term2(arg(t)), term2(arg(s))):),
 					  unif_prb_lst1 = append(append(unif_prb1_1, unif_prb2_2), cdr(unif_prb_lst)),
-					  sol1 = unify(Delta, sigma, unif_prb_lst1, fix_pnt_eq_lst),
+					  sol1 = c_unify(Delta, sigma, unif_prb_lst1, fix_pnt_eq_lst),
 					  % solve problem, trying to unify (t1 with s2) and (t2 with s1)
 					  unif_prb1_2 = (:(term1(arg(t)), term2(arg(s))):),
 					  unif_prb2_1 = (:(term2(arg(t)), term1(arg(s))):),
 					  unif_prb_lst2 = append(append(unif_prb1_2, unif_prb2_2), cdr(unif_prb_lst)),
-					  sol2 = unify(Delta, sigma, unif_prb_lst2, fix_pnt_eq_lst)
+					  sol2 = c_unify(Delta, sigma, unif_prb_lst2, fix_pnt_eq_lst)
 					  IN append(sol1, sol2) 
 			 	 ENDIF 
 	        ENDCASES
 	    ENDIF
 ENDIF
-MEASURE lex2(card(vars_lst(unif_prb_lst)), depth_lst(unif_prb_lst))
+MEASURE lex2(card(vars_lst(unif_prb_lst)), size_lst(unif_prb_lst))
 % lex 2 -> TODO? (number of variables in all problems, sum of depth of terms) 
 % lex 3 should only be used if i also need to handle the number of commutative function symbols.
+%%%%%%%%%% end of algorithm to perform c unification 
 
-% new soundness of unify - TODO: is this how i should specify?
+%%%%%%%%%% specification of soundness and completeness of the algorithm
+% soundness of unify - TODO: is there no need to verify consistency of context? 
 c_unify_sound: LEMMA 
-FORALL (Delta: fresh_context), (sigma: Sub), (fix_pnt_eq_lst: list[fix_pnt_eq]| member((Delta, sigma, fix_pnt_eq_lst), unify((::), (::), (:(t, s):), (::)))) :
-c_alpha(Delta, fix_pnt_eq_lst)(Subs(sigma)(t), Subs(sigma)(s)) % extend this procedure to be alpha equivalence under a context AND a list of fixpoint equations 
-
-% new completeness of unify - TODO: this lemma needs function less. So, here is my adaptation from Ana's less function
-% this function compares a triple (Delta, sigma, fix_pnt_eq_lst1) with a triple (Nabla, gamma, fix_pnt_eq_lst2)
-% the function return true if the first_triple <= second_triple.
-% 
-c_less((Delta, sigma, fix_pnt_eq_lst1), (Nabla,gamma, fix_pnt_eq_lst2)): bool = % Definition 4.11
-   EXISTS theta: fresh_subs(Nabla)(theta, Delta)
-   AND
-   FORALL X : alpha(Nabla)(Subs(append(theta,sigma))((::)*X), Subs(gamma)((::)*X))
-   AND
-   FORALL fix_pnt_eq1: member(fix_pnt_eq1, fix_pnt_eq_lst1) => member(fix_pnt_eq1, fix_pnt_eq_lst2)
+FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
+    LET unif_prb_lst_sol = fix_pnt2unif_prb(fix_pnt_eq_lst_sol) IN
+    (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, (::))) AND
+        is_sol_prb_trp(Nabla, sigma1, Delta_sol, sigma_sol, unif_prb_lst_sol))
+	=> is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst)
 
 
+%c_unify_sound_cor: COROLLARY
+%FORALL Delta, sigma, fix_pnt_eq_lst:
+%    LET unif_prb_lst = fix_pnt2unif_prb(fix_pnt_eq_lst) IN
+%        (member((Delta, sigma, fix_pnt_eq_lst), c_unify((::), (::), (:(t, s):), (::))) AND
+%        is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst))
+%	=> is_sol_prb_trp(Nabla, sigma1, (::), (::), (:(t, s):))
+
+
+% new completeness of unify. Is this how i should specify?
 c_unify_complete: LEMMA
-c_alpha(Delta1, fix_pnt_eq_lst1)(Subs(sigma1)(t), Subs(sigma1)(s)) IMPLIES
-EXISTS (Delta: fresh_context), (sigma: Sub), (fix_pnt_eq_lst: list[fix_pnt_eq]| member((Delta, sigma, fix_pnt_eq_lst), unify((::), (::), (:(t, s):), (::)) )):
-c_less(Delta, sigma, fix_pnt_eq_lst, Delta1, sigma1, fix_pnt_eq_lst1)
+is_sol_prb_trp(Nabla, sigma1, (::), (::), (:(t, s):) ) =>
+EXISTS (Delta:fresh_context), (sigma: Sub), (fix_pnt_eq_lst: list[fix_pnt_eq]| member((Delta, sigma, fix_pnt_eq_lst), c_unify((::), (::), (:(t, s):), (::)) )) :
+LET unif_prb_lst = fix_pnt2unif_prb(fix_pnt_eq_lst) IN
+is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst)
+%%%%%%%%%% end of specification of soundness and completeness of algorithm  
 
-%%%%%%%%%%%%
-%  original function
-unify(t,s): RECURSIVE [fresh_context, Subs_unif(t,s), bool] =
-   IF susp?(s) AND NOT occurs(V(s), t)
-      THEN ((::),(:(V(s),ext(reverse(p(s)))(t)):),TRUE)
-      ELSE
-   CASES t OF
-   	 at(a): ((::),Id,s=at(a)),
-	 *(pm,X): IF NOT occurs(X,s) THEN ((::),(:(X,ext(reverse(pm))(s)):),TRUE)
-	 	     ELSE LET SOL = alpha?(pm * X, s) IN
-		     	  (SOL`1,Id,SOL`2) ENDIF,
-	 unit: ((::),Id,s=unit),
-	 pair(t1,t2): IF NOT pair?(s) THEN ((::), Id, FALSE) 
-	 	      	 ELSE LET (Delta1, sig1, b1) = unify(t1,term1(s)),
-			      	  (Delta2, sig2, b2) = unify(Subs(sig1)(t2),Subs(sig1)(term2(s))),
-			      	  (Delta3, b3) = fresh_subs?(sig2, Delta1) IN
-			          x((Delta2,sig2,b2), (Delta3,sig1, b1 AND b3)) ENDIF,	
-	 abs(a,bd): IF NOT abs?(s) THEN ((::), Id, FALSE)
-		       ELSIF a = abstr(s)
-			     THEN unify(bd, body(s))	
-			     ELSE LET (Delta1, sig, b1) = unify(bd, ext((:(a,abstr(s)):))(body(s))),
-				      (Delta2, b2) = fresh?(a, Subs(sig)(body(s))) IN
-				      x((Delta2, Id, b2), (Delta1, sig, b1)) ENDIF,
-	 app(f,ag): IF NOT app?(s) OR f /= sym(s) THEN ((::), Id, FALSE)
-		       ELSE unify(ag, arg(s)) ENDIF
-ENDCASES ENDIF
-MEASURE lex2(card(Vars(t,s)), depth(t))
 
-% Soundness of unify.
-unify_sound: LEMMA % Lemma 4.10
-   LET (Delta, sig, b) = unify(t, s) IN
-   b => alpha(Delta)(Subs(sig)(t), Subs(sig)(s))
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Partial order over pairs (Context x substitution).
-less((Delta, sigma), (Nabla,gamma)): bool = % Definition 4.11
-   EXISTS theta:
-   fresh_subs(Nabla)(theta, Delta) AND
-   FORALL X : alpha(Nabla)(Subs(append(theta,sigma))((::)*X), Subs(gamma)((::)*X))
-
-% Completeness of unify.
-unify_complete: THEOREM % Theorem 4.12
-   LET (Nabla, gamma, b) = unify(t, s) IN
-   alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s)) 
-   IMPLIES b AND less(Nabla, gamma, Delta, sigma)
 
 END nominalunif
