@@ -1,0 +1,11 @@
+# variable case
+(name-replace "t_alg" "car(x!1)`1") 
+(name-replace "s_alg" "car(x!1)`2")
+(name-replace "sigma1_alg" "(: (V(s_alg), ext(reverse(p(s_alg)))(t_alg) ) :)")
+(name-replace "new_sigma_alg" "append(sigma1_alg, sigma!1)") 
+(name-replace "Delta1_alg" "fresh_subs?(sigma1_alg, Delta!1)`1")
+(name-replace "bool1_alg" "fresh_subs?(sigma1_alg, Delta!1)`2")
+(name-replace "unif_prb_lst1_alg" "apply_sub_prb_lst(sigma1_alg, cdr(x!1))")
+(name-replace "unif_prb_lst2_alg" "fix_pnt2unif_prb_via_sub(sigma1_alg, fix_pnt_eq_lst!1)")
+(name-replace "new_Delta_alg" "append(Delta1_alg, Delta!1)")
+(name-replace "new_unif_prb_lst_alg" "append(unif_prb_lst1_alg, unif_prb_lst2_alg)") 

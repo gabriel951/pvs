@@ -21,11 +21,12 @@ BEGIN
 		  structure_extra[[variable,term]],
 		  atoms
 
-	Delta, Delta1, Delta_sol, Nabla: VAR fresh_context
+	Delta, Delta1, Delta_sol, Nabla, Nabla1: VAR fresh_context
 	sigma, sigma_sol, sigma1, gamma, theta, lambda1: VAR Sub
 	t, s, u: VAR term
 	X: VAR variable
-
+	a: VAR atom
+	
 %%%%%%%%%% preliminar definitions
 % TODO: see if i've used all this variables i've defined
 % A fix point equation type is a permutation and a variable 
@@ -145,7 +146,9 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 	    THEN LET % substitution that will be added 
 	             sigma1 = (: (V(s), ext(reverse(p(s)))(t) ) :),
 		     % apply substitution to context and check if it is consistent
-		     (new_Delta, bool1) = fresh_subs?(sigma1, Delta),
+		     (Delta1, bool1) = fresh_subs?(sigma1, Delta),
+		     % add new context to the old ones we had
+		     new_Delta = append(Delta1, Delta), 
 		     % get new substitution list 
 		     new_sigma = append(sigma1, sigma), 
 	    	     % get new problem list - apply substitution to remaining problems and to fixpoint equations.
@@ -165,7 +168,8 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 		 % this case is similar to s being a suspension	   
 	         *(pm, X): IF NOT occurs(X, s) THEN LET % this is the same as the case above where s is a suspension.
 	             					sigma1 = (: (V(s), ext(reverse(p(s)))(t) ) :),
-		   					(new_Delta, bool1) = fresh_subs?(sigma1, Delta),
+		   					(Delta1, bool1) = fresh_subs?(sigma1, Delta),
+							new_Delta = append(Delta1, Delta),
 							new_sigma = append(sigma1, sigma), 
 							unif_prb_lst1 = apply_sub_prb_lst(sigma1, cdr(unif_prb_lst)), 
 		     					unif_prb_lst2 = fix_pnt2unif_prb_via_sub(sigma1, fix_pnt_eq_lst),
@@ -234,12 +238,28 @@ MEASURE lex2(card(vars_lst(unif_prb_lst)), size_lst(unif_prb_lst))
 % lex 3 should only be used if i also need to handle the number of commutative function symbols.
 %%%%%%%%%% end of algorithm to perform c unification 
 
+%%%%%%%%%%% auxiliar lemmas for soundness of the algorithm
+% the context returned by the algorithm is bigger than the context the algorithm started with 
+ctxt_ret_big_init_ctxt: LEMMA
+    FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
+    member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
+    => FORALL (a, X): member((a, X), Delta) => member((a, X), Delta_sol) 
+
+% if Delta |- Nabla sigma, then Delta |- subset(Nabla) sigma
+fresh_subs_subset: LEMMA
+    FORALL sigma, Delta, Nabla1, Nabla: 
+    (FORALL (a, X): member((a, X), Nabla1) IMPLIES member((a, X), Nabla)
+    AND fresh_subs(Delta)(sigma, Nabla))
+    => fresh_subs(Delta)(sigma, Nabla1) 
+%%%%%%%%%%% end of auxiliar lemmas for soundness of the algorithm
+
+
 %%%%%%%%%% specification of soundness and completeness of the algorithm
 % soundness of unify - TODO: is there no need to verify consistency of context? 
 c_unify_sound: LEMMA 
 FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
     LET unif_prb_lst_sol = fix_pnt2unif_prb(fix_pnt_eq_lst_sol) IN
-    (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, (::))) AND
+    (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)) AND
         is_sol_prb_trp(Nabla, sigma1, Delta_sol, sigma_sol, unif_prb_lst_sol))
 	=> is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst)
 
