@@ -56,6 +56,7 @@
  (|c_unify_TCC14| 0
   (|c_unify_TCC14-1| NIL 3754037948 ("" (TERMINATION-TCC) NIL NIL) NIL NIL))
  (|ctxt_ret_big_init_ctxt| 0
+  (|ctxt_ret_big_init_ctxt-2| NIL 3754833997 NIL NIL NIL)
   (|ctxt_ret_big_init_ctxt-1| NIL 3754230212
    (""
     (MEASURE-INDUCT+
@@ -118,7 +119,53 @@
                                                      "sigma_sol!1"
                                                      "fix_pnt_eq_lst_sol!1")
                                                     (("1" (PROP)
-                                                      (("1" (POSTPONE) NIL NIL)
+                                                      (("1" (HIDE -2 -3)
+                                                        (("1" (REVEAL -5)
+                                                          (("1" (SKOLEM!)
+                                                            (("1" (INST? -2)
+                                                              (("1"
+                                                                (CASE
+                                                                    "member((a!1, X!1), Delta!1)")
+                                                                (("1" (PROP)
+                                                                  (("1"
+                                                                    (HIDE -3 2)
+                                                                    (("1"
+                                                                      (GRIND)
+                                                                      (("1"
+                                                                        (REPLACE
+                                                                         -2 1
+                                                                         RL)
+                                                                        (("1"
+                                                                          (HIDE
+                                                                           -2)
+                                                                          (("1"
+                                                                            (LEMMA
+                                                                             "append_member"
+                                                                             ("x"
+                                                                              "(a!1, X!1)"))
+                                                                            (("1"
+                                                                              (INST
+                                                                               -1
+                                                                               "Delta1_alg"
+                                                                               "Delta!1")
+                                                                              (("1"
+                                                                                (ASSERT)
+                                                                                NIL
+                                                                                NIL))
+                                                                              NIL))
+                                                                            NIL))
+                                                                          NIL))
+                                                                        NIL))
+                                                                      NIL))
+                                                                    NIL))
+                                                                  NIL)
+                                                                 ("2" (PROP)
+                                                                  NIL NIL))
+                                                                NIL))
+                                                              NIL))
+                                                            NIL))
+                                                          NIL))
+                                                        NIL)
                                                        ("2" (HIDE -1 -2 2)
                                                         (("2"
                                                           (LEMMA
@@ -418,7 +465,317 @@
                                   (("2" (ASSERT) (("2" (GRIND) NIL NIL)) NIL))
                                   NIL))
                                 NIL)
-                               ("2" (POSTPONE) NIL NIL))
+                               ("2" (FLATTEN -1)
+                                (("2" (SPLIT)
+                                  (("1" (FLATTEN -1)
+                                    (("1" (SPLIT)
+                                      (("1" (PROP)
+                                        (("1" (HIDE -2 1 2)
+                                          (("1" (ASSERT)
+                                            (("1" (LIFT-IF)
+                                              (("1"
+                                                (NAME-REPLACE "sigma1_alg"
+                                                 "(: (V(s_alg), ext(reverse(p(s_alg)))(t_alg) ) :)")
+                                                (("1"
+                                                  (NAME-REPLACE "new_sigma_alg"
+                                                   "append(sigma1_alg, sigma!1)")
+                                                  (("1"
+                                                    (NAME-REPLACE "Delta1_alg"
+                                                     "fresh_subs?(sigma1_alg, Delta!1)`1")
+                                                    (("1"
+                                                      (NAME-REPLACE "bool1_alg"
+                                                       "fresh_subs?(sigma1_alg, Delta!1)`2")
+                                                      (("1"
+                                                        (NAME-REPLACE
+                                                         "unif_prb_lst1_alg"
+                                                         "apply_sub_prb_lst(sigma1_alg, cdr(x!1))")
+                                                        (("1"
+                                                          (NAME-REPLACE
+                                                           "unif_prb_lst2_alg"
+                                                           "fix_pnt2unif_prb_via_sub(sigma1_alg, fix_pnt_eq_lst!1)")
+                                                          (("1" (SPLIT)
+                                                            (("1" (PROP)
+                                                              (("1" (HIDE -1)
+                                                                (("1"
+                                                                  (NAME-REPLACE
+                                                                   "new_Delta_alg"
+                                                                   "append(Delta1_alg, Delta!1)")
+                                                                  (("1"
+                                                                    (NAME-REPLACE
+                                                                     "new_unif_prb_lst_alg"
+                                                                     "append(unif_prb_lst1_alg, unif_prb_lst2_alg)")
+                                                                    (("1"
+                                                                      (REVEAL
+                                                                       -13)
+                                                                      (("1"
+                                                                        (INST
+                                                                         -1
+                                                                         "new_unif_prb_lst_alg")
+                                                                        (("1"
+                                                                          (INST
+                                                                           -1
+                                                                           "new_Delta_alg"
+                                                                           "(::)"
+                                                                           "new_sigma_alg"
+                                                                           "Delta_sol!1"
+                                                                           "sigma_sol!1"
+                                                                           "fix_pnt_eq_lst_sol!1")
+                                                                          (("1"
+                                                                            (PROP)
+                                                                            (("1"
+                                                                              (HIDE
+                                                                               -2)
+                                                                              (("1"
+                                                                                (REVEAL
+                                                                                 -4)
+                                                                                (("1"
+                                                                                  (REPLACE
+                                                                                   -1
+                                                                                   -2
+                                                                                   RL)
+                                                                                  (("1"
+                                                                                    (HIDE
+                                                                                     -1)
+                                                                                    (("1"
+                                                                                      (SKOLEM!)
+                                                                                      (("1"
+                                                                                        (LEMMA
+                                                                                         "append_member"
+                                                                                         ("x"
+                                                                                          "(a!1, X!1)"))
+                                                                                        (("1"
+                                                                                          (GRIND)
+                                                                                          NIL
+                                                                                          NIL))
+                                                                                        NIL))
+                                                                                      NIL))
+                                                                                    NIL))
+                                                                                  NIL))
+                                                                                NIL))
+                                                                              NIL)
+                                                                             ("2"
+                                                                              (HIDE
+                                                                               -1
+                                                                               2)
+                                                                              (("2"
+                                                                                (LEMMA
+                                                                                 "c_unify_TCC1")
+                                                                                (("2"
+                                                                                  (INST
+                                                                                   -1
+                                                                                   "Delta!1"
+                                                                                   "sigma!1"
+                                                                                   "x!1"
+                                                                                   "fix_pnt_eq_lst!1")
+                                                                                  (("2"
+                                                                                    (PROP)
+                                                                                    (("1"
+                                                                                      (INST
+                                                                                       -1
+                                                                                       "t_alg")
+                                                                                      (("1"
+                                                                                        (PROP)
+                                                                                        (("1"
+                                                                                          (INST
+                                                                                           -1
+                                                                                           "s_alg")
+                                                                                          (("1"
+                                                                                            (PROP)
+                                                                                            (("1"
+                                                                                              (INST
+                                                                                               -1
+                                                                                               "sigma1_alg")
+                                                                                              (("1"
+                                                                                                (PROP)
+                                                                                                (("1"
+                                                                                                  (INST
+                                                                                                   -1
+                                                                                                   "Delta1_alg"
+                                                                                                   "bool1_alg")
+                                                                                                  (("1"
+                                                                                                    (PROP)
+                                                                                                    (("1"
+                                                                                                      (INST
+                                                                                                       -1
+                                                                                                       "new_Delta_alg")
+                                                                                                      (("1"
+                                                                                                        (PROP)
+                                                                                                        (("1"
+                                                                                                          (INST
+                                                                                                           -1
+                                                                                                           "new_sigma_alg")
+                                                                                                          (("1"
+                                                                                                            (PROP)
+                                                                                                            (("1"
+                                                                                                              (INST
+                                                                                                               -1
+                                                                                                               "unif_prb_lst1_alg")
+                                                                                                              (("1"
+                                                                                                                (PROP)
+                                                                                                                (("1"
+                                                                                                                  (INST
+                                                                                                                   -1
+                                                                                                                   "unif_prb_lst2_alg")
+                                                                                                                  (("1"
+                                                                                                                    (PROP)
+                                                                                                                    (("1"
+                                                                                                                      (INST
+                                                                                                                       -1
+                                                                                                                       "new_unif_prb_lst_alg")
+                                                                                                                      (("1"
+                                                                                                                        (PROP)
+                                                                                                                        (("1"
+                                                                                                                          (REVEAL
+                                                                                                                           -15)
+                                                                                                                          (("1"
+                                                                                                                            (PROPAX)
+                                                                                                                            NIL
+                                                                                                                            NIL))
+                                                                                                                          NIL)
+                                                                                                                         ("2"
+                                                                                                                          (REVEAL
+                                                                                                                           -13)
+                                                                                                                          (("2"
+                                                                                                                            (ASSERT)
+                                                                                                                            NIL
+                                                                                                                            NIL))
+                                                                                                                          NIL))
+                                                                                                                        NIL))
+                                                                                                                      NIL)
+                                                                                                                     ("2"
+                                                                                                                      (REVEAL
+                                                                                                                       -15)
+                                                                                                                      (("2"
+                                                                                                                        (ASSERT)
+                                                                                                                        NIL
+                                                                                                                        NIL))
+                                                                                                                      NIL))
+                                                                                                                    NIL))
+                                                                                                                  NIL)
+                                                                                                                 ("2"
+                                                                                                                  (REVEAL
+                                                                                                                   -15)
+                                                                                                                  (("2"
+                                                                                                                    (ASSERT)
+                                                                                                                    NIL
+                                                                                                                    NIL))
+                                                                                                                  NIL))
+                                                                                                                NIL))
+                                                                                                              NIL)
+                                                                                                             ("2"
+                                                                                                              (REVEAL
+                                                                                                               -17)
+                                                                                                              (("2"
+                                                                                                                (ASSERT)
+                                                                                                                NIL
+                                                                                                                NIL))
+                                                                                                              NIL))
+                                                                                                            NIL))
+                                                                                                          NIL)
+                                                                                                         ("2"
+                                                                                                          (REVEAL
+                                                                                                           -10)
+                                                                                                          (("2"
+                                                                                                            (ASSERT)
+                                                                                                            NIL
+                                                                                                            NIL))
+                                                                                                          NIL))
+                                                                                                        NIL))
+                                                                                                      NIL)
+                                                                                                     ("2"
+                                                                                                      (REVEAL
+                                                                                                       -13)
+                                                                                                      (("2"
+                                                                                                        (ASSERT)
+                                                                                                        NIL
+                                                                                                        NIL))
+                                                                                                      NIL)
+                                                                                                     ("3"
+                                                                                                      (REVEAL
+                                                                                                       -13)
+                                                                                                      (("3"
+                                                                                                        (REVEAL
+                                                                                                         -14)
+                                                                                                        (("3"
+                                                                                                          (ASSERT)
+                                                                                                          NIL
+                                                                                                          NIL))
+                                                                                                        NIL))
+                                                                                                      NIL))
+                                                                                                    NIL))
+                                                                                                  NIL)
+                                                                                                 ("2"
+                                                                                                  (REVEAL
+                                                                                                   -16)
+                                                                                                  (("2"
+                                                                                                    (REVEAL
+                                                                                                     -15)
+                                                                                                    (("2"
+                                                                                                      (ASSERT)
+                                                                                                      NIL
+                                                                                                      NIL))
+                                                                                                    NIL))
+                                                                                                  NIL))
+                                                                                                NIL))
+                                                                                              NIL)
+                                                                                             ("2"
+                                                                                              (POSTPONE)
+                                                                                              NIL
+                                                                                              NIL)
+                                                                                             ("3"
+                                                                                              (POSTPONE)
+                                                                                              NIL
+                                                                                              NIL)
+                                                                                             ("4"
+                                                                                              (POSTPONE)
+                                                                                              NIL
+                                                                                              NIL))
+                                                                                            NIL))
+                                                                                          NIL)
+                                                                                         ("2"
+                                                                                          (POSTPONE)
+                                                                                          NIL
+                                                                                          NIL))
+                                                                                        NIL))
+                                                                                      NIL)
+                                                                                     ("2"
+                                                                                      (POSTPONE)
+                                                                                      NIL
+                                                                                      NIL))
+                                                                                    NIL))
+                                                                                  NIL))
+                                                                                NIL))
+                                                                              NIL))
+                                                                            NIL))
+                                                                          NIL))
+                                                                        NIL))
+                                                                      NIL))
+                                                                    NIL))
+                                                                  NIL))
+                                                                NIL))
+                                                              NIL)
+                                                             ("2" (POSTPONE)
+                                                              NIL NIL))
+                                                            NIL))
+                                                          NIL)
+                                                         ("2" (POSTPONE) NIL
+                                                          NIL))
+                                                        NIL))
+                                                      NIL))
+                                                    NIL))
+                                                  NIL)
+                                                 ("2" (POSTPONE) NIL NIL))
+                                                NIL))
+                                              NIL))
+                                            NIL))
+                                          NIL))
+                                        NIL)
+                                       ("2" (POSTPONE) NIL NIL))
+                                      NIL))
+                                    NIL)
+                                   ("2" (POSTPONE) NIL NIL))
+                                  NIL))
+                                NIL))
                               NIL))
                             NIL))
                           NIL))
@@ -519,8 +876,7 @@
     (|symbol| TYPE-EQ-DECL NIL |nominal_term| NIL)
     (|commutative_symbol| TYPE-EQ-DECL NIL |nominal_term| NIL)
     (|term| TYPE-DECL NIL |term_adt| NIL)
-    (PRED TYPE-EQ-DECL NIL |defined_types| NIL)
-    (|every| ADT-DEF-DECL "boolean" |term_adt| NIL)
+    (PRED TYPE-EQ-DECL NIL |defined_types| NIL) NIL
     (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
     (TRUE CONST-DECL "bool" |booleans| NIL)
     (|Sub| TYPE-EQ-DECL NIL |substitution| NIL)
