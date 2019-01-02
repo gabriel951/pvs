@@ -114,8 +114,7 @@
     (NOT CONST-DECL "[bool -> bool]" |booleans| NIL)
     (IMPLIES CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
     (|append| DEF-DECL "list[T]" |list_props| NIL)
-    (|below| TYPE-EQ-DECL NIL |nat_types| NIL)
-    (|l2| SKOLEM-CONST-DECL "list[T]" |structure_extra| NIL)
+    (|below| TYPE-EQ-DECL NIL |nat_types| NIL) NIL
     (|length| DEF-DECL "nat" |list_props| NIL)
     (+ CONST-DECL "[numfield, numfield -> numfield]" |number_fields| NIL)
     (|numfield| NONEMPTY-TYPE-EQ-DECL NIL |number_fields| NIL)
@@ -142,12 +141,7 @@
     (|int_plus_int_is_int| APPLICATION-JUDGEMENT "int" |integers| NIL)
     (|real_ge_is_total_order| NAME-JUDGEMENT "(total_order?[real])"
      |real_props| NIL)
-    (|i| SKOLEM-CONST-DECL
-     "below[length(cons(cons1_var, cons2_var)) + length(l2)]" |structure_extra|
-     NIL)
-    (|cons2_var| SKOLEM-CONST-DECL "list[T]" |structure_extra| NIL)
-    (|cons1_var| SKOLEM-CONST-DECL "T" |structure_extra| NIL)
-    (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
+    NIL NIL NIL (AND CONST-DECL "[bool, bool -> bool]" |booleans| NIL)
     (|cons| ADT-CONSTRUCTOR-DECL "[[T, list] -> (cons?)]" |list_adt| NIL)
     (|cons?| ADT-RECOGNIZER-DECL "[list -> boolean]" |list_adt| NIL)
     (|posint_plus_nnint_is_posint| APPLICATION-JUDGEMENT "posint" |integers|

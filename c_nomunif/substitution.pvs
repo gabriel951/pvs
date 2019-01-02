@@ -35,7 +35,8 @@ subs(X,s)(t): RECURSIVE term =
 	 unit: unit,
 	 pair(t1, t2): pair(subs(X,s)(t1), subs(X,s)(t2)),
 	 abs(a, bd): abs(a, subs(X,s)(bd)),
-	 app(f, ag): app(f, subs(X,s)(ag))
+	 app(f, ag): app(f, subs(X,s)(ag)),
+	 c_app(f, ag): c_app(f, pair(subs(X,s)(term1(ag)), subs(X, s)(term2(ag))))
    ENDCASES
    MEASURE t BY <<
 
@@ -49,7 +50,7 @@ subs_perm_comm: LEMMA % BI Lemma 2.9
 
 Sub: TYPE = list[[variable, term]]
 
-	sigma, gamma: VAR Sub
+	sigma, lambda1, gamma: VAR Sub
 	Id: Sub = (::)
 % Action of substitutions over terms. Close to the notion of triangular
 % substitutions.
@@ -322,5 +323,29 @@ alpha_Subs_ord: LEMMA
 alpha_Subs_invariance: LEMMA % Lemma 4.9
    (FORALL X: alpha(Delta)(Subs(sigma)((::)*X), Subs(gamma)((::)*X)) )
    IMPLIES alpha(Delta)(Subs(sigma)(t), Subs(gamma)(t))
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% return the set of variables on the range of a substitution  
+vars_range_sub(sigma): RECURSIVE finite_set[variable] =
+IF null?(sigma) THEN emptyset
+ELSE LET t = car(sigma)`2 IN
+     	 union(vars_range_sub(cdr(sigma)), Vars(t))
+ENDIF
+MEASURE sigma BY << 
+
+% return the set of variables on the domain of a substitution
+vars_dom_sub(sigma): RECURSIVE finite_set[variable] =
+IF null?(sigma) THEN emptyset
+ELSE LET X = car(sigma)`1 IN
+     	 union(singleton(X), vars_dom_sub(cdr(sigma)))
+ENDIF
+MEASURE sigma BY << 
+
+% return a boolean indicating if sigma is more general than gamma under context Delta. 
+is_more_gen_sub(Delta)(sigma, gamma): bool =
+    EXISTS lambda1:
+        FORALL X: alpha(Delta)(Subs(append(sigma, lambda1))((::)*X), Subs(gamma)((::)*X))
+%%%%%%%%%%% end of solution to a problem triple 
 
 END substitution

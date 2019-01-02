@@ -17,4 +17,7 @@ the notation.
 
 # Thing i should say as the meeting of 10/12
 -> The code is typechecked :) 
--> I am beggining 
+-> I am beggining the proof
+
+After the Meeting 
+-> I should finish the specification according to the paper of Washington

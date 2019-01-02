@@ -68,7 +68,8 @@ ext(pi)(t): RECURSIVE term =
    	 pair(t1,t2): pair(ext(pi)(t1),ext(pi)(t2)),
    	 abs(ab, bd): abs(act(pi)(ab), ext(pi)(bd)),
    	 app(sl, ag): app(sl, ext(pi)(ag)),
-	 c_app(sl, ag): c_app(sl, ext(pi)(ag))
+	 % TODO: why can't i put ext(pi)(ag)? When I put it, I can't prove the tcc!
+	 c_app(sl, ag): c_app(sl, pair(ext(pi)(term1(ag)), ext(pi)(term2(ag))) )
   ENDCASES
 MEASURE t BY <<
 
@@ -106,12 +107,13 @@ ext_preserves_depth: LEMMA
    depth(ext(pi)(t)) = depth(t)
 
 
-% size of terms
+% TODO: size of terms
+% I'll probably need it for the lexicographic measure.
 size(t): RECURSIVE nat =
    CASES t OF
-   	 at(a): 0,
-	 *(pm,v): 0,
-	 unit: 0,
+   	 at(a): 1,
+	 *(pm,v): 1,
+	 unit: 1,
 	 pair(t1,t2): 1 + size(t1) + size(t2),
 	 abs(a,bd): 1 + size(bd),
 	 app(sl,ag): 1 + size(ag),
@@ -119,6 +121,10 @@ size(t): RECURSIVE nat =
    ENDCASES
    MEASURE t BY <<
 
+% Permutations do not change the size of a term 
+ext_preserves_size: LEMMA
+    size(ext(pi)(t)) = size(t)
+    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % "occurs" verify if X occurs inside the term t.
 occurs(X, t): RECURSIVE bool =
@@ -162,10 +168,3 @@ Vars_occurs: LEMMA
    Vars(t)(X) = occurs(X,t)
 
 END nominal_term
-  
-
-
-
-
-
-

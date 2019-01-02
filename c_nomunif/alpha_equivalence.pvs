@@ -42,16 +42,11 @@ alpha(Delta)(t, s): RECURSIVE bool =
 	 app(sl,ag): app?(s) AND sl=sym(s) AND
 	 	     alpha(Delta)(ag, arg(s)),
 
-	% TODO: added commutative function. The way we constructed commutative function, how should we handle the possibility of ag not being a pair?
-	% possibility 1: return false if c_app is not used with a pair?
-	c_app(sl, ag): c_app?(s) AND sl = c_sym(s) AND pair?(ag) AND pair?(c_arg(s)) AND ( 
+	% TODO: commutative function symbols
+	c_app(sl, ag): c_app?(s) AND sl = c_sym(s) AND ( 
 		       (alpha(Delta)(term1(ag), term1(c_arg(s))) AND alpha(Delta)(term2(ag), term2(c_arg(s)))) OR
 		       (alpha(Delta)(term1(ag), term2(c_arg(s))) AND alpha(Delta)(term2(ag), term1(c_arg(s))))
 											  )
-		       
-	% other possibilities would be:
-	% 1. to define a commutative function as taking a term.
- 	% 2. To define a commutative function taking exactly two terms
    ENDCASES
 MEASURE t BY <<
 
@@ -59,41 +54,14 @@ MEASURE t BY <<
 fix_pnt_eq: TYPE = [perm, variable]
 fix_pnt_eq_lst: VAR list[fix_pnt_eq]
 
-% TODO: This is an adaptation of function alpha-equivalence in order to take into account fixpoint equations.
-% So, we now need to check if t and s are alpha equivalent under a context Delta AND a list of fixpoint equations. 
-c_alpha(Delta, fix_pnt_eq_lst)(t, s): RECURSIVE bool =
-    CASES t OF
-	 at(a): s=at(a),
-	 *(pm,v): susp?(s) AND v = V(s) AND 
-	 	  member((append(pm, reverse(p(s))), v), fix_pnt_eq_lst),
-	 unit: s=unit,
-	 pair(t1,t2): pair?(s) AND alpha(Delta)(t1,term1(s)) AND
-	 	      alpha(Delta)(t2,term2(s)),
-	 abs(a,bd): abs?(s) AND
-	 	    IF a = abstr(s) THEN alpha(Delta)(bd,body(s))
-		       ELSE fresh(Delta)(a, body(s)) AND
-		       	    alpha(Delta)(bd, ext((:(a,abstr(s)):))(body(s)))
-		    ENDIF,
-	 app(sl,ag): app?(s) AND sl=sym(s) AND
-	 	     alpha(Delta)(ag, arg(s)),
-
-	% TODO: added commutative function. The way we constructed commutative function, how should we handle the possibility of ag not being a pair?
-	% possibility 1: return false if c_app is not used with a pair?
-	c_app(sl, ag): c_app?(s) AND sl = c_sym(s) AND pair?(ag) AND pair?(c_arg(s)) AND ( 
-		       (alpha(Delta)(term1(ag), term1(c_arg(s))) AND alpha(Delta)(term2(ag), term2(c_arg(s)))) OR
-		       (alpha(Delta)(term1(ag), term2(c_arg(s))) AND alpha(Delta)(term2(ag), term1(c_arg(s))))
-											  )
-		       
-	% other possibilities would be:
-	% 1. to define a commutative function as taking a term.
- 	% 2. To define a commutative function taking exactly two terms
-    ENDCASES
-MEASURE t by <<
-
 % alpha-equivalence preserves depth of terms.
 alpha_depth: LEMMA
    alpha(Delta)(t,s) => depth(t)=depth(s)
 
+% alpha equivalence preserves size of terms
+alpha_size: LEMMA
+   alpha(Delta)(t, s) => size(t) = size(s)
+   
 % If the action of two permutations are the same, they produce
 % alpha-equivalent terms when applied to one term.
 alpha_ext_invariance: LEMMA

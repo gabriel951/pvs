@@ -25,6 +25,6 @@ BEGIN
       IF i < length(l1) 
 	     THEN nth(l1, i)
 	     ELSE nth(l2, i - length(l1))
-      ENDIF     
-
+      ENDIF      
+    
 END structure_extra

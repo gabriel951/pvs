@@ -1,3 +1,37 @@
 % File that contain auxiliar specification for nominalunif.pvs.
+aux_nominal_unif: THEORY 
+BEGIN
 
-BEGIN 
+IMPORTING substitution,
+		  structure_extra[[variable,term]],
+		  atoms
+
+	Delta, Delta1, Delta_sol, Nabla: VAR fresh_context
+	sigma, sigma_sol, sigma1, gamma, theta, lambda1: VAR Sub
+	t, s, u: VAR term
+	X: VAR variable
+
+%%%%%%%%%% preliminar definitions
+% TODO: see if i've used all this variables i've defined
+% A fix point equation type is a permutation and a variable 
+fix_pnt_eq_typ: TYPE = [perm, variable]
+fix_pnt_eq: VAR fix_pnt_eq_typ                  % I'll need a variable of type fix point equation
+fix_pnt_eq_lst, fix_pnt_eq_lst1, fix_pnt_eq_lst2, fix_pnt_eq_lst_sol: VAR list[fix_pnt_eq_typ]
+
+% a unification problem type is a list containing the two terms to be unified
+unif_prb_typ: TYPE = [term, term]
+unif_prb: VAR unif_prb_typ
+unif_prb_lst, unif_prb_lst_sol: VAR list[unif_prb_typ]
+
+% a nominal solution type is a list consisting of (fresh context, substitution, list[fix_point_equations]) 
+nominal_sol_typ:  TYPE = [fresh_context, Sub, list[fix_pnt_eq]]
+nominal_sol: VAR nominal_sol_typ
+
+% variables needed to specify algorithm
+sol: VAR nominal_sol_typ
+sol_lst: VAR list[nominal_sol_typ]
+%%%%%%%%%%% end of preliminar definitions
+
+
+
+END aux_nominal_unif 
