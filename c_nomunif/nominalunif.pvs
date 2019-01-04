@@ -124,19 +124,29 @@ vars_lst_append: LEMMA
     vars_lst(append(unif_prb_lst1, unif_prb_lst2)) = union(vars_lst(unif_prb_lst1), vars_lst(unif_prb_lst2))  
 
 % Vars(Psigma) <= Vars(Im(sigma)) U Vars(P)
-aux_vars_lst_sub: LEMMA
+vars_lst_sub_subset: LEMMA
     subset?(vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)), union(vars_range_sub(sigma), vars_lst(unif_prb_lst)))
 
-% X in Dom(Sub) AND X not in Im(Sub) => X not in (Vars(apply_sub(Sub, P)))
+% X in Dom(Sub) AND X not in Range(Sub) => X not in (Vars(P*Sub)))
 apply_sub_elim_var: LEMMA
-    member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma))) =>
+    (member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma)))) =>
     NOT member(X, vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)))
 
+% auxiliar lemma to the one above:
+% X in Dom(Sub) AND X not in Range(Sub) => X not in Vars(tSub) 
+apply_sub_elim_var_term: LEMMA
+    (member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma)))) =>
+    NOT member(X, Vars(Subs(sigma)(t)))
+    
 % l1 U l2 is alpha-equivalent under a context IFF (l1 AND l2 are alpha-equivalent under the context) 
 is_alpha_eq_lst_append: LEMMA
     is_alpha_eq_lst(Delta, append(unif_prb_lst1, unif_prb_lst2)) IFF
     (is_alpha_eq_lst(Delta, unif_prb_lst1) AND is_alpha_eq_lst(Delta, unif_prb_lst2))
-    
+
+% cdr(unif_prb_lst) < unif_prb_lst
+cdr_smaller_size: LEMMA
+NOT null?(unif_prb_lst) => size_lst(cdr(unif_prb_lst)) < size_lst(unif_prb_lst)
+
 %%%%%%%%%% end of lemmas related to the auxiliar functions above
 
 

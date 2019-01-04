@@ -55,8 +55,8 @@ fix_pnt_eq: TYPE = [perm, variable]
 fix_pnt_eq_lst: VAR list[fix_pnt_eq]
 
 % alpha-equivalence preserves depth of terms.
-alpha_depth: LEMMA
-   alpha(Delta)(t,s) => depth(t)=depth(s)
+%alpha_depth: LEMMA
+%   alpha(Delta)(t,s) => depth(t)=depth(s)
 
 % alpha equivalence preserves size of terms
 alpha_size: LEMMA

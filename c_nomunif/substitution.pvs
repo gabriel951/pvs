@@ -58,7 +58,8 @@ Sub: TYPE = list[[variable, term]]
 Subs(sigma)(t): RECURSIVE term =
    CASES sigma OF
    	 null : t,
-	 cons(head,tail): subs(head)(Subs(tail)(t))
+	 % TODO: previously, it was subs(head)(Subs(tail)(t))
+	 cons(head,tail): Subs(tail)(subs(head)(t))
    ENDCASES
    MEASURE sigma BY <<
 
@@ -86,6 +87,10 @@ Subs_abs: LEMMA
 Subs_app: LEMMA
    Subs(sigma)(app(f, t)) = app(f, Subs(sigma)(t))
 
+% TODO: Substitution over a c_application is a c_application
+Subs_c_app: LEMMA
+   Subs(sigma)(c_app(f, pair(t, s))) = c_app(f, Subs(sigma)(pair(t,s)))
+   
 % Applying an append of two substitutions to terms is equal 
 % to apply one by one.
 Subs_append: LEMMA
@@ -346,6 +351,15 @@ MEASURE sigma BY <<
 is_more_gen_sub(Delta)(sigma, gamma): bool =
     EXISTS lambda1:
         FORALL X: alpha(Delta)(Subs(append(sigma, lambda1))((::)*X), Subs(gamma)((::)*X))
-%%%%%%%%%%% end of solution to a problem triple 
+%%%%%%%%%%%
+
+%%%%%%%%%%% necessary lemmas
+% X in var(tsigma) => X in var(t) or x in Range(sigma) 
+member_var_term_sub: LEMMA
+member(X, Vars(Subs(sigma)(t))) => member(X, Vars(t)) OR member(X, vars_range_sub(sigma))
+
+% X not in Dom(sigma) => (X in Vars(t) => X in Vars(sigma t)) 
+var_not_sub: LEMMA
+NOT member(X, vars_dom_sub(sigma)) => (member(X, Vars(t)) => member(X, Vars(Subs(sigma)(t))))
 
 END substitution

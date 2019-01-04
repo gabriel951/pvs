@@ -124,7 +124,10 @@ size(t): RECURSIVE nat =
 % Permutations do not change the size of a term 
 ext_preserves_size: LEMMA
     size(ext(pi)(t)) = size(t)
-    
+
+% size(t) >= 1
+size_gt_1: LEMMA
+    size(t) >= 1 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % "occurs" verify if X occurs inside the term t.
 occurs(X, t): RECURSIVE bool =
