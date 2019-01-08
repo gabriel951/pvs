@@ -59,7 +59,7 @@ Subs(sigma)(t): RECURSIVE term =
    CASES sigma OF
    	 null : t,
 	 % TODO: previously, it was subs(head)(Subs(tail)(t))
-	 cons(head,tail): Subs(tail)(subs(head)(t))
+	 cons(head,tail): subs(head)(Subs(tail)(t))
    ENDCASES
    MEASURE sigma BY <<
 
@@ -354,9 +354,17 @@ is_more_gen_sub(Delta)(sigma, gamma): bool =
 %%%%%%%%%%%
 
 %%%%%%%%%%% necessary lemmas
+% aux lemma for the one below
+member_var_term_sub_aux: LEMMA
+member(X, Vars(subs(Y, s)(t))) => member(X, Vars(t)) OR member(X, vars_range_sub((:(Y, s):)))
+
 % X in var(tsigma) => X in var(t) or x in Range(sigma) 
 member_var_term_sub: LEMMA
 member(X, Vars(Subs(sigma)(t))) => member(X, Vars(t)) OR member(X, vars_range_sub(sigma))
+
+% aux lemma for the one below
+var_not_sub_aux: LEMMA
+NOT member(X, vars_dom_sub((:(Y, s):))) => (member(X, Vars(t)) => member(X, Vars(subs(Y,s)(t))))
 
 % X not in Dom(sigma) => (X in Vars(t) => X in Vars(sigma t)) 
 var_not_sub: LEMMA

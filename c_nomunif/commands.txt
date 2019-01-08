@@ -18,9 +18,33 @@
 
 # variable second case 
 (name-replace "new_fix_pnt_eq_alg" "(: (append(p(t_alg), reverse(p(s_alg))), V(t_alg)) :)")
-(name-replace "new_fix_pnt_eq_lst_alg" "append(new_fix_pnt_eq_alg, fix_pnt_eq_lst!1)")
+(name-replace "new_fix_pnt_eq_lst_alg" "append(new_fix_pnt_eq_alg, x!2)")
 
 # pair 
 (name-replace "unif_prb1_alg" "(: (term1(t_alg), term1(s_alg)) :)")
 (name-replace "unif_prb2_alg" "(: (term2(t_alg), term2(s_alg)) :)")
-??? Tem que por mais um name replace aqui. 
+(name-replace "new_unif_prb_lst_alg" "append(append(unif_prb1_alg, unif_prb2_alg), cdr(x!1))")
+
+# abs - case 1 
+(name-replace "new_unif_prb_alg" "(: (body(t_alg), body(s_alg)) :)")
+(name-replace "new_unif_prb_lst_alg" "append(new_unif_prb_alg, cdr(x!1))")
+
+# abs - case 2
+(name-replace "bool1_alg" "fresh?(abstr(t_alg), body(s_alg))`2")
+(name-replace "Delta1_alg" "fresh?(abstr(t_alg), body(s_alg))`1") 
+(name-replace "new_Delta_alg" "append(Delta1_alg, Delta)")
+(name-replace "new_unif_prb_alg" "(: (body(t_alg), ext((: (abstr(t_alg), abstr(s_alg)) :)) (body(s_alg))) :)") 
+(name-replace "new_unif_prb_lst_alg" "append(new_unif_prb_alg, cdr(x!1))")
+
+# app 
+(name-replace "new_unif_prb_alg" "(: (arg(t_alg), arg(s_alg)) :)")
+(name-replace "new_unif_prb_lst_alg" "append(new_unif_prb_alg, cdr(x!1))")
+
+# c app 
+(name-replace "unif_prb1_1_alg" "(: (term1(c_arg(t_alg)), term1(c_arg(s_alg))) :)")
+(name-replace "unif_prb2_2_alg" "(: (term2(c_arg(t_alg)), term2(c_arg(s_alg))) :)")
+(name-replace "unif_prb_lst1_alg" "append(append(unif_prb1_1_alg, unif_prb2_2_alg),cdr(x!1))")
+(name-replace "unif_prb1_2_alg" "(: (term1(c_arg(t_alg)), term2(c_arg(s_alg))) :)")
+(name-replace "unif_prb2_1_alg" "(: (term2(c_arg(t_alg)), term1(c_arg(s_alg))) :)")
+(name-replace "unif_prb_lst2_alg" "append(append(unif_prb1_2_alg, unif_prb2_1_alg),cdr(x!1))")
+

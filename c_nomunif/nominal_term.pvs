@@ -69,7 +69,7 @@ ext(pi)(t): RECURSIVE term =
    	 abs(ab, bd): abs(act(pi)(ab), ext(pi)(bd)),
    	 app(sl, ag): app(sl, ext(pi)(ag)),
 	 % TODO: why can't i put ext(pi)(ag)? When I put it, I can't prove the tcc!
-	 c_app(sl, ag): c_app(sl, pair(ext(pi)(term1(ag)), ext(pi)(term2(ag))) )
+	 c_app(sl, ag): c_app(sl, pair(ext(pi)(term1(ag)), ext(pi)(term2(ag))) )	
   ENDCASES
 MEASURE t BY <<
 
