@@ -51,13 +51,13 @@ sol: VAR nominal_sol_typ
 sol_lst: VAR list[nominal_sol_typ]
 %%%%%%%%%%% end of preliminar definitions
 
-%%%%%%%%%%% solution to a problem triple
+%%%%%%%%%%% useful definitions and functions
 % is every pair (t, s) in the unification problem list such that t = s (alfa-equivalent)  
-is_alpha_eq_lst(Delta, unif_prb_lst): RECURSIVE bool =
+alpha_eq_lst?(Delta, unif_prb_lst): RECURSIVE bool =
 IF null?(unif_prb_lst) THEN TRUE
 ELSE LET t = car(unif_prb_lst)`1,
      	 s = car(unif_prb_lst)`2 IN 
-	 IF alpha(Delta)(t, s) THEN is_alpha_eq_lst(Delta, cdr(unif_prb_lst))
+	 IF alpha(Delta)(t, s) THEN alpha_eq_lst?(Delta, cdr(unif_prb_lst))
 	 ELSE FALSE
 	 ENDIF 
 ENDIF
@@ -76,17 +76,7 @@ ELSE LET t = car(unif_prb_lst)`1,
 ENDIF
 MEASURE unif_prb_lst BY <<          
 
-% returns a boolean indicating if the pair (Nabla, sigma) is a solution to a problem triple (Delta, gamma, unif_prb_lst) 
-is_sol_prb_trp((Nabla, sigma), (Delta, gamma, unif_prb_lst)): bool =
-    % Nabla |- Delta sigma
-    fresh_subs(Nabla)(sigma, Delta) AND
-    % Nabla |- s(sigma) = t(sigma), for all s and t in the unification problem list
-    is_alpha_eq_lst(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst)) AND
-    % gamma is more general than sigma under the context Nabla
-    is_more_gen_sub(Nabla)(gamma, sigma)
-%%%%%%%%%%% end of solution to a problem triple 
 
-%%%%%%%%%% auxiliary functions for the main function: c_unify AND for the specification
 
 % get set of different variables in a list of terms
 % this functions build on the work of function Vars
@@ -119,36 +109,73 @@ ELSE LET fix_pnt_eq = car(fix_pnt_eq_lst),
 ENDIF
 MEASURE fix_pnt_eq_lst BY << 
 
-%%%%%%%%%% end of auxiliary functions for main algorithm AND for specification
+% defines a valid quadruple. Valid quadruples are what occur in the algorithm 
+valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): bool =
+   % im(sigma) and dom(sigma) are disjoint
+   disjoint?(vars_range_sub(sigma), vars_dom_sub(sigma))  
+   AND 
+   % Dom(sigma) and Vars(Problem) are disjoint
+   disjoint?(vars_dom_sub(sigma), vars_lst(append(unif_prb_lst, fix_pnt2unif_prb(fix_pnt_eq_lst))))
+
+% returns a boolean indicating if the pair (Nabla, sigma) is a solution to a
+% problem quadruple (Delta, gamma, unif_prb_lst, fix_pnt_eq_lst) 
+sol_prb_quad?(Nabla, sigma)(Delta, gamma, unif_prb_lst, fix_pnt_eq_lst): bool =
+    % Nabla |- Delta sigma
+    fresh_subs(Nabla)(sigma, Delta) AND
+    % Nabla |- s(sigma) = t(sigma), for all s and t in the unification problem list
+    alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst)) AND
+    % Nabla |- (pi X)sigma = (pi' X)sigma, for all fix point equations in the list
+    alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, fix_pnt2unif_prb(fix_pnt_eq_lst))) AND 
+    % gamma is more general than sigma under the context Nabla
+    more_gen_sub?(Nabla)(gamma, sigma)
+
+%%%%%%%%%% end of useful functions 
 
 %%%%%%%%%% lemmas related to the auxiliar functions above
 % Vars(l1 U l2) = Vars(l1) U Vars(l2)
 vars_lst_append: LEMMA
-    vars_lst(append(unif_prb_lst1, unif_prb_lst2)) = union(vars_lst(unif_prb_lst1), vars_lst(unif_prb_lst2))  
+   vars_lst(append(unif_prb_lst1, unif_prb_lst2)) = union(vars_lst(unif_prb_lst1), vars_lst(unif_prb_lst2))  
 
 % Vars(Psigma) <= Vars(Im(sigma)) U Vars(P)
 vars_lst_sub_subset: LEMMA
-    subset?(vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)), union(vars_range_sub(sigma), vars_lst(unif_prb_lst)))
+   subset?(vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)), union(vars_range_sub(sigma), vars_lst(unif_prb_lst)))
 
 % auxiliar lemmas to the apply_sub_elim_var:
 apply_sub_elim_var_term_aux: LEMMA
-    (member(X, vars_dom_sub((:(Y,s):))) AND (NOT member(X, vars_range_sub((:(Y, s):))))) =>
-    NOT member(X, Vars(subs(Y,s)(t)))
+   (member(X, vars_dom_sub((:(Y,s):))) AND (NOT member(X, vars_range_sub((:(Y, s):))))) =>
+   NOT member(X, Vars(subs(Y,s)(t)))
 % X in Dom(Sub) AND X not in Range(Sub) => X not in Vars(tSub) 
 apply_sub_elim_var_term: LEMMA
-    (member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma)))) =>
-    NOT member(X, Vars(Subs(sigma)(t)))
+   (member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma)))) =>
+   NOT member(X, Vars(Subs(sigma)(t)))
     
 % X in Dom(Sub) AND X not in Range(Sub) => X not in (Vars(P*Sub)))
 apply_sub_elim_var: LEMMA
-    (member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma)))) =>
-    NOT member(X, vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)))
-    
-% l1 U l2 is alpha-equivalent under a context IFF (l1 AND l2 are alpha-equivalent under the context) 
-is_alpha_eq_lst_append: LEMMA
-    is_alpha_eq_lst(Delta, append(unif_prb_lst1, unif_prb_lst2)) IFF
-    (is_alpha_eq_lst(Delta, unif_prb_lst1) AND is_alpha_eq_lst(Delta, unif_prb_lst2))
+   (member(X, vars_dom_sub(sigma)) AND (NOT member(X, vars_range_sub(sigma)))) =>
+   NOT member(X, vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)))
 
+% apply_sub (sigma, l1 + l2) = apply_sub(sigma, l1) + apply_sub(sigma, l2)
+apply_sub_prb_lst_append: LEMMA
+   apply_sub_prb_lst(sigma, append(unif_prb_lst1, unif_prb_lst2)) =
+   append(apply_sub_prb_lst(sigma, unif_prb_lst1), apply_sub_prb_lst(sigma, unif_prb_lst2))
+
+% l1 + l2 is alpha-equivalent under a context IFF (l1 AND l2 are alpha-equivalent under the context) 
+is_alpha_eq_lst_append: LEMMA
+    alpha_eq_lst?(Delta, append(unif_prb_lst1, unif_prb_lst2)) IFF
+    (alpha_eq_lst?(Delta, unif_prb_lst1) AND alpha_eq_lst?(Delta, unif_prb_lst2))
+
+% aux lemma for the one below
+apply_sub_prb_lst_cons_calls_aux: LEMMA
+   (more_gen_sub?(Nabla)(sigma1, sigma) AND
+   alpha(Nabla)(Subs(sigma)(Subs(sigma1)(t)), Subs(sigma)(Subs(sigma1)(s)))) =>
+   alpha(Nabla)(Subs(sigma)(t), Subs(sigma)(s))
+   
+% the idea is you can "cancel" apply_sub_prb_lst consecutive calls, for some substitutions
+apply_sub_prb_lst_cons_calls: LEMMA
+   (more_gen_sub?(Nabla)(sigma1, sigma) AND
+      alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, apply_sub_prb_lst(sigma1, unif_prb_lst)))) =>
+      alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst))
+   
 % cdr(unif_prb_lst) < unif_prb_lst
 cdr_smaller_size: LEMMA
 NOT null?(unif_prb_lst) => size_lst(cdr(unif_prb_lst)) < size_lst(unif_prb_lst)
@@ -278,27 +305,27 @@ fresh_subs_subset: LEMMA
 
 
 %%%%%%%%%% specification of soundness and completeness of the algorithm
-% soundness of unify - TODO: is there no need to verify consistency of context? 
-c_unify_sound: LEMMA 
+% soundness of unify  
+c_unify_sound: conjecture  
 FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
-    LET unif_prb_lst_sol = fix_pnt2unif_prb(fix_pnt_eq_lst_sol) IN
     (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)) AND
-        is_sol_prb_trp(Nabla, sigma1, Delta_sol, sigma_sol, unif_prb_lst_sol))
-	=> is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst)
+        sol_prb_quad?(Nabla, sigma1)(Delta_sol, sigma_sol, (::), fix_pnt_eq_lst_sol) AND
+	valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
+	=> sol_prb_quad?(Nabla, sigma1)(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)
 
 %c_unify_sound_cor: COROLLARY
-%FORALL Delta, sigma, fix_pnt_eq_lst:
+%FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
 %    LET unif_prb_lst = fix_pnt2unif_prb(fix_pnt_eq_lst) IN
-%        (member((Delta, sigma, fix_pnt_eq_lst), c_unify((::), (::), (:(t, s):), (::))) AND
-%        is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst))
+%        (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify((::), (::), (:(t, s):), (::))) AND
+%        is_sol_prb_trp(Nabla, sigma1, Delta_sol, sigma_sol, unif_prb_lst))
 %	=> is_sol_prb_trp(Nabla, sigma1, (::), (::), (:(t, s):))
 
-%c_unify_complete: LEMMA
-%FORALL Delta, sigma, unif_prb_lst:
-%    is_sol_prb_trp(Nabla, sigma1, Delta, sigma, unif_prb_lst) =>
-%    EXISTS Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
-%    	   member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)) AND
-%	   is_sol_prb_trp(Nabla, sigma1, Delta_sol, sigma_sol, fix_pnt_eq_lst_sol)
+c_unify_complete: conjecture
+    sol_prb_quad?(Nabla, sigma1)(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst) AND
+    valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst) =>
+    EXISTS Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
+       member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
+	AND sol_prb_quad?(Nabla, sigma1)(Delta_sol, sigma_sol, (::), fix_pnt_eq_lst_sol)
     
     
 

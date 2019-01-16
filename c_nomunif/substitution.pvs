@@ -87,7 +87,7 @@ Subs_abs: LEMMA
 Subs_app: LEMMA
    Subs(sigma)(app(f, t)) = app(f, Subs(sigma)(t))
 
-% TODO: Substitution over a c_application is a c_application
+% Substitution over a c_application is a c_application
 Subs_c_app: LEMMA
    Subs(sigma)(c_app(f, pair(t, s))) = c_app(f, Subs(sigma)(pair(t,s)))
    
@@ -348,12 +348,20 @@ ENDIF
 MEASURE sigma BY << 
 
 % return a boolean indicating if sigma is more general than gamma under context Delta. 
-is_more_gen_sub(Delta)(sigma, gamma): bool =
+more_gen_sub?(Delta)(sigma, gamma): bool =
     EXISTS lambda1:
-        FORALL X: alpha(Delta)(Subs(append(sigma, lambda1))((::)*X), Subs(gamma)((::)*X))
+        FORALL X: alpha(Delta)(Subs(append(lambda1, sigma))((::)*X), Subs(gamma)((::)*X))
+
+% boolean that indicates if a substitution is idempotent
+idempotent?(sigma): bool =
+IF (FORALL t: Subs(sigma)(Subs(sigma)(t)) = Subs(sigma)(t))
+   THEN TRUE
+ELSE FALSE
+ENDIF
+
 %%%%%%%%%%%
 
-%%%%%%%%%%% necessary lemmas
+%%%%%%%%%%% necessary lemmas i added
 % aux lemma for the one below
 member_var_term_sub_aux: LEMMA
 member(X, Vars(subs(Y, s)(t))) => member(X, Vars(t)) OR member(X, vars_range_sub((:(Y, s):)))
@@ -369,5 +377,40 @@ NOT member(X, vars_dom_sub((:(Y, s):))) => (member(X, Vars(t)) => member(X, Vars
 % X not in Dom(sigma) => (X in Vars(t) => X in Vars(sigma t)) 
 var_not_sub: LEMMA
 NOT member(X, vars_dom_sub(sigma)) => (member(X, Vars(t)) => member(X, Vars(Subs(sigma)(t))))
+
+% aux lemma for the one below
+sub_skip_term_aux: LEMMA
+   disjoint?(Vars(t), vars_dom_sub((:(Y, s):))) => subs(Y, s)(t) = t
+   
+% if all variables in the term are not in the domain of the substitution, the substitution leave the term intact
+sub_skip_term: LEMMA
+   disjoint?(Vars(t), vars_dom_sub(sigma)) => Subs(sigma)(t) = t
+
+% X in t AND X in t sigma, where sigma is a nuclear substitution. THEN X in Range(sigma) 
+member_var_range_nuc_sub: LEMMA
+   member(X, Vars(t)) AND member(X, Vars(subs(X, s)(t))) => member(X, Vars(s)) 
+
+% aux lemma for the one below 
+suf_cond_idempotent_aux: LEMMA
+   disjoint?(vars_range_sub(sigma), vars_dom_sub(sigma))  =>
+   disjoint?(Vars(Subs(sigma)(t)), vars_dom_sub(sigma)) 
+
+% the lemma below give a sufficient condition for the substitution to be idempotent
+% if dom(sigma) \cap Vars(range(sigma)) = \emptyset, the substitution is idempotent
+suf_cond_idempotent: LEMMA
+   disjoint?(vars_range_sub(sigma), vars_dom_sub(sigma))  
+   => idempotent?(sigma) 
+
+% technical lemma in order to swap substitutions gamma and sigma 
+eq_sub_alpha: LEMMA
+   (alpha(Delta)(Subs(gamma)(t), Subs(sigma)(t)) AND
+   alpha(Delta)(Subs(gamma)(t), Subs(gamma)(s))) =>
+   alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
+
+% give a sufficient condition for permutations to commute 
+suf_cond_sub_comm: CONJECTURE
+   disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)),
+             union(vars_dom_sub(gamma), vars_range_sub(gamma))) =>
+   Subs(sigma)(Subs(gamma)(t)) = Subs(gamma)(Subs(sigma)(t))
 
 END substitution
