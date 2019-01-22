@@ -129,4 +129,9 @@ DS(pi1,pi2): list[atom] =
 DS_member: LEMMA
    member(a, ds(pi1,pi2)) = member(a, DS(pi1,pi2))
 
+
+%%%%%%%%%%%%%%%%% Lemmas i needed to add
+act_reverse_aux1: CONJECTURE
+   act((: :)) = act(append(pi, reverse(pi)))
+   
 end atoms

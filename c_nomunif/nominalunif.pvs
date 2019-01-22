@@ -111,8 +111,8 @@ MEASURE fix_pnt_eq_lst BY <<
 
 % defines a valid quadruple. Valid quadruples are what occur in the algorithm 
 valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): bool =
-   % im(sigma) and dom(sigma) are disjoint
-   disjoint?(vars_range_sub(sigma), vars_dom_sub(sigma))  
+   % well - behaved variable
+   well_behaved?(sigma)  
    AND 
    % Dom(sigma) and Vars(Problem) are disjoint
    disjoint?(vars_dom_sub(sigma), vars_lst(append(unif_prb_lst, fix_pnt2unif_prb(fix_pnt_eq_lst))))
@@ -160,21 +160,23 @@ apply_sub_prb_lst_append: LEMMA
    append(apply_sub_prb_lst(sigma, unif_prb_lst1), apply_sub_prb_lst(sigma, unif_prb_lst2))
 
 % l1 + l2 is alpha-equivalent under a context IFF (l1 AND l2 are alpha-equivalent under the context) 
-is_alpha_eq_lst_append: LEMMA
+alpha_eq_lst?_append: LEMMA
     alpha_eq_lst?(Delta, append(unif_prb_lst1, unif_prb_lst2)) IFF
     (alpha_eq_lst?(Delta, unif_prb_lst1) AND alpha_eq_lst?(Delta, unif_prb_lst2))
 
 % aux lemma for the one below
 apply_sub_prb_lst_cons_calls_aux: LEMMA
    (more_gen_sub?(Nabla)(sigma1, sigma) AND
+   idempotent?(sigma1) AND
    alpha(Nabla)(Subs(sigma)(Subs(sigma1)(t)), Subs(sigma)(Subs(sigma1)(s)))) =>
    alpha(Nabla)(Subs(sigma)(t), Subs(sigma)(s))
    
 % the idea is you can "cancel" apply_sub_prb_lst consecutive calls, for some substitutions
 apply_sub_prb_lst_cons_calls: LEMMA
    (more_gen_sub?(Nabla)(sigma1, sigma) AND
-      alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, apply_sub_prb_lst(sigma1, unif_prb_lst)))) =>
-      alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst))
+   idempotent?(sigma1) AND
+   alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, apply_sub_prb_lst(sigma1, unif_prb_lst)))) =>
+   alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst))
    
 % cdr(unif_prb_lst) < unif_prb_lst
 cdr_smaller_size: LEMMA
@@ -299,6 +301,20 @@ fresh_subs_subset: LEMMA
     (FORALL (a, X): member((a, X), Nabla1) IMPLIES member((a, X), Nabla)
     AND fresh_subs(Delta)(sigma, Nabla))
     => fresh_subs(Delta)(sigma, Nabla1)
+
+% aux lemma for the one below
+suf_cond_not_prb_lst_aux: LEMMA
+   sigma = (:(X, t):) AND member(X, Vars(Subs(sigma)(s))) => member(X, Vars(t))
+   
+% technical, non interesting lemma
+% gives a sufficient condition for a variable not in a unification problem list 
+suf_cond_not_prb_lst: LEMMA 
+   sigma = (:(X, t):) AND NOT member(X, Vars(t)) => NOT member(X, vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst)))
+
+% a sufficient condition for a variable to be in a unification problem list 
+suf_cond_member_unif_prb_lst: LEMMA
+   member(X, vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst))) AND NOT member(X, vars_range_sub(sigma))
+   => member(X, vars_lst(unif_prb_lst))
 
 
 %%%%%%%%%%% end of auxiliar lemmas for soundness of the algorithm

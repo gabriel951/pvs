@@ -124,4 +124,6 @@ fresh?_complete: LEMMA % Lemma 3.13
    fresh(Delta)(a, t) IMPLIES b AND
    (FORALL (b, X): member((b, X), Nabla) => member((b, X), Delta))
 
+
+
 END freshness

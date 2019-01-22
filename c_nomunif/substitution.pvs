@@ -17,11 +17,11 @@ BEGIN
 
 	t,s,u,w: VAR term
 	X,Y: VAR variable
-	pi: VAR perm
+	pi, pi1: VAR perm
 	a, b: VAR atom
 	f: VAR symbol
 	
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+v%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Nuclear substitution:
 % The function subs exchanges the variable X by the term s inside the term t.
 % This is the action of a basic substitution in a term.
@@ -352,6 +352,14 @@ more_gen_sub?(Delta)(sigma, gamma): bool =
     EXISTS lambda1:
         FORALL X: alpha(Delta)(Subs(append(lambda1, sigma))((::)*X), Subs(gamma)((::)*X))
 
+% indicates if a substitution is well-behaved.
+well_behaved?(sigma): bool =
+IF FORALL X: member(X, vars_dom_sub(sigma))
+   => (FORALL Y: member(Y, Vars(Subs(sigma)((::) * X))) => NOT member(Y, vars_dom_sub(sigma)))
+   THEN TRUE
+ELSE FALSE
+ENDIF
+
 % boolean that indicates if a substitution is idempotent
 idempotent?(sigma): bool =
 IF (FORALL t: Subs(sigma)(Subs(sigma)(t)) = Subs(sigma)(t))
@@ -360,6 +368,23 @@ ELSE FALSE
 ENDIF
 
 %%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%% Technical, non important or obvious auxiliary lemmas
+% (pi * X) sigma = (pi' * X) sigma => pi * X = pi'* X
+Subs_perm_equal: LEMMA 
+   Subs(sigma)(pi * X) = Subs(sigma)(pi1 * X) => pi * X = pi1 * X 
+
+Subs_perm_Var_aux: LEMMA
+   Subs(sigma)(pi * X) = ext(pi)(Subs(sigma)((::) * X))
+
+Subs_perm_Var: LEMMA
+   member(Y, Vars(Subs(sigma)(pi * X))) => member(Y, Vars(Subs(sigma)(pi1 * X)))
+
+vars_dom_sub_append: LEMMA
+   member(X, vars_dom_sub(append(sigma, gamma))) => member(X, vars_dom_sub(sigma)) OR
+                                                    member(X, vars_dom_sub(gamma))
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%% necessary lemmas i added
 % aux lemma for the one below
@@ -401,16 +426,71 @@ suf_cond_idempotent: LEMMA
    disjoint?(vars_range_sub(sigma), vars_dom_sub(sigma))  
    => idempotent?(sigma) 
 
+% a well-behaved substitution is idempotent
+well_behaved?_idempotent?: LEMMA
+   well_behaved?(sigma) => idempotent?(sigma) 
+
+% TODO: is this correct? 
 % technical lemma in order to swap substitutions gamma and sigma 
 eq_sub_alpha: LEMMA
    (alpha(Delta)(Subs(gamma)(t), Subs(sigma)(t)) AND
    alpha(Delta)(Subs(gamma)(t), Subs(gamma)(s))) =>
    alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
 
-% give a sufficient condition for permutations to commute 
-suf_cond_sub_comm: CONJECTURE
+% give a sufficient condition to simplify (sigma gamma sigma) to (sigma gamma)  
+suf_cond_simp_sub_append: CONJECTURE
+   idempotent?(sigma) AND 
    disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)),
-             union(vars_dom_sub(gamma), vars_range_sub(gamma))) =>
-   Subs(sigma)(Subs(gamma)(t)) = Subs(gamma)(Subs(sigma)(t))
+             vars_dom_sub(gamma)) =>
+   Subs(sigma)(Subs(gamma)(Subs(sigma)(t))) = Subs(sigma)(Subs(gamma)(t))
 
+% a sufficient condition to conclude that:  sigma gamma < lambda1 => sigma < lambda1
+suf_cond_more_gen_sub?_append: CONJECTURE
+   idempotent?(sigma) AND 
+   disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)),
+             vars_dom_sub(gamma)) AND 
+   more_gen_sub?(Nabla)(append(sigma, gamma), lambda1) => more_gen_sub?(Nabla)(sigma, lambda1)
+
+% if X is in the domain of a well behaved substitution sigma then X is not in sigma t
+well_behaved?_var_disappear: LEMMA
+   member(X, vars_dom_sub(sigma)) AND well_behaved?(sigma) =>
+   NOT member(X, Vars(Subs(sigma)(t)))
+
+% a sufficient condition to conclude that:
+% well_behaved?(sigma) AND well_behaved?(gamma) => well_behaved?(sigma + gamma)
+suf_cond_idempotent?_append: CONJECTURE
+   well_behaved?(sigma) AND well_behaved?(gamma) AND
+   disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)), vars_dom_sub(gamma))
+   => well_behaved?(append(sigma, gamma))
+
+% a rather technical lemma for the kind of substitution that appears in the algorithm
+% the kind of this substitution is well_behaved 
+subs_add_alg_well_behaved?: CONJECTURE
+   NOT member(X, Vars(t)) => well_behaved?((:(X, t):))
+
+
+
+%%%%%%%%%%%%%%%%%%%%% necessary lemmas related to functions fresh_subs and similar ones
+aux_lemma_fresh_sub1: CONJECTURE
+   fresh(Nabla)(a, Subs(sigma)(t))
+   => fresh_subs(Nabla)(sigma, fresh?(a, t)`1)
+
+% auxiliar lemma for aux_lemma_fresh_sub
+fresh_alpha_equivalent: CONJECTURE
+   fresh(Nabla)(a, t) AND alpha(Nabla)(t, s) => fresh(Nabla)(a, s)
+
+% lemma to be used in the main algorithm 
+aux_lemma_fresh_sub: CONJECTURE
+   fresh_subs(Nabla)(sigma, Delta) AND more_gen_sub?(Nabla)(gamma, sigma) AND idempotent?(gamma) =>
+   fresh_subs(Nabla)(sigma, fresh_subs?(gamma, Delta)`1)
+
+% aux lemma for the one below
+aux_lemma_fresh_sub_aux: CONJECTURE
+   fresh(Nabla)(a, Subs(sigma)(t)) => fresh?(a, t)`2
+
+% possible lemma to be used in the main algorithm
+aux_lemma_fresh_sub2: CONJECTURE
+   fresh_subs(Nabla)(sigma, Delta) AND more_gen_sub?(Nabla)(gamma, sigma) AND idempotent?(gamma) 
+   => fresh_subs?(gamma, Delta)`2
+   
 END substitution
