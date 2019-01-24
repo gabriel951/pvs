@@ -162,8 +162,13 @@ apply_sub_prb_lst_append: LEMMA
 
 % l1 + l2 is alpha-equivalent under a context IFF (l1 AND l2 are alpha-equivalent under the context) 
 alpha_eq_lst?_append: LEMMA
-    alpha_eq_lst?(Delta, append(unif_prb_lst1, unif_prb_lst2)) IFF
-    (alpha_eq_lst?(Delta, unif_prb_lst1) AND alpha_eq_lst?(Delta, unif_prb_lst2))
+   alpha_eq_lst?(Delta, append(unif_prb_lst1, unif_prb_lst2)) IFF
+   (alpha_eq_lst?(Delta, unif_prb_lst1) AND alpha_eq_lst?(Delta, unif_prb_lst2))
+
+% fix_pnt2unif_prb(FP1 + FP2) = fix_pnt2unif_prb(FP1) + fix_pnt2unif_prb(FP2) 
+fix_pnt2unif_prb_append: CONJECTURE
+   fix_pnt2unif_prb(append(fix_pnt_eq_lst1, fix_pnt_eq_lst2)) =
+   append(fix_pnt2unif_prb(fix_pnt_eq_lst1), fix_pnt2unif_prb(fix_pnt_eq_lst2)) 
 
 % aux lemma for the one below
 apply_sub_prb_lst_cons_calls_aux: LEMMA
@@ -317,7 +322,7 @@ suf_cond_member_unif_prb_lst: LEMMA
    member(X, vars_lst(apply_sub_prb_lst(sigma, unif_prb_lst))) AND NOT member(X, vars_range_sub(sigma))
    => member(X, vars_lst(unif_prb_lst))
 
-% TODO
+% trivial lemma, that will be used in the proof of the main theorem. 
 valid_quadruple?_cdr: CONJECTURE
    valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst) AND NOT null?(unif_prb_lst) =>
    valid_quadruple?(Delta, sigma, cdr(unif_prb_lst), fix_pnt_eq_lst) 
