@@ -233,7 +233,7 @@ ELSE LET t = car(unif_prb_lst)`1, s = car(unif_prb_lst)`2
 							IN IF bool1 THEN c_unify(new_Delta, new_sigma, new_unif_prb_lst, (::))
 		       					ELSE (::)
 							ENDIF
-		       	   ELSIF susp?(s) AND occurs(X, s) THEN LET new_fix_pnt_eq = (:(append(pm, reverse(p(s))), X):),
+		       	   ELSIF susp?(s) AND occurs(X, s) THEN LET new_fix_pnt_eq = (:(append(reverse(p(s)), pm), X):),
 			   	 	      		   	    new_fix_pnt_eq_lst = append(new_fix_pnt_eq, fix_pnt_eq_lst)
 			   	 	      		   	    IN c_unify(Delta, sigma, cdr(unif_prb_lst), new_fix_pnt_eq_lst)
 			   ELSE (::) 
