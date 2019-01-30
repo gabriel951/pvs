@@ -1,0 +1,34 @@
+# Before the Meeting
+- I sent an email to the people of PVS, but actually the mistake was mine. I don't
+  think it is worth going back and doing the modifications, since that would slow me
+  down. 
+- I found some bugs in my specification: 
+    * There was a function to check if a triple was valid. However, since i am now
+      working with quadruples, i had to adapt it to work with quadruples. 
+    * I defined a well-behaved substitution to be one in which:
+            im(sigma) \cap dom(sigma) = \emptyset
+      This is according to Washington article 
+    * I found another mistake in the algorithm: in the time of passing a unification
+      problem to a fixpoint equation I did wrong. I fixed the problem by now. 
+
+- I was able to prove correctness (the prove is just long, but not hard at all) 
+- When I started proving completeness i got into a major problem: the way more
+  general substitutions are represented. 
+------> IMPORTANT: IT turns out this is not a problem and I've everything fixed
+        by now!! 
+    * Ex: Try to unify X and f(Y, Y). The solution given by the algorithm is 
+      delta = X -> f(Y, Y). Then the substitution sigma = X -> f(Y, Y) and Y -> a 
+      is a valid one to the problem. We should be able to prove delta < sigma.
+      However, the way we represent substitution in the problem means this is
+      impossible: we would get [Y -> a, X -> f(Y, Y)] and when we apply this
+      substitution: sigma(X) = f(a, a) when the correct should be X = f(Y, Y) 
+        -> Is this so? I am confused... 
+    * I think the correct think to do is to define a more general substitution this
+      way: delta = lambda1 + sigma + lambda 2. With this modification i am able to go
+      further. 
+------> Nevermind this stays here as documentation of my progress :) 
+
+- My files alpha_equivalence.pvs, freshness.pvs and others are not correct
+
+# After the Meeting 
+- 

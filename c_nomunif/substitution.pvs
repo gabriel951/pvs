@@ -50,7 +50,7 @@ subs_perm_comm: LEMMA % BI Lemma 2.9
 
 Sub: TYPE = list[[variable, term]]
 
-	sigma, lambda1, gamma: VAR Sub
+	sigma, sigma1, lambda1, gamma: VAR Sub
 	Id: Sub = (::)
 % Action of substitutions over terms. Close to the notion of triangular
 % substitutions.
@@ -430,12 +430,11 @@ suf_cond_idempotent: LEMMA
 well_behaved?_idempotent?: LEMMA
    well_behaved?(sigma) => idempotent?(sigma) 
 
-% TODO: is this correct? 
-% technical lemma in order to swap substitutions gamma and sigma 
+% there was a lemma "eq_sub_alpha" that was similar to this and it is wrong. Don't use it.
 eq_sub_alpha: LEMMA
-   (alpha(Delta)(Subs(gamma)(t), Subs(sigma)(t)) AND
-   alpha(Delta)(Subs(gamma)(t), Subs(gamma)(s))) =>
-   alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
+   alpha(Delta)(Subs(gamma)(t), Subs(gamma)(s)) AND 
+   (FORALL X: alpha(Delta)(Subs(sigma)((: :) * X), Subs(gamma)((: :) * X)))
+   => alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
 
 % give a sufficient condition to simplify (sigma gamma sigma) to (sigma gamma)  
 suf_cond_simp_sub_append: CONJECTURE
@@ -470,6 +469,19 @@ subs_add_alg_well_behaved?: CONJECTURE
    NOT member(X, Vars(t)) => well_behaved?((:(X, t):))
 
 
+% a technical lemma to be used in the proof of completeness
+suf_cond_more_gen_nuc_sub: LEMMA  
+   sigma = (: (X, ext(reverse(pi))(t)) :) AND NOT member(X, Vars(t)) AND
+   alpha(Delta)(Subs(gamma)(pi * X), Subs(gamma)(t))
+   => more_gen_sub?(Delta)(sigma, gamma)
+
+% close to the lemma above, this one
+suf_cond_more_gen_append: LEMMA
+   sigma1 = (: (X, ext(reverse(pi))(t)) :) AND NOT member(X, Vars(t)) AND
+   alpha(Delta)(Subs(gamma)(pi * X), Subs(gamma)(t)) AND 
+   disjoint?(vars_dom_sub(sigma), union(Vars((::)* X), Vars(t))) AND
+   more_gen_sub?(Delta)(sigma, gamma)
+   => more_gen_sub?(Delta)(append(sigma1, sigma), gamma) 
 
 %%%%%%%%%%%%%%%%%%%%% necessary lemmas related to functions fresh_subs and similar ones
 % useful lemmas that appeared in the the proof of completeness
@@ -492,12 +504,12 @@ aux_lemma_fresh_sub: CONJECTURE
    fresh_subs(Nabla)(sigma, fresh_subs?(gamma, Delta)`1)
 
 % aux lemma for the one below
-aux_lemma_fresh_sub_aux: CONJECTURE
+aux_lemma_fresh_sub_aux: LEMMA
    fresh(Nabla)(a, Subs(sigma)(t)) => fresh?(a, t)`2
 
-% possible lemma to be used in the main algorithm
-aux_lemma_fresh_sub2: CONJECTURE
+% lemma to be used in the proof of completeness 
+aux_lemma_fresh_sub2: LEMMA 
    fresh_subs(Nabla)(sigma, Delta) AND more_gen_sub?(Nabla)(gamma, sigma) AND idempotent?(gamma) 
    => fresh_subs?(gamma, Delta)`2
-   
+
 END substitution

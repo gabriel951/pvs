@@ -1,0 +1,17 @@
+# Before the Meeting
+- Last meeting was on 17/12/18. So, there were two mondays without reunions. 
+- In the last meeting we finished the remaining details about the specification. 
+Show him how it is. 
+- I proved the TCC's for the termination of the algorithm, but i didn't prove the 
+preceding lemmas yet. There were some errors i made, so i fixed then
+    * the lexicographic measure should consider the variables in P_lst U FP_lst, not
+      only in P_lst
+    * in one branch of the algorithm, i forgot to keep the original context. 
+    * Warning: I changed the function Subs of Ana, to apply the first substitution in
+      the head of the list 
+- Comment about the specification
+- I am planning on traveling this week to Patos de Minas 
+
+# After the Meeting 
+- I need to use the substitution as defined by Ana Cristina
+- It would be good to organize the code to show Ayala next meeting

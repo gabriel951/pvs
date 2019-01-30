@@ -1,0 +1,55 @@
+# variable case
+(then@
+    (name-replace "t_alg" "car(x!1)`1") 
+    (name-replace "s_alg" "car(x!1)`2")
+    (name-replace "sigma1_alg" "(: (V(s_alg), ext(reverse(p(s_alg)))(t_alg) ) :)")
+    (name-replace "new_sigma_alg" "append(sigma1_alg, sigma)") 
+    (name-replace "Delta1_alg" "fresh_subs?(sigma1_alg, Delta)`1")
+    (name-replace "bool1_alg" "fresh_subs?(sigma1_alg, Delta)`2")
+    (name-replace "unif_prb_lst1_alg" "apply_sub_prb_lst(sigma1_alg, cdr(x!1))")
+    (name-replace "unif_prb_lst2_alg" "apply_sub_prb_lst(sigma1_alg, fix_pnt2unif_prb(x!2))")
+    (name-replace "new_Delta_alg" "append(Delta1_alg, Delta)")
+    (name-replace "new_unif_prb_lst_alg" "append(unif_prb_lst1_alg, unif_prb_lst2_alg)") 
+)
+
+
+# variable case - change s and t 
+(name-replace "sigma1_alg" "(: (V(t_alg), ext(reverse(p(t_alg)))(s_alg) ) :)")
+
+# variable second case 
+(name-replace "new_fix_pnt_eq_alg" "(: (append(reverse(p(s_alg)), p(t_alg)), V(t_alg)) :)")
+(name-replace "new_fix_pnt_eq_lst_alg" "append(new_fix_pnt_eq_alg, x!2)")
+
+
+# pair 
+(then@ 
+    (name-replace "unif_prb1_alg" "(: (term1(t_alg), term1(s_alg)) :)")
+    (name-replace "unif_prb2_alg" "(: (term2(t_alg), term2(s_alg)) :)")
+    (name-replace "new_unif_prb_lst_alg" "append(append(unif_prb1_alg, unif_prb2_alg), cdr(x!1))")
+)
+
+# abs - case 1 
+(name-replace "new_unif_prb_alg" "(: (body(t_alg), body(s_alg)) :)")
+(name-replace "new_unif_prb_lst_alg" "append(new_unif_prb_alg, cdr(x!1))")
+
+# abs - case 2
+(name-replace "bool1_alg" "fresh?(abstr(t_alg), body(s_alg))`2")
+(name-replace "Delta1_alg" "fresh?(abstr(t_alg), body(s_alg))`1") 
+(name-replace "new_Delta_alg" "append(Delta1_alg, Delta)")
+(name-replace "new_unif_prb_alg" "(: (body(t_alg), ext((: (abstr(t_alg), abstr(s_alg)) :)) (body(s_alg))) :)") 
+(name-replace "new_unif_prb_lst_alg" "append(new_unif_prb_alg, cdr(x!1))")
+
+# app 
+(name-replace "new_unif_prb_alg" "(: (arg(t_alg), arg(s_alg)) :)")
+(name-replace "new_unif_prb_lst_alg" "append(new_unif_prb_alg, cdr(x!1))")
+
+# c app 
+(name-replace "unif_prb1_1_alg" "(: (term1(c_arg(t_alg)), term1(c_arg(s_alg))) :)")
+(name-replace "unif_prb2_2_alg" "(: (term2(c_arg(t_alg)), term2(c_arg(s_alg))) :)")
+(name-replace "unif_prb_lst1_alg" "append(append(unif_prb1_1_alg, unif_prb2_2_alg),cdr(x!1))")
+(name-replace "unif_prb1_2_alg" "(: (term1(c_arg(t_alg)), term2(c_arg(s_alg))) :)")
+(name-replace "unif_prb2_1_alg" "(: (term2(c_arg(t_alg)), term1(c_arg(s_alg))) :)")
+(name-replace "unif_prb_lst2_alg" "append(append(unif_prb1_2_alg, unif_prb2_1_alg),cdr(x!1))")
+(name-replace "sol1_alg" "c_unify(Delta, sigma, unif_prb_lst1_alg, x!2)")
+(name-replace "sol2_alg" "c_unify(Delta, sigma, unif_prb_lst2_alg, x!2)")
+

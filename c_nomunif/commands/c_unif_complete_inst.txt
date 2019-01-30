@@ -1,0 +1,12 @@
+# File that contain the correct instantion of Delta_sol, sigma_sol and
+fix_pnt_eq_lst_sol, according to each case of the algorithm, since PVS does not allow
+me to do that. 
+
+# case null 
+(case "null?(x!1)")
+(inst 1 "Delta" "sigma" "x!2")
+
+# case s = X 
+(case "susp?(s_alg) AND NOT occurs(V(s_alg), t_alg)")
+(inst -2 "new_unif_prb_lst_alg" "(::)") 
+(inst -2 "new_Delta_alg" "Nabla" "new_sigma_alg" "sigma1")

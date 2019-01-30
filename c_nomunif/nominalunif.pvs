@@ -111,7 +111,7 @@ MEASURE fix_pnt_eq_lst BY <<
 
 % defines a valid quadruple. Valid quadruples are what occur in the algorithm 
 valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst): bool =
-   % well - behaved variable
+   % well - behaved substitution
    well_behaved?(sigma)  
    AND 
    % Dom(sigma) and Vars(Problem) are disjoint
@@ -183,6 +183,20 @@ apply_sub_prb_lst_cons_calls: LEMMA
    idempotent?(sigma1) AND
    alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, apply_sub_prb_lst(sigma1, unif_prb_lst)))) =>
    alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst))
+
+% aux lemma for the one below
+apply_sub_prb_lst_cons_calls_add_aux: LEMMA
+   more_gen_sub?(Nabla)(sigma1, sigma) AND
+   idempotent?(sigma1) AND
+   alpha(Nabla)(Subs(sigma)(t), Subs(sigma)(s)) =>
+   alpha(Nabla)(Subs(sigma)(Subs(sigma1)(t)), Subs(sigma)(Subs(sigma1)(s)))
+   
+% the idea is you can add an apply_sub_prb_lst consecutive call, for some substitutions
+apply_sub_prb_lst_cons_calls_add: LEMMA
+   (more_gen_sub?(Nabla)(sigma1, sigma) AND
+   idempotent?(sigma1) AND
+   alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, unif_prb_lst))) =>
+   alpha_eq_lst?(Nabla, apply_sub_prb_lst(sigma, apply_sub_prb_lst(sigma1, unif_prb_lst)))
    
 % cdr(unif_prb_lst) < unif_prb_lst
 cdr_smaller_size: LEMMA
@@ -331,7 +345,7 @@ valid_quadruple?_cdr: CONJECTURE
 
 
 %%%%%%%%%% specification of soundness and completeness of the algorithm
-% soundness of unify  
+% soundness of unify - main theorem
 c_unify_sound: conjecture  
 FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
     (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)) AND
@@ -339,12 +353,12 @@ FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
 	valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
 	=> sol_prb_quad?(Nabla, sigma1)(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)
 
-%c_unify_sound_cor: COROLLARY
-%FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
-%    LET unif_prb_lst = fix_pnt2unif_prb(fix_pnt_eq_lst) IN
-%        (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify((::), (::), (:(t, s):), (::))) AND
-%        is_sol_prb_trp(Nabla, sigma1, Delta_sol, sigma_sol, unif_prb_lst))
-%	=> is_sol_prb_trp(Nabla, sigma1, (::), (::), (:(t, s):))
+% soundness of unify for a term 
+c_unify_sound_cor: COROLLARY
+FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
+        (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify((::), (::), (:(t, s):), (::))) AND
+        sol_prb_quad?(Nabla, sigma1)(Delta_sol, sigma_sol, (::), fix_pnt_eq_lst_sol))
+	=> sol_prb_quad?(Nabla, sigma1)((::), (::), (:(t, s):), (::))
 
 c_unify_complete: conjecture
     sol_prb_quad?(Nabla, sigma1)(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst) AND

@@ -1,0 +1,4 @@
+Before the Meeting 
+- Talk about commutativity and how to define commutative functions 
+- I have finished the specification, according to Washington paper
+- I started the proof.

@@ -1,0 +1,151 @@
+# redoing TCCs
+# TCC 1 - perm
+(inst -1 "new_unif_prb_lst_alg" "(::)")
+(inst -1 "new_Delta_alg" "new_sigma_alg" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+
+(then@ 
+    (INST -1 "Delta" "sigma" "x!1" "x!2") (PROP) 
+    (INST -1 "t_alg") (PROP) 
+    (INST -1 "s_alg") (PROP) 
+    (INST -1 "sigma1_alg") (PROP) 
+    (INST -1 "Delta1_alg" "bool1_alg") (PROP) 
+    (INST -1 "new_Delta_alg") (PROP) 
+    (INST -1 "new_sigma_alg") (PROP) 
+    (INST -1 "unif_prb_lst1_alg") (PROP) 
+    (INST -1 "unif_prb_lst2_alg") (PROP) 
+    (INST -1 "new_unif_prb_lst_alg") (PROP) 
+)
+
+# TCC 2 - atom 
+(inst -1 "cdr(x!1)" "x!2")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+
+(then@ 
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "a(t_alg)") (prop) 
+    (inst -1 "cdr(x!1)" "x!2") (prop) 
+)
+
+# TCC 3 - perm
+(inst -1 "new_unif_prb_lst_alg" "(::)")
+(inst -1 "new_Delta_alg" "new_sigma_alg" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+
+(then@ 
+    (inst -1 "Delta" "sigma" "x!1" "x!2") (prop) 
+    (INST -1 "t_alg") (PROP) 
+    (INST -1 "s_alg") (PROP) 
+    (INST -1 "p(t_alg)" "V(t_alg)") (PROP)
+    (INST -1 "sigma1_alg") (PROP) 
+    (INST -1 "Delta1_alg" "bool1_alg") (PROP) 
+    (INST -1 "new_Delta_alg") (PROP) 
+    (INST -1 "new_sigma_alg") (PROP) 
+    (INST -1 "unif_prb_lst1_alg") (PROP) 
+    (INST -1 "unif_prb_lst2_alg") (PROP) 
+    (INST -1 "new_unif_prb_lst_alg") (PROP) 
+)
+
+# TCC 4 - perm
+(inst -1 "cdr(x!1)" "append(new_fix_pnt_eq_alg, x!2)")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+
+(then@
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (INST -1 "p(t_alg)" "V(t_alg)") (PROP)
+    (inst -1 "new_fix_pnt_eq_alg") (prop) 
+    (inst -1 "new_fix_pnt_eq_lst_alg") (prop) 
+)
+
+# TCC 5 - unit
+(inst -1 "cdr(x!1)" "x!2")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+(then@
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+)
+
+# TCC 6 - pair
+(inst -1 "new_unif_prb_lst_alg" "x!2")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+(then@ 
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "term1(t_alg)" "term2(t_alg)") (prop) 
+    (inst -1 "unif_prb1_alg") (prop) 
+    (inst -1 "unif_prb2_alg") (prop)
+    (inst -1 "new_unif_prb_lst_alg") (prop)
+)
+
+# TCC 7 - abstraction 
+(inst -1 "new_unif_prb_lst_alg" "x!2")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+(then@ 
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "abstr(t_alg)" "body(t_alg)") (prop) 
+    (inst -1 "new_unif_prb_alg") (prop)
+    (inst -1 "new_unif_prb_lst_alg") (prop)
+) 
+
+# TCC 8 - abstraction 
+(inst -1 "new_unif_prb_lst_alg" "x!2")
+(inst -1 "new_Delta_alg" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+(then@
+    (inst -1 "Delta" "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "abstr(t_alg)" "body(t_alg)") (prop) 
+    (inst -1 "Delta1_alg" "bool1_alg") (prop) 
+    (inst -1 "new_Delta_alg")(prop) 
+    (inst -1 "new_unif_prb_alg")(prop) 
+    (inst -1 "new_unif_prb_lst_alg")(prop) 
+)
+
+# TCC 9 - Application 
+(inst -1 "new_unif_prb_lst_alg" "x!2")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol") 
+(then@
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "sym(t_alg)" "arg(t_alg)") (prop) 
+    (inst -1 "new_unif_prb_alg") (prop) 
+    (inst -1 "new_unif_prb_lst_alg") (prop) 
+) 
+
+# TCC 10 - CAPP
+(inst -1 "unif_prb_lst1_alg" "x!2") 
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol")
+(then@ 
+    (inst -1 "x!1" "x!2") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "c_sym(t_alg)" "c_arg(t_alg)") (prop) 
+    (inst -1 "unif_prb1_1_alg") (prop) 
+    (inst -1 "unif_prb2_2_alg") (prop) 
+    (inst -1 "unif_prb_lst1_alg") (prop) 
+)
+
+# TCC 11 - CAPP
+(inst -1 "unif_prb_lst2_alg" "x!2")
+(inst -1 "Delta" "sigma" "Delta_sol" "sigma_sol" "fix_pnt_eq_lst_sol"
+(then@ 
+    (inst -1 "Delta" "sigma" "x!1" "x!2" "c_unify") (prop) 
+    (inst -1 "t_alg") (prop) 
+    (inst -1 "s_alg") (prop) 
+    (inst -1 "c_sym(t_alg)" "c_arg(t_alg)") (prop) 
+    (inst -1 "unif_prb1_1_alg") (prop) 
+    (inst -1 "unif_prb2_2_alg") (prop) 
+    (inst -1 "unif_prb_lst1_alg") (prop) 
+    (inst -1 "sol1_alg") (prop) 
+    (inst -1 "unif_prb1_2_alg") (prop) 
+    (inst -1 "unif_prb2_1_alg") (prop) 
+    (inst -1 "unif_prb_lst2_alg") (prop) 
+
+)
