@@ -383,7 +383,7 @@ Subs_perm_Var: LEMMA
 vars_dom_sub_append: LEMMA
    member(X, vars_dom_sub(append(sigma, gamma))) => member(X, vars_dom_sub(sigma)) OR
                                                     member(X, vars_dom_sub(gamma))
-   
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%% necessary lemmas i added
@@ -483,23 +483,37 @@ suf_cond_more_gen_append: LEMMA
    more_gen_sub?(Delta)(sigma, gamma)
    => more_gen_sub?(Delta)(append(sigma1, sigma), gamma) 
 
+%%%%%%%%%%%%%%%%%%%%% necessary lemmas related to the ord of a term
+% auxiliar lemma for the one below
+% the size of a term "t" (that is not a suspension AND such that "t" contains a variable X)
+% is greater than pi * X, even after a substitution
+size_term_gt_var_after_sub: LEMMA
+   member(X, Vars(t)) AND NOT susp?(t) => size(Subs(sigma)(t)) > size(Subs(sigma)(pi * X))
+   
+% a suficient condition for a term to be a substitution
+% needed in the completeness theorem
+suf_cond_term_is_sub: LEMMA
+   member(X, Vars(t)) AND alpha(Delta)(Subs(sigma)(pi * X), Subs(sigma)(t))
+   => susp?(t) 
+
+
 %%%%%%%%%%%%%%%%%%%%% necessary lemmas related to functions fresh_subs and similar ones
 % useful lemmas that appeared in the the proof of completeness
-aux_lemma_fresh_sub1: CONJECTURE
+aux_lemma_fresh_sub1: LEMMA
    fresh(Nabla)(a, Subs(sigma)(t))
    => fresh_subs(Nabla)(sigma, fresh?(a, t)`1)
 
 % auxiliar lemma for aux_lemma_fresh_sub
-fresh_alpha_equivalent: CONJECTURE
+fresh_alpha_equivalent: LEMMA
    fresh(Nabla)(a, t) AND alpha(Nabla)(t, s) => fresh(Nabla)(a, s)
 
 % useful lemma that appear in the proof of correctness
-aux_lemma_fresh_sub_reverse1: CONJECTURE
+aux_lemma_fresh_sub_reverse1: LEMMA
    fresh_subs(Nabla)(sigma, fresh?(a, t)`1) AND fresh?(a, t)`2 
    => fresh(Nabla)(a, Subs(sigma)(t))
 
 % lemma to be used in the theorem of completeness  
-aux_lemma_fresh_sub: CONJECTURE
+aux_lemma_fresh_sub: LEMMA
    fresh_subs(Nabla)(sigma, Delta) AND more_gen_sub?(Nabla)(gamma, sigma) AND idempotent?(gamma) =>
    fresh_subs(Nabla)(sigma, fresh_subs?(gamma, Delta)`1)
 
