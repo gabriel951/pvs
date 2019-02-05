@@ -166,7 +166,7 @@ alpha_eq_lst?_append: LEMMA
    (alpha_eq_lst?(Delta, unif_prb_lst1) AND alpha_eq_lst?(Delta, unif_prb_lst2))
 
 % fix_pnt2unif_prb(FP1 + FP2) = fix_pnt2unif_prb(FP1) + fix_pnt2unif_prb(FP2) 
-fix_pnt2unif_prb_append: CONJECTURE
+fix_pnt2unif_prb_append: LEMMA
    fix_pnt2unif_prb(append(fix_pnt_eq_lst1, fix_pnt_eq_lst2)) =
    append(fix_pnt2unif_prb(fix_pnt_eq_lst1), fix_pnt2unif_prb(fix_pnt_eq_lst2)) 
 
@@ -309,11 +309,12 @@ MEASURE lex2(card(vars_lst(append(unif_prb_lst, fix_pnt2unif_prb(fix_pnt_eq_lst)
 %%%%%%%%%% end of algorithm to perform c unification 
 
 %%%%%%%%%%% auxiliar lemmas for soundness of the algorithm
+% TODO: I don't need this anymore.
 % the context returned by the algorithm is bigger than the context the algorithm started with 
-ctxt_ret_big_init_ctxt: LEMMA
-    FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
-    member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
-    => FORALL (aX:[atom, variable]): member(aX, Delta) => member(aX, Delta_sol) 
+%ctxt_ret_big_init_ctxt: LEMMA
+%    FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
+%    member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
+%    => FORALL (aX:[atom, variable]): member(aX, Delta) => member(aX, Delta_sol) 
 
 % if Delta |- Nabla sigma, then Delta |- subset(Nabla) sigma
 fresh_subs_subset: LEMMA
@@ -353,21 +354,27 @@ FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
 	valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
 	=> sol_prb_quad?(Nabla, sigma1)(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst)
 
-% soundness of unify for a term 
+% soundness of c unify for the initial call of the algorithm 
 c_unify_sound_cor: COROLLARY
 FORALL Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
         (member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify((::), (::), (:(t, s):), (::))) AND
         sol_prb_quad?(Nabla, sigma1)(Delta_sol, sigma_sol, (::), fix_pnt_eq_lst_sol))
 	=> sol_prb_quad?(Nabla, sigma1)((::), (::), (:(t, s):), (::))
 
+% completeness of c unify - main theorem
 c_unify_complete: LEMMA
     sol_prb_quad?(Nabla, sigma1)(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst) AND
     valid_quadruple?(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst) =>
     EXISTS Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
        member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify(Delta, sigma, unif_prb_lst, fix_pnt_eq_lst))
 	AND sol_prb_quad?(Nabla, sigma1)(Delta_sol, sigma_sol, (::), fix_pnt_eq_lst_sol)
-    
-    
+
+% completeness of c unify for the initial call of the algorithm 
+c_unify_complete_cor: COROLLARY
+    sol_prb_quad?(Nabla, sigma1)((::), (::), (:(t, s):), (::)) =>
+    EXISTS Delta_sol, sigma_sol, fix_pnt_eq_lst_sol:
+       member((Delta_sol, sigma_sol, fix_pnt_eq_lst_sol), c_unify((::), (::), (:(t, s):), (::)) )
+       AND sol_prb_quad?(Nabla, sigma1)(Delta_sol, sigma_sol, (::), fix_pnt_eq_lst_sol)
 
 % old completeness of unify. This is not how i should specify
 %c_unify_complete: LEMMA

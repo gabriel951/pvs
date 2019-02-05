@@ -108,8 +108,7 @@ ext_preserves_depth: LEMMA
    depth(ext(pi)(t)) = depth(t)
 
 
-% TODO: size of terms
-% I'll probably need it for the lexicographic measure.
+% size of terms
 size(t): RECURSIVE nat =
    CASES t OF
    	 at(a): 1,

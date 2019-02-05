@@ -20,6 +20,8 @@
 (name-replace "new_fix_pnt_eq_alg" "(: (append(reverse(p(s_alg)), p(t_alg)), V(t_alg)) :)")
 (name-replace "new_fix_pnt_eq_lst_alg" "append(new_fix_pnt_eq_alg, x!2)")
 
+# unit 
+** No name-replace :)
 
 # pair 
 (then@ 

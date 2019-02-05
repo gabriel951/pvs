@@ -54,9 +54,13 @@ MEASURE t BY <<
 fix_pnt_eq: TYPE = [perm, variable]
 fix_pnt_eq_lst: VAR list[fix_pnt_eq]
 
+% alpha_equivalence preserves ord of term
+alpha_ord: LEMMA
+   alpha(Delta)(t, s) => ord(t) = ord(s)
+   
 % alpha-equivalence preserves depth of terms.
-%alpha_depth: LEMMA
-%   alpha(Delta)(t,s) => depth(t)=depth(s)
+alpha_depth: LEMMA
+   alpha(Delta)(t,s) => depth(t)=depth(s)
 
 % alpha equivalence preserves size of terms
 alpha_size: LEMMA

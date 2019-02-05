@@ -430,42 +430,42 @@ suf_cond_idempotent: LEMMA
 well_behaved?_idempotent?: LEMMA
    well_behaved?(sigma) => idempotent?(sigma) 
 
-% there was a lemma "eq_sub_alpha" that was similar to this and it is wrong. Don't use it.
+% a suficient condition to replace a substitution to an equivalent one in an alpha-equivalence relation
 eq_sub_alpha: LEMMA
    alpha(Delta)(Subs(gamma)(t), Subs(gamma)(s)) AND 
    (FORALL X: alpha(Delta)(Subs(sigma)((: :) * X), Subs(gamma)((: :) * X)))
    => alpha(Delta)(Subs(sigma)(t), Subs(sigma)(s))
 
 % give a sufficient condition to simplify (sigma gamma sigma) to (sigma gamma)  
-suf_cond_simp_sub_append: CONJECTURE
+suf_cond_simp_sub_append: LEMMA
    idempotent?(sigma) AND 
    disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)),
              vars_dom_sub(gamma)) =>
    Subs(sigma)(Subs(gamma)(Subs(sigma)(t))) = Subs(sigma)(Subs(gamma)(t))
 
 % a sufficient condition to conclude that:  sigma gamma < lambda1 => sigma < lambda1
-suf_cond_more_gen_sub?_append: CONJECTURE
+suf_cond_more_gen_sub?_append: LEMMA
    idempotent?(sigma) AND 
    disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)),
              vars_dom_sub(gamma)) AND 
    more_gen_sub?(Nabla)(append(sigma, gamma), lambda1) => more_gen_sub?(Nabla)(sigma, lambda1)
 
 % if X is in the domain of a well behaved substitution sigma then X is not in sigma t
-well_behaved?_var_disappear: LEMMA
+well_behaved?_var_disappear: LEMMA 
    member(X, vars_dom_sub(sigma)) AND well_behaved?(sigma) =>
    NOT member(X, Vars(Subs(sigma)(t)))
 
 % a sufficient condition to conclude that:
 % well_behaved?(sigma) AND well_behaved?(gamma) => well_behaved?(sigma + gamma)
 % TODO: change the name, if there is time. 
-suf_cond_idempotent?_append: CONJECTURE
+suf_cond_idempotent?_append: LEMMA
    well_behaved?(sigma) AND well_behaved?(gamma) AND
    disjoint?(union(vars_dom_sub(sigma), vars_range_sub(sigma)), vars_dom_sub(gamma))
    => well_behaved?(append(sigma, gamma))
 
 % a rather technical lemma for the kind of substitution that appears in the algorithm
 % the kind of this substitution is well_behaved 
-subs_add_alg_well_behaved?: CONJECTURE
+subs_add_alg_well_behaved?: LEMMA
    NOT member(X, Vars(t)) => well_behaved?((:(X, t):))
 
 
