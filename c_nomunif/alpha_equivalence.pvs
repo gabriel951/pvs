@@ -106,10 +106,7 @@ alpha_fresh_invariance: LEMMA % Lemma 3.8
    (FORALL(a:(ds(pi1,pi2))):fresh(Delta)(a,t))
 	IMPLIES alpha(Delta)(ext(pi1)(t), ext(pi2)(t))
 
-% The converse result from previous lemma.
-alpha_ds_fresh: LEMMA 
-   alpha(Delta)(ext(pi1)(t), ext(pi2)(t))
-	IMPLIES (FORALL(a:(ds(pi1,pi2))):fresh(Delta)(a,t))
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % alpha-equivalence is a transitive relation.
@@ -122,6 +119,14 @@ alpha_symmetric: LEMMA % Lemma 3.11
    alpha(Delta)(t, s) = alpha(Delta)(s, t)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The converse result from alpha_fresh_invariance lemma.
+% TODO: i dont think this lemma holds anymore, because of commutative functions
+% i'll try to do the remaining proofs without using this. 
+%alpha_ds_fresh: LEMMA 
+%   alpha(Delta)(ext(pi1)(t), ext(pi2)(t))
+%	IMPLIES (FORALL(a:(ds(pi1,pi2))):fresh(Delta)(a,t))
+
+
 % Enlarging contexts preserves alpha-equivalence.
 alpha_weakening: LEMMA
    (FORALL(ax:[atom,variable]): member(ax,Delta) => member(ax,Nabla))

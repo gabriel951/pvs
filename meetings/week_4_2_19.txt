@@ -1,0 +1,14 @@
+# Before the Meeting
+- Ayala asked me to refactor the specification in order to make it more elegant. i
+  found a problem with this approach: when i use in the code the command that expand a
+  definition i might get in trouble. So, I thought: i should finish the code with the
+  workaround and then i can make it more elegant. 
+- I am almost finishing the proof:
+    * i finished the proof of the main theorems 
+    * i need to extend Ana's lemmas to the case of commutative function symbols. I am
+      currently in alpha-equivalence.pvs.  
+    * i believe i can finish everything this week 
+- I have workshop in the week 18-22. I was planning on finishing the proof this week
+  and showing you the slides for the presentation next week. 
+
+# After the Meeting
