@@ -369,11 +369,7 @@ ENDIF
 
 %%%%%%%%%%%
 
-%%%%%%%%%%%%%%%%% Technical, non important or obvious auxiliary lemmas
-% (pi * X) sigma = (pi' * X) sigma => pi * X = pi'* X
-Subs_perm_equal: LEMMA 
-   Subs(sigma)(pi * X) = Subs(sigma)(pi1 * X) => pi * X = pi1 * X 
-
+%%%%%%%%%%%%%%%%% Technical, non important or obvious auxiliary lemmas 
 Subs_perm_Var_aux: LEMMA
    Subs(sigma)(pi * X) = ext(pi)(Subs(sigma)((::) * X))
 
